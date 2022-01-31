@@ -1,8 +1,11 @@
-#include <iostream>
-
-#include "hello/hello.hpp"
+#include "game/game.hpp"
 
 int main() {
-  std::cout << Hello::get_greeting();
+  if (Game::init()) {
+    Game::start();
+  } else {
+    Game::stop();
+  }
+
   return 0;
 }
