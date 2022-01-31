@@ -32,6 +32,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
         cmake -B ${{github.workspace}}/build
+        -DCMAKE_TOOLCHAIN_FILE=${{github.workspace}}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
         -DCMAKE_C_COMPILER=${{env.COMPILER}}
         -DCMAKE_CXX_COMPILER=${{env.COMPILER}}
