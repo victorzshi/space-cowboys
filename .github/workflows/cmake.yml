@@ -13,31 +13,26 @@ jobs:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-2022
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Initialize submodules
-      shell: bash
       run: |
         git submodule init
         git submodule update
 
     - name: Bootstrap vcpkg
-      shell: cmd
-      working-directory: ${{github.workspace}}\external\vcpkg
-      run: .\bootstrap-vcpkg.bat -disableMetrics
+      run: external/vcpkg/bootstrap-vcpkg -disableMetrics
 
     - name: Install dependencies
-      shell: cmd
       working-directory: ${{github.workspace}}\external\vcpkg
-      run: .\vcpkg.exe install --triplet=x64-windows
+      run: external/vcpkg/vcpkg install
 
-    - name: Set environment variables
-      shell: cmd
-      working-directory: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\
-      run: .\vcvarsall.bat
+#    - name: Set environment variables
+#      shell: cmd
+#      run: call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" x64
 
     - name: Configure build
       # Configure CMake in a 'build' subdirectory. 
@@ -46,7 +41,7 @@ jobs:
       run: >
         cmake -B ${{github.workspace}}/build
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        -T ClangCL
+        -DC_CXX_COMPILER=clang
 
     - name: Build code
       # Build your program with the given configuration
