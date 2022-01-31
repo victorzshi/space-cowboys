@@ -22,10 +22,8 @@ jobs:
 
     - name: Prepare environment
       run: |
-        git clone https://github.com/catchorg/Catch2.git
-        cd Catch2
-        cmake -Bbuild -H. -DBUILD_TESTING=OFF
-        sudo cmake --build build/ --target install
+        external/vcpkg/bootstrap-vcpkg
+        external/vcpkg/vcpkg install sdl2 catch2 --triplet x64-windows
 
     - name: Configure build
       # Configure CMake in a 'build' subdirectory. 
