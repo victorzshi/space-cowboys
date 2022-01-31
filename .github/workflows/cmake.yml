@@ -19,14 +19,6 @@ jobs:
         git submodule init &&
         git submodule update
 
-    - name: Bootstrap vcpkg
-      run: >
-        .\external\vcpkg\bootstrap-vcpkg.bat -disableMetrics
-
-    - name: Install dependencies
-      run: >
-        .\external\vcpkg\vcpkg install
-
     - name: Configure build
       run: >
         cmake
