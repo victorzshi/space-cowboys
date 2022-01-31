@@ -2,7 +2,7 @@
 
 Game::Game() {}
 
-bool Game::init() { return !(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0); }
+bool Game::init() { return true; }
 
 void Game::start() {}
 
