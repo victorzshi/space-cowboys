@@ -11,7 +11,7 @@ target_compile_options(main PRIVATE
   $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
     -Wall -Wextra -Wpedantic -Werror>
   $<$<CXX_COMPILER_ID:MSVC>:
-    /permissive /W4 /Wx>)
+    /permissive /W4 /WX>)
 
 # Set up unit testing
 find_package(Catch2 CONFIG REQUIRED)
