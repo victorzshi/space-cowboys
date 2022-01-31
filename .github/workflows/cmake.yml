@@ -6,7 +6,7 @@ on:
 
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
+  BUILD_TYPE: Debug
   COMPILER: clang
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
         git submodule init
         git submodule update
         external/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-        external/vcpkg/vcpkg install
+        external/vcpkg/vcpkg install sdl2 catch2
 
     - name: Configure build
       # Configure CMake in a 'build' subdirectory. 
