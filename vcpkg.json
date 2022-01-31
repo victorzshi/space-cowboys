@@ -1,5 +1,8 @@
 {
   "name": "space-invaders",
   "version": "0.1.0",
-  "dependencies": [ "catch2" ]
+  "dependencies": [
+    "sdl2",
+    "catch2"
+  ]
 }
