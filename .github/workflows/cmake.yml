@@ -24,7 +24,7 @@ jobs:
       run: |
         git submodule init
         git submodule update
-        external/vcpkg/bootstrap-vcpkg
+        external/vcpkg/bootstrap-vcpkg.sh
         external/vcpkg/vcpkg install sdl2 catch2 --triplet x64-windows
 
     - name: Configure build
