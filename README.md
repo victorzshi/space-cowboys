@@ -12,7 +12,7 @@ C++ clone of Taito's arcade game Space Invaders (1978).
 git submodule init
 git submodule update
 external/vcpkg/bootstrap-vcpkg.bat
-external/vcpkg/vcpkg install sdl2 catch2 --triplet=x64-windows
+external/vcpkg/vcpkg install
 ```
 
 ## License
