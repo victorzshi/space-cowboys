@@ -18,14 +18,26 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Prepare environment
-      shell: cmd
+    - name: Initialize submodules
+      shell: bash
       run: |
         git submodule init
         git submodule update
-        external/vcpkg/bootstrap-vcpkg.bat -disableMetrics
-        external/vcpkg/vcpkg install --triplet=x64-windows
-        call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
+
+    - name: Bootstrap vcpkg
+      shell: cmd
+      working-directory: ${{github.workspace}}\external\vcpkg
+      run: .\bootstrap-vcpkg.bat -disableMetrics
+
+    - name: Install dependencies
+      shell: cmd
+      working-directory: ${{github.workspace}}\external\vcpkg
+      run: .\vcpkg.exe install --triplet=x64-windows
+
+    - name: Set environment variables
+      shell: cmd
+      working-directory: C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\
+      run: .\vcvarsall.bat
 
     - name: Configure build
       # Configure CMake in a 'build' subdirectory. 
