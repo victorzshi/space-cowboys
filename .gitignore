@@ -3,3 +3,6 @@
 
 # Build results
 build/
+
+# Dependencies
+vcpkg_installed/
