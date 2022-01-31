@@ -24,10 +24,10 @@ jobs:
         git submodule update
 
     - name: Bootstrap vcpkg
-      run: external/vcpkg/bootstrap-vcpkg -disableMetrics
+      run: ./external/vcpkg/bootstrap-vcpkg.sh -disableMetrics
 
     - name: Install dependencies
-      run: external/vcpkg/vcpkg install
+      run: ./external/vcpkg/vcpkg install
 
 #    - name: Set environment variables
 #      shell: cmd
