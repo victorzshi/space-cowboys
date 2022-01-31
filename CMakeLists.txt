@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.15)
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buildsystems/vcpkg.cmake
   CACHE STRING "Vcpkg toolchain file")
 
-project(main VERSION 0.1.0)
+project(main LANGUAGES CXX VERSION 0.1.0)
 
 # Compile with very strict warning level
 add_executable(main "src/main.cpp")
