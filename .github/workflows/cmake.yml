@@ -7,24 +7,25 @@ on:
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Debug
-  COMPILER: clang
 
 jobs:
   build:
     # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
     # You can convert this to a matrix build if you need cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v2
 
     - name: Prepare environment
+      shell: cmd
       run: |
         git submodule init
         git submodule update
-        external/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-        external/vcpkg/vcpkg install sdl2 catch2
+        external/vcpkg/bootstrap-vcpkg.bat -disableMetrics
+        external/vcpkg/vcpkg install --triplet=x64-windows
+        call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat"
 
     - name: Configure build
       # Configure CMake in a 'build' subdirectory. 
@@ -33,8 +34,7 @@ jobs:
       run: >
         cmake -B ${{github.workspace}}/build
         -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        -DCMAKE_C_COMPILER=${{env.COMPILER}}
-        -DCMAKE_CXX_COMPILER=${{env.COMPILER}}
+        -T ClangCL
 
     - name: Build code
       # Build your program with the given configuration
