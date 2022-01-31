@@ -8,8 +8,7 @@ project(space_invaders LANGUAGES CXX VERSION 0.1.0)
 # Source
 find_package(SDL2 CONFIG REQUIRED)
 add_executable(${PROJECT_NAME} "src/main.cpp" "src/game/game.cpp")
-# target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main)
-target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2)
+target_link_libraries(${PROJECT_NAME} PRIVATE SDL2::SDL2 SDL2::SDL2main)
 target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic -Werror)
 
 # Tests
