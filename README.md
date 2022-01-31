@@ -7,30 +7,23 @@ C++ clone of Taito's arcade game Space Invaders (1978).
 ## Installation
 
 Clone repo:
+
 ```
 git clone https://github.com/victorzshi/space-invaders.git
 ```
 
-Initialize submodules inside **external/**:
+Initialize submodules:
+
 ```
 git submodule init
 git submodule update
 ```
 
-Bootstrap vcpkg package manager:
-```
-# Windows
-.\external\vcpkg\bootstrap-vcpkg.bat -disableMetrics
-# Unix
-./external/vcpkg/bootstrap-vcpkg.sh -disableMetrics
-```
+Build with CMake:
 
-Install dependencies:
 ```
-# Windows
-.\external\vcpkg\vcpkg install
-# Unix
-./external/vcpkg/vcpkg install
+cmake -B build
+cmake --build build
 ```
 
 ## License
