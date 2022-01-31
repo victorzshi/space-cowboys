@@ -5,9 +5,13 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/external/vcpkg/scripts/buil
 
 project(main VERSION 0.1.0)
 
-# Compile with Clang and very strict warning level
+# Compile with very strict warning level
 add_executable(main "src/main.cpp")
-target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
+target_compile_options(main PRIVATE
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
+    -Wall -Wextra -Wpedantic -Werror>
+  $<$<CXX_COMPILER_ID:MSVC>:
+    /permissive /W4 /Wx>)
 
 # Set up unit testing
 find_package(Catch2 CONFIG REQUIRED)
