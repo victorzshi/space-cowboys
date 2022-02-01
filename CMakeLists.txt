@@ -13,7 +13,7 @@ find_package(Catch2 CONFIG REQUIRED)
 # main target
 add_executable(main)
 target_sources(main PRIVATE "src/main.cpp")
-target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2-static)
+target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 set_property(TARGET main PROPERTY CXX_STANDARD 11)
 
 # Compile with very strict warning level

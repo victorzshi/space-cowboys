@@ -35,9 +35,6 @@
       "description": "Default build using Ninja Multi-Config generator",
       "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/build/${presetName}",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
     }
   ],
   "buildPresets": [
