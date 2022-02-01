@@ -11,7 +11,7 @@ find_package(Catch2 CONFIG REQUIRED)
 
 # Main target
 add_executable(main)
-target_sources(main PRIVATE "src/main.cpp")
+target_sources(main PRIVATE "src/main.cpp" "src/game/game.cpp")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -21,9 +21,9 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(main PRIVATE ${X11_LIBRARIES})
 endif()
 
-# Compile with very strict warning level
+# Compile main target with very strict warning level
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(main PRIVATE -Wall -Wextra -Werror)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
   target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
@@ -35,7 +35,7 @@ endif()
 # Set up unit testing
 add_executable(tests)
 target_sources(tests PRIVATE "src/test.cpp")
-target_link_libraries(tests PRIVATE Catch2::Catch2)
+target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2 SDL2::SDL2main)
 
 include(CTest)
 include(Catch)
