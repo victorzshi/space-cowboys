@@ -7,33 +7,32 @@ project(main)
 
 # Dependencies via vcpkg.cmake
 find_package(SDL2 CONFIG REQUIRED)
-# find_package(Catch2 CONFIG REQUIRED)
+find_package(Catch2 CONFIG REQUIRED)
 
 # Compile with very strict warning level
 add_executable(main)
 target_sources(main PRIVATE src/main.cpp)
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
-# if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-#   target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
-# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-#   target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
-# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-#   target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
-# elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-#   target_compile_options(main PRIVATE /permissive /W4)
-# endif()
-# 
-# # Set up unit testing
-# add_executable(tests)
-# target_sources(tests PRIVATE "src/test.cpp")
-# target_link_libraries(tests PRIVATE Catch2::Catch2)
-# 
-# include(CTest)
-# include(Catch)
-# catch_discover_tests(tests)
-# 
-# # Smoke test
-# enable_testing()
-# add_test(NAME Runs COMMAND main)
-# 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
+elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_options(main PRIVATE /permissive /W4)
+endif()
+
+# Set up unit testing
+add_executable(tests)
+target_sources(tests PRIVATE "src/test.cpp")
+target_link_libraries(tests PRIVATE Catch2::Catch2)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(tests)
+
+# Smoke test
+enable_testing()
+add_test(NAME Runs COMMAND main)
