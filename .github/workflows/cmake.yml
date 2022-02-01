@@ -31,7 +31,7 @@ jobs:
       - name: Run CMake
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: "ninja-multi-debug"
+          configurePreset: "ninja-multi"
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
 
