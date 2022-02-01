@@ -17,10 +17,7 @@ target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 # Manually link X11 library on Linux
 if(UNIX AND NOT APPLE)
   find_package(X11 REQUIRED)
-  message(STATUS "X11_FOUND = ${X11_FOUND}")
-  message(STATUS "X11_INCLUDE_DIR = ${X11_INCLUDE_DIR}")
-  message(STATUS "X11_LIBRARIES = ${X11_LIBRARIES}")
-  include_directories(${X11_INCLUDE_DIR})
+  target_include_directories(main PRIVATE ${X11_INCLUDE_DIR})
   target_link_libraries(main PRIVATE ${X11_LIBRARIES})
 endif()
 
