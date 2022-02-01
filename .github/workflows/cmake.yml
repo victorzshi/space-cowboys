@@ -2,37 +2,35 @@ name: CMake
 
 on:
   pull_request:
-    branches: [ main ]
-
-env:
-  BUILD_TYPE: Debug
+    branches: [main]
 
 jobs:
   build:
-    runs-on: windows-latest
+    name: ${{ matrix.os }}-${{ github.workflow }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, macos-11]
 
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
 
-    - name: Initialize submodules
-      run: >
-        git submodule init &&
-        git submodule update
+      - name: Get CMake
+        uses: lukka/get-cmake@latest
 
-    - name: Configure CMake
-      run: >
-        cmake
-        -B ${{github.workspace}}/build
-        -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v10.1
+        with:
+          vcpkgDirectory: "${{ github.workspace }}/external/vcpkg"
+          vcpkgJsonGlob: "vcpkg.json"
 
-    - name: Build project
-      run: >
-        cmake 
-        --build ${{github.workspace}}/build 
-        --config ${{env.BUILD_TYPE}}
-
-    - name: Run tests
-      working-directory: ${{github.workspace}}/build
-      run: >
-        ctest 
-        -C ${{env.BUILD_TYPE}}
+      - name: Run CMake
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: "ninja-multi"
+          buildPreset: "ninja-multi-debug"
+          testPreset: "ninja-multi-debug"
