@@ -38,10 +38,11 @@ jobs:
 
       - uses: DoozyX/clang-format-lint-action@v0.13
         with:
-          source: 'src'
-          extensions: 'cpp,hpp'
+          source: "src"
+          extensions: "cpp,hpp"
           clangFormatVersion: 12
           inplace: True
 
       - uses: stefanzweifel/git-auto-commit-action@v4.13.1
-        commit_message: Format code
+        with:
+          commit_message: Format code
