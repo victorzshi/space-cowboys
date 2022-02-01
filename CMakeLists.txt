@@ -12,7 +12,14 @@ find_package(Catch2 CONFIG REQUIRED)
 # Compile with very strict warning level
 add_executable(main)
 target_sources(main PRIVATE src/main.cpp)
-target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
+
+if(UNIX AND NOT APPLE)
+  target_include_directories(main PRIVATE ${SDL2_INCLUDE_DIRS})
+  target_link_libraries(main PRIVATE ${SDL2_LIBRARIES})
+elseif(WIN32 OR APPLE)
+  target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
+endif()
+
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
   target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
