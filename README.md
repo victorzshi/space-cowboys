@@ -1,5 +1,7 @@
 # Space Invaders (WIP)
 
+![main](https://github.com/victorzshi/space-invaders/actions/workflows/cmake.yml/badge.svg?branch=main)
+
 C++ clone of Taito's arcade game Space Invaders (1978).
 
 > TODO: Add gameplay gif.
