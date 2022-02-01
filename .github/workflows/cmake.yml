@@ -39,3 +39,13 @@ jobs:
       - name: Format files
         run: >
           clang-format -i -style=file src/**/*.cpp src/**/*.hpp
+
+      - name: Create report file
+        run: date +%s > report.txt
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Victor Z. Shi'
+          git config --global user.email '19493797+victorzshi@users.noreply.github.com'
+          git commit -am "Code formatting"
+          git push
