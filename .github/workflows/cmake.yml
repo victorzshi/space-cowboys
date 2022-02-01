@@ -11,13 +11,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: true
+
+      - name: Setup X11 on Ubuntu
+        run: |
+          sudo apt install libx11-dev
 
       - name: Get CMake
         uses: lukka/get-cmake@v3.21.2
