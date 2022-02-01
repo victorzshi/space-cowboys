@@ -11,7 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, ubuntu-20.04, macos-11]
+        # os: [windows-2022, ubuntu-20.04, macos-11]
+        os: [ubuntu-20.04]
 
     steps:
       - name: Checkout
@@ -34,3 +35,6 @@ jobs:
           configurePreset: "ninja-multi"
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
+
+      - name: Run clang-format
+        run: make clang-format
