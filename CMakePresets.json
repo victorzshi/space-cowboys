@@ -30,40 +30,14 @@
       }
     },
     {
-      "name": "ninja-multi",
-      "displayName": "Ninja Multi-Config",
-      "description": "Default build using Ninja Multi-Config generator for CI builds",
+      "name": "ninja-multi-debug",
+      "displayName": "Ninja Multi-Config Debug",
+      "description": "Debug build using Ninja Multi-Config generator",
       "generator": "Ninja Multi-Config",
-      "binaryDir": "${sourceDir}/build/${presetName}"
-    }
-  ],
-  "buildPresets": [
-    {
-      "name": "ninja-multi-debug",
-      "configurePreset": "ninja-multi",
-      "displayName": "Build ninja-multi-debug",
-      "description": "Build ninja-multi Debug configuration",
-      "configuration": "Debug"
-    },
-    {
-      "name": "ninja-multi-release",
-      "configurePreset": "ninja-multi",
-      "displayName": "Build ninja-multi-release",
-      "description": "Build ninja-multi Release configuration",
-      "configuration": "RelWithDebInfo"
-    }
-  ],
-  "testPresets": [
-
-    {
-      "name": "ninja-multi-debug",
-      "configurePreset": "ninja-multi",
-      "configuration": "Debug"
-    },
-    {
-      "name": "ninja-multi-release",
-      "configurePreset": "ninja-multi",
-      "configuration": "RelWithDebInfo"
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
     }
   ]
 }

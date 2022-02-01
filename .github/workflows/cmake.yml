@@ -31,9 +31,7 @@ jobs:
       - name: Run CMake
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: "ninja-multi"
-          buildPreset: "ninja-multi-debug"
-          testPreset: "ninja-multi-debug"
+          configurePreset: "ninja-multi-debug"
 
       - name: Run tests
         working-directory: ${{github.workspace}}/build
