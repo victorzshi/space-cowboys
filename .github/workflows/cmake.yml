@@ -38,5 +38,4 @@ jobs:
 
       - name: Format files
         run: >
-          find src -name "*.[ch]pp" |
-          clang-format -i -style=file
+          clang-format -i -style=file src/**/*.cpp src/**/*.hpp
