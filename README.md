@@ -33,6 +33,16 @@ Install dependencies:
 ./external/vcpkg/vcpkg install
 ```
 
+## Known Issues
+
+Errors while running CTest for `Ninja Multi-Config`:
+
+```
+Test not available without configuration.  (Missing "-C <config>"?)
+```
+
+> See [open issue](https://gitlab.kitware.com/cmake/cmake/-/issues/20283). Catch2 tests are unaffected.
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
