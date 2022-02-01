@@ -1,0 +1,30 @@
+name: Clang Format
+
+on:
+  pull_request:
+    branches: 
+      - main
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run clang-format
+        uses: DoozyX/clang-format-lint-action@v0.13
+        with:
+          source: "src"
+          extensions: "cpp,hpp"
+          clangFormatVersion: 12
+          inplace: True
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.13.1
+        with:
+          commit_message: Format code
+          skip_dirty_check: true

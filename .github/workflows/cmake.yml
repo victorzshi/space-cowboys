@@ -2,7 +2,8 @@ name: CMake
 
 on:
   pull_request:
-    branches: [main]
+    branches: 
+      - main
 
 jobs:
   build:
@@ -11,8 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # os: [windows-2022, ubuntu-20.04, macos-11]
-        os: [ubuntu-20.04]
+        os: [windows-2022, ubuntu-20.04, macos-11]
 
     steps:
       - name: Checkout
@@ -36,14 +36,3 @@ jobs:
           configurePreset: "ninja-multi"
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
-
-      - uses: DoozyX/clang-format-lint-action@v0.13
-        with:
-          source: "src"
-          extensions: "cpp,hpp"
-          clangFormatVersion: 12
-          inplace: True
-
-      - uses: stefanzweifel/git-auto-commit-action@v4.13.1
-        with:
-          commit_message: Format code
