@@ -14,7 +14,7 @@ add_executable(main)
 target_sources(main PRIVATE src/main.cpp)
 
 if(UNIX AND NOT APPLE)
-  target_include_directories(main PRIVATE ${SDL2_INCLUDE_DIRS})
+  include_directories(${SDL2_INCLUDE_DIRS})
   target_link_libraries(main PRIVATE ${SDL2_LIBRARIES})
 elseif(WIN32 OR APPLE)
   target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
