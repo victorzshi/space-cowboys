@@ -36,17 +36,12 @@ jobs:
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
 
-      - name: Format files
-        run: >
-          clang-format -i -style=file src/**/*.cpp src/**/*.hpp
+      - uses: DoozyX/clang-format-lint-action@v0.13
+        with:
+          source: 'src'
+          extensions: 'cpp,hpp'
+          clangFormatVersion: 12
+          inplace: True
 
-      - name: Create report file
-        run: date +%s > report.txt
-
-      - name: Commit changes
-        run: |
-          git config --global user.name 'Victor Z. Shi'
-          git config --global user.email '19493797+victorzshi@users.noreply.github.com'
-          git add .
-          git commit -m "Code formatting"
-          git push
+      - uses: stefanzweifel/git-auto-commit-action@v4.13.1
+        commit_message: Format code
