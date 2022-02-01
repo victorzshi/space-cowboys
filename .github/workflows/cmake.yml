@@ -34,5 +34,5 @@ jobs:
           configurePreset: "ninja-multi-debug"
 
       - name: Run tests
-        working-directory: ${{github.workspace}}/build
+        working-directory: ${{github.workspace}}/build/ninja-multi-debug
         run: ctest -C Debug
