@@ -36,5 +36,7 @@ jobs:
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
 
-      - name: Run clang-format
-        run: make clang-format
+      - name: Format files
+        run: >
+          find src -name "*.[ch]pp" |
+          clang-format -i -style=file
