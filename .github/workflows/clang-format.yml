@@ -27,7 +27,7 @@ jobs:
         uses: tj-actions/verify-changed-files@v8.8
 
       - name: Run step only when files change.
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        if: steps.verify-changed-files.outputs.files_changed == true
         run: |
           echo "Changed files: ${{ steps.verify-changed-files.outputs.changed_files }}"
 
