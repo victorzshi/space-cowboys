@@ -8,7 +8,7 @@ find_package(Catch2 CONFIG REQUIRED)
 
 # main target
 add_executable(main)
-target_sources(main PRIVATE "src/main.cpp" "src/game/game.cpp")
+target_sources(main PRIVATE src/main.cpp src/game/game.cpp)
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -31,14 +31,14 @@ endif()
 
 # tests target
 add_executable(tests)
-target_sources(tests PRIVATE "src/game/game.test.cpp")
+target_sources(tests PRIVATE src/game/game.test.cpp)
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 
-# Set up unit testing
+# Add unit tests
 include(CTest)
 include(Catch)
 catch_discover_tests(tests)
 
 # Smoke test
 enable_testing()
-add_test(NAME Runs COMMAND main)
+add_test(NAME "Smoke test" COMMAND main --smoke-test)

@@ -4,16 +4,23 @@
 
 class Game {
  public:
-  Game();
+  Game(bool isSmokeTest = false);
   static bool init();
   void start();
   void stop();
+  void processInput();
+  void update();
+  void render();
 
  private:
-  static const int m_SCREEN_WIDTH = 640;
-  static const int m_SCREEN_HEIGHT = 480;
-  static const int m_STAY_ALIVE = 1000;
+  static const int kScreenWidth = 640;
+  static const int kScreenHeight = 480;
+  static const int kTicksPerUpdate = 16;
+  static const int kSmokeTestDuration = 1000;
 
-  SDL_Window* window;
-  SDL_Renderer* renderer;
+  bool isSmokeTest_;
+  bool isRunning_;
+
+  SDL_Window* window_;
+  SDL_Renderer* renderer_;
 };
