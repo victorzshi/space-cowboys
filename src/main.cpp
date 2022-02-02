@@ -1,15 +1,18 @@
+#include <iostream>
+#include <string>
+
 #include "game/game.hpp"
 
 int main(int argc, char* argv[]) {
-  // Ignore unused parameters
-  (void)argc;
-  (void)argv;
+  bool isSmokeTest = false;
 
-  if (Game::init())
+  if (argc == 2 && std::string(argv[1]) == "--smoke-test") {
+    std::cout << "Smoke testing..." << std::endl;
+    isSmokeTest = true;
+  }
 
-  {
-    Game game = Game();
-
+  if (Game::init()) {
+    Game game = Game(isSmokeTest);
     game.start();
     game.stop();
   }
