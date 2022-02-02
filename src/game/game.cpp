@@ -8,9 +8,7 @@ Game::Game() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 }
 
-bool Game::init() { 
-  return SDL_Init(SDL_INIT_VIDEO) == 0; 
-}
+bool Game::init() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
 
 void Game::start() {
   SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
