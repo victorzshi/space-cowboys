@@ -2,11 +2,11 @@ name: Clang Format
 
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:
-  clang-format:
+  format:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,4 +27,3 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.13.1
         with:
           commit_message: Format code
-          skip_dirty_check: true
