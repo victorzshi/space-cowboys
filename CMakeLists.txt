@@ -11,7 +11,7 @@ find_package(Catch2 CONFIG REQUIRED)
 
 # Main target
 add_executable(main)
-target_sources(main PRIVATE "src/main.cpp")
+target_sources(main PRIVATE "src/main.cpp" "src/game/game.cpp")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -34,7 +34,7 @@ endif()
 
 # Set up unit testing
 add_executable(tests)
-target_sources(tests PRIVATE "src/test.cpp")
+target_sources(tests PRIVATE "src/game/game.test.cpp")
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 include(CTest)
