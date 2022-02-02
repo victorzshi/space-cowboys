@@ -25,9 +25,11 @@ jobs:
 
       - name: Verify changed files
         uses: tj-actions/verify-changed-files@v8.8
+        with:
+          files: src
 
       - name: Commit changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        if: contains(steps.verify-changed-files.outputs.changed_files, 'src')
         uses: stefanzweifel/git-auto-commit-action@v4.13.1
         with:
           commit_message: Format code
