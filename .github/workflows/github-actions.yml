@@ -2,8 +2,8 @@ name: GitHub Actions
 
 on:
   pull_request:
-    types:
-      - opened
+    branches:    
+      - main
   schedule:
     - cron: "0 0 * * SUN"
 
