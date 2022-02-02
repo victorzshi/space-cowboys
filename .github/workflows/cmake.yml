@@ -1,17 +1,21 @@
-name: CMake
+name: cmake
 
 on:
-  pull_request:
-    branches: [main]
+  workflow_run:
+    workflows: [clang-format]
+    types:
+      - completed
+  schedule:
+    - cron: "0 0 * * SUN"
 
 jobs:
-  build:
-    name: build-${{ matrix.os }}
+  build-and-test:
+    name: build-and-test-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-2022, ubuntu-20.04, macos-11]
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
       - name: Checkout
