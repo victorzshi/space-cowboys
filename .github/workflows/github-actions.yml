@@ -51,7 +51,7 @@ jobs:
           request_changes: true
 
   build-and-test:
-    needs: auto-format
+    needs: format-and-lint
     name: build-and-test-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
