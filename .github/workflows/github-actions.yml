@@ -52,9 +52,15 @@ jobs:
           vcpkgDirectory: "${{ github.workspace }}/external/vcpkg"
           vcpkgJsonGlob: "vcpkg.json"
 
+      - name: Replace CMakeSettings.json with CMakePresets.json
+        shell: bash
+        run: |
+          rm CMakeSettings.json
+          mv tools/CMakePresets.json .
+
       - name: Run CMake
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: "ninja-multi"
-          buildPreset: "ninja-multi-debug"
-          testPreset: "ninja-multi-debug"
+          configurePreset: 'ninja-multi-vcpkg'
+          buildPreset: 'ninja-multi-vcpkg-debug'
+          testPreset: 'ninja-multi-vcpkg-debug'
