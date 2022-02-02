@@ -8,36 +8,8 @@ on:
     - cron: "0 0 * * SUN"
 
 jobs:
-  auto-format:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.head_ref }}
-
-      - name: Run clang-format
-        uses: DoozyX/clang-format-lint-action@v0.13
-        with:
-          source: "src"
-          extensions: "cpp,hpp"
-          clangFormatVersion: 12
-          inplace: True
-
-      - name: Verify changed files
-        id: verify-changed-files
-        uses: tj-actions/verify-changed-files@v8.8
-
-      - name: Commit changes
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        uses: stefanzweifel/git-auto-commit-action@v4.13.1
-        with:
-          commit_message: Run clang-format
-
-  build-and-test:
-    needs: auto-format
-    name: build-and-test-${{ matrix.os }}
+  build:
+    name: build-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -48,7 +20,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          ref: ${{ github.head_ref }}  
           submodules: true
+
+      - name: Format code
+        if: matrix.os == 'ubuntu-latest'
+        uses: DoozyX/clang-format-lint-action@v0.13
+        with:
+          source: "src"
+          extensions: "cpp,hpp"
+          clangFormatVersion: 12
+          inplace: True
+
+      - name: Verify changed files
+        if: matrix.os == 'ubuntu-latest'
+        uses: tj-actions/verify-changed-files@v8.8
+        id: verify-changed-files
+
+      - name: Commit changes
+        if: matrix.os == 'ubuntu-latest' && steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4.13.1
+        with:
+          commit_message: Format code
 
       - name: Get CMake
         uses: lukka/get-cmake@v3.21.2
@@ -59,9 +52,15 @@ jobs:
           vcpkgDirectory: "${{ github.workspace }}/external/vcpkg"
           vcpkgJsonGlob: "vcpkg.json"
 
+      - name: Replace CMakeSettings.json with CMakePresets.json
+        shell: bash
+        run: |
+          rm CMakeSettings.json
+          mv tools/CMakePresets.json .
+
       - name: Run CMake
         uses: lukka/run-cmake@v10
         with:
-          configurePreset: "ninja-multi"
-          buildPreset: "ninja-multi-debug"
-          testPreset: "ninja-multi-debug"
+          configurePreset: 'ninja-multi-vcpkg'
+          buildPreset: 'ninja-multi-vcpkg-debug'
+          testPreset: 'ninja-multi-vcpkg-debug'
