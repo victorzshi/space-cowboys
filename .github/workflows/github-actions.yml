@@ -89,7 +89,7 @@ jobs:
         run: sudo apt-get install -y clang-tidy
 
       - name: Create build results
-        run: git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
+        run: git diff origin/main... | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
 
       - name: Run clang-tidy-pr-comments action
         uses: platisd/clang-tidy-pr-comments@master
