@@ -9,13 +9,13 @@ Game::Game() {
 }
 
 bool Game::init() {
-  // return SDL_Init(SDL_INIT_VIDEO) == 0;
+  
+    
+    
+    
+    
+    return SDL_Init(SDL_INIT_VIDEO) == 0;
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    return false;
-  } else {
-    return true;
-  }
 }
 
 void Game::start() {
