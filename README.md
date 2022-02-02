@@ -1,6 +1,6 @@
 # Space Invaders (WIP)
 
-![GitHub Actions](https://github.com/victorzshi/space-invaders/actions/workflows/github-actions.yml/badge.svg?branch=main)
+![GitHub Actions](https://github.com/victorzshi/space-invaders/actions/workflows/github-actions.yml/badge.svg)
 
 C++ clone of Taito's arcade game Space Invaders (1978).
 
