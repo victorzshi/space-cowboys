@@ -21,13 +21,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.head_ref }}
-          fetch-depth: 2
           submodules: true
 
       # Auto-format on Ubuntu
       # The Ubuntu build runs the fastest so we can slide this in for free
 
-      - name: Run clang-format
+      - name: Format code
         if: matrix.os == 'ubuntu-latest'
         uses: DoozyX/clang-format-lint-action@v0.13
         with:
@@ -45,20 +44,20 @@ jobs:
         if: matrix.os == 'ubuntu-latest' && steps.verify-changed-files.outputs.files_changed == 'true'
         uses: stefanzweifel/git-auto-commit-action@v4.13.1
         with:
-          commit_message: Run clang-format
+          commit_message: Format code
 
       # Build on all available OS
 
-      - name: Get CMake
+      - name: Install CMake
         uses: lukka/get-cmake@v3.21.2
 
-      - name: Run vcpkg
+      - name: Install project dependencies
         uses: lukka/run-vcpkg@v10.1
         with:
           vcpkgDirectory: "${{ github.workspace }}/external/vcpkg"
           vcpkgJsonGlob: "vcpkg.json"
 
-      - name: Run CMake
+      - name: Build and test
         uses: lukka/run-cmake@v10
         with:
           configurePreset: "ninja-multi"
@@ -68,9 +67,15 @@ jobs:
       # Auto-lint on Ubuntu
       # Probably waiting for Windows and macOS build to finish anyways
 
+      - name: Install clang-tidy
+        if: matrix.os == 'ubuntu-latest'
+        run: sudo apt-get install -y clang-tidy
+
       - name: Analyze code
         if: matrix.os == 'ubuntu-latest'
-        run: git diff origin/main... | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
+        run: >
+          git diff --name-only origin/main origin/${GITHUB_HEAD_REF} |
+          clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
 
       - name: Request changes
         if: matrix.os == 'ubuntu-latest'
