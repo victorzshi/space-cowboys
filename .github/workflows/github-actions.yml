@@ -1,0 +1,67 @@
+name: GitHub Actions
+
+on:
+  pull_request:
+    branches:    
+      - main
+  schedule:
+    - cron: "0 0 * * SUN"
+
+jobs:
+  auto-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Run clang-format
+        uses: DoozyX/clang-format-lint-action@v0.13
+        with:
+          source: "src"
+          extensions: "cpp,hpp"
+          clangFormatVersion: 12
+          inplace: True
+
+      - name: Verify changed files
+        id: verify-changed-files
+        uses: tj-actions/verify-changed-files@v8.8
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: stefanzweifel/git-auto-commit-action@v4.13.1
+        with:
+          commit_message: Run clang-format
+
+  build-and-test:
+    needs: auto-format
+    name: build-and-test-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Get CMake
+        uses: lukka/get-cmake@v3.21.2
+
+      - name: Run vcpkg
+        uses: lukka/run-vcpkg@v10.1
+        with:
+          vcpkgDirectory: "${{ github.workspace }}/external/vcpkg"
+          vcpkgJsonGlob: "vcpkg.json"
+
+      - name: Run CMake
+        uses: lukka/run-cmake@v10
+        with:
+          configurePreset: "ninja-multi"
+          buildPreset: "ninja-multi-debug"
+          testPreset: "ninja-multi-debug"
