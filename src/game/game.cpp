@@ -8,7 +8,7 @@ Game::Game() {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
 }
 
-bool Game::init() { 
+bool Game::init() {
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
     return false;
   } else {
