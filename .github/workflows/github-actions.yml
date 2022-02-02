@@ -2,13 +2,13 @@ name: GitHub Actions
 
 on:
   pull_request:
-    branches:    
+    branches:
       - main
   schedule:
     - cron: "0 0 * * SUN"
 
 jobs:
-  auto-format:
+  format-and-lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +34,21 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4.13.1
         with:
           commit_message: Run clang-format
+
+      - name: Install clang-tidy
+        run: sudo apt-get install -y clang-tidy
+
+      - name: Create build results
+        run: |
+          cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+          git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
+
+      - name: Run clang-tidy-pr-comments action
+        uses: platisd/clang-tidy-pr-comments@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          clang_tidy_fixes: build/clang-tidy.yml
+          request_changes: true
 
   build-and-test:
     needs: auto-format
