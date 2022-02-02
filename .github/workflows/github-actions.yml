@@ -8,7 +8,7 @@ on:
     - cron: "0 0 * * SUN"
 
 jobs:
-  format-and-lint:
+  auto-format:
     runs-on: ubuntu-latest
 
     steps:
@@ -35,23 +35,8 @@ jobs:
         with:
           commit_message: Run clang-format
 
-      - name: Install clang-tidy
-        run: sudo apt-get install -y clang-tidy
-
-      - name: Create build results
-        run: |
-          cmake -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
-          git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
-
-      - name: Run clang-tidy-pr-comments action
-        uses: platisd/clang-tidy-pr-comments@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          clang_tidy_fixes: build/clang-tidy.yml
-          request_changes: true
-
   build-and-test:
-    needs: format-and-lint
+    needs: auto-format
     name: build-and-test-${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -80,3 +65,35 @@ jobs:
           configurePreset: "ninja-multi"
           buildPreset: "ninja-multi-debug"
           testPreset: "ninja-multi-debug"
+
+      - uses: actions/upload-artifact@v2
+        if: matrix.os == 'ubuntu-latest'
+        with:
+          name: build
+          path: build
+
+  auto-lint:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - uses: actions/download-artifact@v2
+        with:
+          name: build
+          path: build
+
+      - name: Install clang-tidy
+        run: sudo apt-get install -y clang-tidy
+
+      - name: Create build results
+        run: git diff -U0 HEAD^ | clang-tidy-diff -p1 -path build -export-fixes build/clang-tidy.yml
+
+      - name: Run clang-tidy-pr-comments action
+        uses: platisd/clang-tidy-pr-comments@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          clang_tidy_fixes: build/clang-tidy.yml
+          request_changes: true
