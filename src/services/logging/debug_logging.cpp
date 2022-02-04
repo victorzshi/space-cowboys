@@ -1,3 +1,7 @@
 #include "debug_logging.hpp"
 
-void DebugLogging::print() { std::cout << "Hello World!\n"; }
+#include <iostream>
+
+void DebugLogging::print(const std::string& text) {
+  std::cout << text << std::endl;
+}

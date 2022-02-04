@@ -1,6 +1,3 @@
-#include <iostream>
-#include <string>
-
 #include "game/game.hpp"
 #include "services/locator.hpp"
 #include "services/logging/debug_logging.hpp"
@@ -10,12 +7,13 @@ int main(int argc, char *argv[]) {
   Locator::provide(debugLogging);
 
   Logging *logging = Locator::getLogging();
-  logging->print();
+  logging->print("Warning: Debug mode is on");
 
   bool isSmokeTest = false;
 
   if (argc == 2 && std::string(argv[1]) == "--smoke-test") {
-    std::cout << "Smoke testing..." << std::endl;
+    logging->print("Smoke testing...");
+
     isSmokeTest = true;
   }
 
