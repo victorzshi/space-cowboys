@@ -8,7 +8,12 @@ find_package(Catch2 CONFIG REQUIRED)
 
 # main target
 add_executable(main)
-target_sources(main PRIVATE src/main.cpp src/game/game.cpp)
+target_sources(main PRIVATE 
+  "src/main.cpp" 
+  "src/game/game.cpp"
+  "src/services/logging/debug_logging.cpp"
+  "src/services/locator.cpp"
+)
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -20,18 +25,20 @@ endif()
 
 # Compile with very strict warning level
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
+  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   target_compile_options(main PRIVATE /permissive /W4 /WX)
 endif()
 
 # tests target
 add_executable(tests)
-target_sources(tests PRIVATE src/game/game.test.cpp)
+target_sources(tests PRIVATE 
+  "src/game/game.test.cpp"
+)
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 # Add unit tests
@@ -41,4 +48,4 @@ catch_discover_tests(tests)
 
 # Smoke test
 enable_testing()
-add_test(NAME "Smoke test" COMMAND main --smoke-test)
+add_test(NAME "Smoke test" COMMAND main "--smoke-test")
