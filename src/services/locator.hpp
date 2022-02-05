@@ -1,17 +1,17 @@
 #pragma once
 
-#include "logging/logging.hpp"
-#include "logging/debug_logging/debug_logging.hpp"
-#include "logging/release_logging/release_logging.hpp"
+#include "logger/logger.hpp"
+#include "logger/debug_logger/debug_logger.hpp"
+#include "logger/release_logger/release_logger.hpp"
 
 class Locator {
  public:
-  static Logging& logging();
+  static Logger& logger();
 
  private:
 #if DEBUG
-  static DebugLogging logging_;
+  static DebugLogger logger_;
 #else
-  static ReleaseLogging logging_;
+  static ReleaseLogger logger_;
 #endif
 };

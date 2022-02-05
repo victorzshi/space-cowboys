@@ -1,9 +1,9 @@
 #include "locator.hpp"
 
-Logging& Locator::logging() { return logging_; }
+Logger& Locator::logger() { return logger_; }
 
 #if DEBUG
-DebugLogging Locator::logging_ = DebugLogging();
+DebugLogger Locator::logger_ = DebugLogger();
 #else
-ReleaseLogging Locator::logging_ = ReleaseLogging();
+ReleaseLogger Locator::logger_ = ReleaseLogger();
 #endif

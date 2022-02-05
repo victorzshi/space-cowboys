@@ -2,8 +2,8 @@
 
 #include <string>
 
-class Logging {
+class Logger {
  public:
-  virtual ~Logging() = default;
+  virtual ~Logger() = default;
   virtual void print(const std::string& text) = 0;
 };

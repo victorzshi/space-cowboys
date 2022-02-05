@@ -1,11 +1,11 @@
-#include "debug_logging.hpp"
+#include "debug_logger.hpp"
 
 #include <iostream>
 
-DebugLogging::DebugLogging() {
+DebugLogger::DebugLogger() {
   std::cout << "DEBUG mode is ON..." << std::endl;
 }
 
-void DebugLogging::print(const std::string& text) {
+void DebugLogger::print(const std::string& text) {
   std::cout << text << std::endl;
 }
