@@ -1,9 +1,16 @@
 #include "locator.hpp"
 
-Logger& Locator::logger() { return logger_; }
+#include "logger/debug_logger/debug_logger.hpp"
+#include "logger/release_logger/release_logger.hpp"
 
+void Locator::initialize() {
 #if DEBUG
-DebugLogger Locator::logger_ = DebugLogger();
+  logger_ = new DebugLogger();
 #else
-ReleaseLogger Locator::logger_ = ReleaseLogger();
+  logger_ = new ReleaseLogger();
 #endif
+}
+
+Logger& Locator::logger() { return *logger_; }
+
+Logger* Locator::logger_ = nullptr;

@@ -25,10 +25,20 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Set strict warning level and all warnings as errors
-if(MSVC)
-  target_compile_options(main PRIVATE /W4 /WX)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_options(main PRIVATE 
+    /permissive 
+    /W4 
+    /WX
+  )
 else()
-  target_compile_options(main PRIVATE -Wall -Wextra -pedantic -Werror)
+  target_compile_options(main PRIVATE 
+    -Wall 
+    -Wextra 
+    -Wpedantic 
+    -Werror 
+    -Wno-c++98-compat
+  )
 endif()
 
 # Define DEBUG macro
