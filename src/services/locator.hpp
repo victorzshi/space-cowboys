@@ -12,7 +12,7 @@ class Locator {
  private:
 #if DEBUG
   static Logging* service_;
-  static NullLogging* service_;
+  static NullLogging* nullService_;
 #else
   // TODO: Set release mode logging.
 #endif
