@@ -1,6 +1,8 @@
+#pragma once
+
 #include "../logging.hpp"
 
-class NullLogging : public Logging {
+class ReleaseLogging : public Logging {
  public:
   void print(const std::string& text) override;
 };

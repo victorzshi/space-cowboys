@@ -1,19 +1,17 @@
 #pragma once
 
 #include "logging/logging.hpp"
-#include "logging/null_logging/null_logging.hpp"
+#include "logging/debug_logging/debug_logging.hpp"
+#include "logging/release_logging/release_logging.hpp"
 
 class Locator {
  public:
-  static void initialize();
-  static Logging& getLogging();
-  static void provide(Logging* service);
+  static Logging& logging();
 
  private:
 #if DEBUG
-  static Logging* service_;
-  static NullLogging* nullService_;
+  static DebugLogging logging_;
 #else
-  // TODO: Set release mode logging.
+  static ReleaseLogging logging_;
 #endif
 };

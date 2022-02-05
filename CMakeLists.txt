@@ -13,7 +13,7 @@ target_sources(main PRIVATE
   "src/game/game.cpp"
   "src/services/locator.cpp"
   "src/services/logging/debug_logging/debug_logging.cpp"
-  "src/services/logging/null_logging/null_logging.cpp"
+  "src/services/logging/release_logging/release_logging.cpp"
 )
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
