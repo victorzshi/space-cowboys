@@ -1,6 +1,6 @@
 #pragma once
 
-#include "logger/logger.hpp"
+#include "logger/logger.h"
 
 class Locator {
  public:

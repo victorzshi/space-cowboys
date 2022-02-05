@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../logger.hpp"
+#include "../logger.h"
 
 class ReleaseLogger : public Logger {
  public:

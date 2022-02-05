@@ -1,7 +1,7 @@
-#include "locator.hpp"
+#include "locator.h"
 
-#include "logger/debug_logger/debug_logger.hpp"
-#include "logger/release_logger/release_logger.hpp"
+#include "logger/debug_logger/debug_logger.h"
+#include "logger/release_logger/release_logger.h"
 
 void Locator::initialize() {
 #if DEBUG

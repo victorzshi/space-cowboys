@@ -13,11 +13,11 @@ find_package(Catch2 CONFIG REQUIRED)
 # main target
 add_executable(main)
 target_sources(main PRIVATE 
-  "src/main.cpp" 
-  "src/game/game.cpp"
-  "src/services/locator.cpp"
-  "src/services/logger/debug_logger/debug_logger.cpp"
-  "src/services/logger/release_logger/release_logger.cpp"
+  "src/main.cc" 
+  "src/game/game.cc"
+  "src/services/locator.cc"
+  "src/services/logger/debug_logger/debug_logger.cc"
+  "src/services/logger/release_logger/release_logger.cc"
 )
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
@@ -51,7 +51,7 @@ target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 # tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
-  "src/game/game.test.cpp"
+  "src/game/game.test.cc"
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 

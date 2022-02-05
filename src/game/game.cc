@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "game.h"
 
 Game::Game(bool isSmokeTest) {
   isSmokeTest_ = isSmokeTest;

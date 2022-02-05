@@ -1,3 +1,3 @@
-#include "release_logger.hpp"
+#include "release_logger.h"
 
 void ReleaseLogger::print(const std::string& text) { (void)text; }
