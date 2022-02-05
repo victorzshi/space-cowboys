@@ -2,13 +2,23 @@
 cmake_minimum_required(VERSION 3.21)
 project(main)
 
+# Specify the C++ standard
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
 # Dependencies via vcpkg.cmake
 find_package(SDL2 CONFIG REQUIRED)
 find_package(Catch2 CONFIG REQUIRED)
 
 # main target
 add_executable(main)
-target_sources(main PRIVATE src/main.cpp src/game/game.cpp)
+target_sources(main PRIVATE 
+  "src/main.cpp" 
+  "src/game/game.cpp"
+  "src/services/locator.cpp"
+  "src/services/logger/debug_logger/debug_logger.cpp"
+  "src/services/logger/release_logger/release_logger.cpp"
+)
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -18,20 +28,31 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(main PRIVATE ${X11_LIBRARIES})
 endif()
 
-# Compile with very strict warning level
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  target_compile_options(main PRIVATE /permissive /W4 /WX)
+# Set strict warning level and all warnings as errors
+if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+  target_compile_options(main PRIVATE 
+    /permissive 
+    /W4 
+    /WX
+  )
+else()
+  target_compile_options(main PRIVATE 
+    -Wall 
+    -Wextra 
+    -Wpedantic 
+    -Werror 
+    -Wno-c++98-compat
+  )
 endif()
+
+# Define DEBUG macro
+target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 
 # tests target
 add_executable(tests)
-target_sources(tests PRIVATE src/game/game.test.cpp)
+target_sources(tests PRIVATE 
+  "src/game/game.test.cpp"
+)
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 # Add unit tests
@@ -41,4 +62,4 @@ catch_discover_tests(tests)
 
 # Smoke test
 enable_testing()
-add_test(NAME "Smoke test" COMMAND main --smoke-test)
+add_test(NAME "Smoke test" COMMAND main "--smoke-test")

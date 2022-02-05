@@ -5,13 +5,16 @@
       "generator": "Ninja",
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\build\\${name}",
-      "cmakeCommandArgs": "",
-      "buildCommandArgs": "",
-      "ctestCommandArgs": "",
       "inheritEnvironments": [ "clang_cl_x64_x64" ],
-      "variables": [],
       "intelliSenseMode": "windows-clang-x64",
       "enableClangTidyCodeAnalysis": true
+    },
+    {
+      "name": "x64-Clang-Release",
+      "generator": "Ninja",
+      "configurationType": "Release",
+      "buildRoot": "${projectDir}\\build\\${name}",
+      "inheritEnvironments": [ "clang_cl_x64_x64" ]
     }
   ]
 }
