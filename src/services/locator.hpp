@@ -1,7 +1,7 @@
 #pragma once
 
-#include "logger/logger.hpp"
 #include "logger/debug_logger/debug_logger.hpp"
+#include "logger/logger.hpp"
 #include "logger/release_logger/release_logger.hpp"
 
 class Locator {
