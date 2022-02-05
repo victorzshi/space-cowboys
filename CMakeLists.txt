@@ -11,8 +11,9 @@ add_executable(main)
 target_sources(main PRIVATE 
   "src/main.cpp" 
   "src/game/game.cpp"
-  "src/services/logging/debug_logging.cpp"
   "src/services/locator.cpp"
+  "src/services/logging/debug_logging/debug_logging.cpp"
+  "src/services/logging/null_logging/null_logging.cpp"
 )
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 

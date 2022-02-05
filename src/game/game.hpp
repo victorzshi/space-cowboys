@@ -5,7 +5,7 @@
 class Game {
  public:
   Game(bool isSmokeTest = false);
-  static bool init();
+  static bool initialize();
   void start();
   void stop();
   void processInput();

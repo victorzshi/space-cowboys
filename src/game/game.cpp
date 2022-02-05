@@ -12,7 +12,7 @@ Game::Game(bool isSmokeTest) {
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
-bool Game::init() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
+bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
 
 void Game::start() {
   double previous = static_cast<double>(SDL_GetTicks64());

@@ -4,6 +4,6 @@
 
 class Logging {
  public:
-  virtual ~Logging() {}
+  virtual ~Logging() = default;
   virtual void print(const std::string& text) = 0;
 };

@@ -1,4 +1,4 @@
-#include "logging.hpp"
+#include "../logging.hpp"
 
 class DebugLogging : public Logging {
  public:
