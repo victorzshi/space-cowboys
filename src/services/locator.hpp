@@ -10,6 +10,10 @@ class Locator {
   static void provide(Logging* service);
 
  private:
+#if DEBUG
   static Logging* service_;
-  static NullLogging* nullService_;
+  static NullLogging* service_;
+#else
+  // TODO: Set release mode logging.
+#endif
 };

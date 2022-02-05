@@ -24,16 +24,15 @@ if(UNIX AND NOT APPLE)
   target_link_libraries(main PRIVATE ${X11_LIBRARIES})
 endif()
 
-# Compile with very strict warning level
-if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  target_compile_options(main PRIVATE -Wall -Wextra -Wpedantic -Werror -Wno-c++98-compat)
-elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-  target_compile_options(main PRIVATE /permissive /W4 /WX)
+# Set strict warning level and all warnings as errors
+if(MSVC)
+  target_compile_options(main PRIVATE /W4 /WX)
+else()
+  target_compile_options(main PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
+
+# Define DEBUG macro
+target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 
 # tests target
 add_executable(tests)
