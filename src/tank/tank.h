@@ -1,25 +1,14 @@
 #pragma once
 
-#include <SDL.h>
-
-#include "../vector_2/vector_2.h"
+#include "../game_object/game_object.h"
+#include "tank_graphics_component.h"
+#include "tank_input_component.h"
+#include "tank_physics_component.h"
 
 class Tank {
  public:
-  Tank();
-
-  void setPosition(Vector2 position);
-
-  void input(SDL_Event& event);
-
-  void update();
-
-  void render(SDL_Renderer* renderer) const;
-
- private:
-  const double speed_ = 0.1;
-
-  Vector2 position_;
-  Vector2 velocity_;
-  Vector2 acceleration_;
+  static GameObject* createTank() {
+    return new GameObject(new TankInputComponent(), new TankPhysicsComponent(),
+                          new TankGraphicsComponent());
+  }
 };

@@ -19,7 +19,11 @@ target_sources(main PRIVATE
   "src/service/logger/release_logger/release_logger.cc"
   "src/vector_2/vector_2.cc"
   "src/game/game.cc"
-  "src/tank/tank.cc"
+  "src/game_object/game_object.cc"
+  # TODO(Victor): Use .cc files instead of .h
+  "src/tank/tank_graphics_component.h"
+  "src/tank/tank_input_component.h"
+  "src/tank/tank_physics_component.h"
 )
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
@@ -53,7 +57,7 @@ target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 # tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
-  "src/game/game.test.cc"
+  "src/vector_2/vector_2.test.cc"
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 

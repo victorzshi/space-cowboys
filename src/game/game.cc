@@ -1,5 +1,7 @@
 #include "game.h"
 
+#include "../tank/tank.h"
+
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
@@ -10,12 +12,8 @@ Game::Game() : isRunning_(true) {
 }
 
 bool Game::initialize() {
-  // TODO(Victor): Get rid of this naming.
-  const double two = 2.0;
-
-  Vector2 center = Vector2(kScreenWidth / two, kScreenHeight / two);
-
-  tank_.setPosition(center);
+  tank_ = Tank::createTank();
+  tank_->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
 
   return SDL_Init(SDL_INIT_VIDEO) == 0;
 }
@@ -57,20 +55,24 @@ void Game::processInput() {
       isRunning_ = false;
     }
 
-    tank_.input(event);
+    // TODO(Victor): Process input for all entities.
+    tank_->processInput(event);
   }
 }
 
-void Game::update() { tank_.update(); }
+void Game::update() {
+  // TODO(Victor): Update state of all entities.
+  tank_->update(*this);
+}
 
 void Game::render() {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer_);
 
-  SDL_SetRenderDrawColor(renderer_, SDL_ALPHA_OPAQUE, SDL_ALPHA_OPAQUE,
-                         SDL_ALPHA_OPAQUE, SDL_ALPHA_OPAQUE);
+  SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  tank_.render(renderer_);
+  // TODO(Victor): Render all entities.
+  tank_->render(renderer_);
 
   SDL_RenderPresent(renderer_);
 }

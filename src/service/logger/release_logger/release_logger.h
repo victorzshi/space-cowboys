@@ -4,5 +4,5 @@
 
 class ReleaseLogger : public Logger {
  public:
-  void print(const std::string& text) override;
+  virtual void print(const std::string& text) override;
 };

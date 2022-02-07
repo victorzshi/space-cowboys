@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../tank/tank.h"
 #include "SDL.h"
+#include "../game_object/game_object.h"
 
 class Game {
  public:
@@ -24,5 +24,5 @@ class Game {
   SDL_Window* window_;
   SDL_Renderer* renderer_;
 
-  Tank tank_;
+  GameObject* tank_;
 };
