@@ -1,12 +1,13 @@
 #pragma once
 
+#include "../tank/tank.h"
 #include "SDL.h"
 
 class Game {
  public:
-  Game(bool isSmokeTest = false);
-  static bool initialize();
-  void start();
+  Game();
+  bool initialize();
+  void start(bool isSmokeTest = false);
   void stop();
   void processInput();
   void update();
@@ -18,9 +19,10 @@ class Game {
   static const int kTicksPerUpdate = 16;
   static const int kSmokeTestDuration = 1000;
 
-  bool isSmokeTest_;
   bool isRunning_;
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
+
+  Tank tank_;
 };
