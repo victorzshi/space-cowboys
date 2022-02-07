@@ -4,7 +4,7 @@
 
 class TankInputComponent : public InputComponent {
  public:
-   virtual void update(GameObject& object, SDL_Event event) override {
+  virtual void update(GameObject& object, SDL_Event event) override {
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
