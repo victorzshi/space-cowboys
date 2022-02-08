@@ -14,9 +14,9 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/main.cc" 
-  "src/service/locator.cc"
-  "src/service/logger/debug_logger/debug_logger.cc"
-  "src/service/logger/release_logger/release_logger.cc"
+  "src/services/locator.cc"
+  "src/services/logger/debug_logger/debug_logger.cc"
+  "src/services/logger/release_logger/release_logger.cc"
   "src/vector_2/vector_2.cc"
   "src/game/game.cc"
   "src/game_object/game_object.cc"
