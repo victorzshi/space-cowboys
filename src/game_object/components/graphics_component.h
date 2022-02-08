@@ -6,5 +6,6 @@ struct SDL_Renderer;
 class GraphicsComponent {
  public:
   virtual ~GraphicsComponent() {}
-  virtual void update(GameObject& object, SDL_Renderer* renderer) = 0;
+  virtual void update(GameObject& object, SDL_Renderer* renderer,
+                      double delay) = 0;
 };

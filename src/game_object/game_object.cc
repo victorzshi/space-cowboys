@@ -12,6 +12,6 @@ void GameObject::processInput(SDL_Event event) { input_->update(*this, event); }
 
 void GameObject::update(Game& game) { physics_->update(*this, game); }
 
-void GameObject::render(SDL_Renderer* renderer) {
-  graphics_->update(*this, renderer);
+void GameObject::render(SDL_Renderer* renderer, double delay) {
+  graphics_->update(*this, renderer, delay);
 }

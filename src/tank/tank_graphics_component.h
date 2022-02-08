@@ -4,7 +4,11 @@
 
 class TankGraphicsComponent : public GraphicsComponent {
  public:
-  virtual void update(GameObject& object, SDL_Renderer* renderer) override {
+  virtual void update(GameObject& object, SDL_Renderer* renderer,
+                      double delay) override {
+    // TODO(Victor): Account for delay.
+    (void)delay;
+
     int x = static_cast<int>(round(object.position.x));
     int y = static_cast<int>(round(object.position.y));
     const int width = 100;

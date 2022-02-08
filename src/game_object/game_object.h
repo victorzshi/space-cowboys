@@ -22,7 +22,7 @@ class GameObject {
 
   void update(Game& game);
 
-  void render(SDL_Renderer* renderer);
+  void render(SDL_Renderer* renderer, double delay);
 
  private:
   InputComponent* input_;

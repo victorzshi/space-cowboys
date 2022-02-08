@@ -39,7 +39,7 @@ void Game::start(bool isSmokeTest) {
       lag -= kTicksPerUpdate;
     }
 
-    render();
+    render(lag / kTicksPerUpdate);
 
     if (isSmokeTest && current > kSmokeTestDuration) {
       isRunning_ = false;
@@ -76,7 +76,7 @@ void Game::update() {
   }
 }
 
-void Game::render() {
+void Game::render(double delay) {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
   SDL_RenderClear(renderer_);
 
@@ -84,7 +84,7 @@ void Game::render() {
 
   for (int i = 0; i < kMaxObjects; i++) {
     if (objects[i] != nullptr) {
-      objects[i]->render(renderer_);
+      objects[i]->render(renderer_, delay);
     }
   }
 

@@ -12,7 +12,7 @@ class Game {
   void stop();
   void input();
   void update();
-  void render();
+  void render(double delay);
 
  private:
   static const int kScreenWidth = 640;
