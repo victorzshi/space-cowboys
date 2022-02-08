@@ -25,6 +25,7 @@ target_sources(main PRIVATE
   "src/tank/tank_input_component.h"
   "src/tank/tank_physics_component.h"
 )
+target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
 
 # Manually link X11 library on Linux
@@ -60,6 +61,7 @@ target_sources(tests PRIVATE
   "src/vector_2/vector_2.cc"
   "src/vector_2/vector_2.test.cc"
 )
+target_include_directories(tests PRIVATE "src")
 target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 # Add unit tests

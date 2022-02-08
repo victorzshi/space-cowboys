@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 
-#include "../game_object/game_object.h"
+#include "game_object/game_object.h"
 
 class Game {
  public:

@@ -2,10 +2,10 @@
 
 #include <SDL.h>
 
-#include "../vector_2/vector_2.h"
 #include "components/graphics_component.h"
 #include "components/input_component.h"
 #include "components/physics_component.h"
+#include "vector_2/vector_2.h"
 
 class Game;
 
