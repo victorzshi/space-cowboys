@@ -2,19 +2,20 @@
 
 #include "game_object/game_object.h"
 
-class TankGraphicsComponent : public GraphicsComponent {
+class TankRenderComponent : public RenderComponent {
  public:
   virtual void update(GameObject& object, SDL_Renderer* renderer,
                       double delay) override {
     // TODO(Victor): Account for delay.
     (void)delay;
 
-    int x = static_cast<int>(round(object.position.x));
-    int y = static_cast<int>(round(object.position.y));
-    const int width = 100;
-    const int height = 100;
+    SDL_Rect box;
 
-    SDL_Rect box = {x, y, width, height};
+    // Return SDL_Point
+    box.x = static_cast<int>(round(object.position.x));
+    box.y = static_cast<int>(round(object.position.y));
+    box.w = object.width;
+    box.h = object.height;
 
     SDL_RenderFillRect(renderer, &box);
   }

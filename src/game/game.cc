@@ -18,6 +18,8 @@ bool Game::initialize() {
 
   GameObject* tank = Tank::createTank();
   tank->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
+  tank->width = 10;
+  tank->height = 10;
   objects[0] = tank;
 
   return SDL_Init(SDL_INIT_VIDEO) == 0;
@@ -62,7 +64,7 @@ void Game::input() {
 
     for (int i = 0; i < kMaxObjects; i++) {
       if (objects[i] != nullptr) {
-        objects[i]->processInput(event);
+        objects[i]->input(event);
       }
     }
   }

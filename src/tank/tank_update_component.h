@@ -2,7 +2,7 @@
 
 #include "game_object/game_object.h"
 
-class TankPhysicsComponent : public PhysicsComponent {
+class TankUpdateComponent : public UpdateComponent {
  public:
   virtual void update(GameObject& object, Game& game) override {
     (void)game;
