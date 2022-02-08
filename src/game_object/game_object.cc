@@ -18,4 +18,3 @@ void GameObject::update(Game& game) { update_->update(*this, game); }
 void GameObject::render(SDL_Renderer* renderer, double delay) {
   render_->update(*this, renderer, delay);
 }
-
