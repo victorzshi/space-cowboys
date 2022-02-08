@@ -4,17 +4,14 @@
 
 Vector2::Vector2() : x(0.0), y(0.0) {}
 
-Vector2::Vector2(double newX, double newY) {
-  this->x = newX;
-  this->y = newY;
+Vector2::Vector2(double newX, double newY) : x(newX), y(newY) {}
+
+Vector2 Vector2::add(Vector2 u, Vector2 v) {
+  return Vector2(u.x + v.x, u.y + v.y);
 }
 
-Vector2 Vector2::add(Vector2 v, Vector2 u) {
-  return Vector2(v.x + u.x, v.y + u.y);
-}
-
-Vector2 Vector2::subtract(Vector2 v, Vector2 u) {
-  return Vector2(v.x - u.x, v.y - u.y);
+Vector2 Vector2::subtract(Vector2 u, Vector2 v) {
+  return Vector2(u.x - v.x, u.y - v.y);
 }
 
 Vector2 Vector2::multiply(Vector2 v, double n) {
@@ -41,4 +38,9 @@ Vector2 Vector2::limit(Vector2 v, double n) {
     return Vector2::multiply(normal, n);
   }
   return v;
+}
+
+bool Vector2::operator==(const Vector2& other) {
+  double error = 0.01;
+  return abs(x - other.x) < error && abs(y - other.y) < error;
 }

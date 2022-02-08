@@ -8,9 +8,9 @@ class Vector2 {
 
   Vector2(double x, double y);
 
-  static Vector2 add(Vector2 v, Vector2 u);
+  static Vector2 add(Vector2 u, Vector2 v);
 
-  static Vector2 subtract(Vector2 v, Vector2 u);
+  static Vector2 subtract(Vector2 u, Vector2 v);
 
   static Vector2 multiply(Vector2 v, double n);
 
@@ -21,4 +21,6 @@ class Vector2 {
   static Vector2 normalize(Vector2 v);
 
   static Vector2 limit(Vector2 v, double n);
+
+  bool operator==(const Vector2& other);
 };

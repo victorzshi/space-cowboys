@@ -57,6 +57,7 @@ target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 # tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
+  "src/vector_2/vector_2.cc"
   "src/vector_2/vector_2.test.cc"
 )
 target_link_libraries(tests PRIVATE Catch2::Catch2)
