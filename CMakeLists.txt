@@ -20,10 +20,6 @@ target_sources(main PRIVATE
   "src/vector_2/vector_2.cc"
   "src/game/game.cc"
   "src/game_object/game_object.cc"
-  # TODO(Victor): Use .cc files instead of .h
-  "src/tank/tank_graphics_component.h"
-  "src/tank/tank_input_component.h"
-  "src/tank/tank_physics_component.h"
 )
 target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)

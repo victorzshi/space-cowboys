@@ -3,8 +3,8 @@
 class GameObject;
 class Game;
 
-class PhysicsComponent {
+class UpdateComponent {
  public:
-  virtual ~PhysicsComponent() {}
+  virtual ~UpdateComponent() {}
   virtual void update(GameObject& object, Game& game) = 0;
 };

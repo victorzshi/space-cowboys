@@ -1,17 +1,20 @@
 #include "game_object.h"
 
-GameObject::GameObject(InputComponent* input, PhysicsComponent* physics,
-                       GraphicsComponent* graphics)
+GameObject::GameObject(InputComponent* input, UpdateComponent* update,
+                       RenderComponent* render)
     : position(Vector2()),
       velocity(Vector2()),
+      acceleration(Vector2()),
+      width(0),
+      height(0),
       input_(input),
-      physics_(physics),
-      graphics_(graphics) {}
+      update_(update),
+      render_(render) {}
 
-void GameObject::processInput(SDL_Event event) { input_->update(*this, event); }
+void GameObject::input(SDL_Event event) { input_->update(*this, event); }
 
-void GameObject::update(Game& game) { physics_->update(*this, game); }
+void GameObject::update(Game& game) { update_->update(*this, game); }
 
-void GameObject::render(SDL_Renderer* renderer) {
-  graphics_->update(*this, renderer);
+void GameObject::render(SDL_Renderer* renderer, double delay) {
+  render_->update(*this, renderer, delay);
 }
