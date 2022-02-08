@@ -12,8 +12,13 @@ Game::Game() : isRunning_(true) {
 }
 
 bool Game::initialize() {
-  tank_ = Tank::createTank();
-  tank_->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
+  for (int i = 0; i < kMaxObjects; i++) {
+    objects[i] = nullptr;
+  }
+
+  GameObject* tank = Tank::createTank();
+  tank->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
+  objects[0] = tank;
 
   return SDL_Init(SDL_INIT_VIDEO) == 0;
 }
@@ -27,7 +32,7 @@ void Game::start(bool isSmokeTest) {
     double elapsed = current - previous;
     previous = current;
     lag += elapsed;
-    processInput();
+    input();
 
     while (lag >= kTicksPerUpdate) {
       update();
@@ -47,7 +52,7 @@ void Game::stop() {
   SDL_Quit();
 }
 
-void Game::processInput() {
+void Game::input() {
   SDL_Event event;
 
   while (SDL_PollEvent(&event) != 0) {
@@ -55,14 +60,20 @@ void Game::processInput() {
       isRunning_ = false;
     }
 
-    // TODO(Victor): Process input for all entities.
-    tank_->processInput(event);
+    for (int i = 0; i < kMaxObjects; i++) {
+      if (objects[i] != nullptr) {
+        objects[i]->processInput(event);
+      }
+    }
   }
 }
 
 void Game::update() {
-  // TODO(Victor): Update state of all entities.
-  tank_->update(*this);
+  for (int i = 0; i < kMaxObjects; i++) {
+    if (objects[i] != nullptr) {
+      objects[i]->update(*this);
+    }
+  }
 }
 
 void Game::render() {
@@ -71,8 +82,11 @@ void Game::render() {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  // TODO(Victor): Render all entities.
-  tank_->render(renderer_);
+  for (int i = 0; i < kMaxObjects; i++) {
+    if (objects[i] != nullptr) {
+      objects[i]->render(renderer_);
+    }
+  }
 
   SDL_RenderPresent(renderer_);
 }
