@@ -39,8 +39,3 @@ Vector2 Vector2::limit(Vector2 v, double n) {
   }
   return v;
 }
-
-bool Vector2::operator==(const Vector2& other) {
-  double error = 0.01;
-  return abs(x - other.x) < error && abs(y - other.y) < error;
-}

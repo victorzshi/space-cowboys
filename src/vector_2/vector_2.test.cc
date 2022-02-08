@@ -10,30 +10,30 @@ Vector2 w;
 
 TEST_CASE("Vector2 add", "[vector_2]") {
   w = Vector2::add(u, v);
-  REQUIRE((w == Vector2(4.0, 6.0)) == true);
-  REQUIRE((w == Vector2(4.1, 6.0)) == false);
-  REQUIRE((w == Vector2(4.0, 6.1)) == false);
+  REQUIRE((w.x == 4.0 && w.y == 6.0) == true);
+  REQUIRE((w.x == 4.1 && w.y == 6.0) == false);
+  REQUIRE((w.x == 4.0 && w.y == 6.1) == false);
 }
 
 TEST_CASE("Vector2 subtract", "[vector_2]") {
   w = Vector2::subtract(u, v);
-  REQUIRE((w == Vector2(-2.0, -2.0)) == true);
-  REQUIRE((w == Vector2(-2.1, -2.0)) == false);
-  REQUIRE((w == Vector2(-2.0, -2.1)) == false);
+  REQUIRE((w.x == -2.0 && w.y == -2.0) == true);
+  REQUIRE((w.x == -2.1 && w.y == -2.0) == false);
+  REQUIRE((w.x == -2.0 && w.y == -2.1) == false);
 }
 
 TEST_CASE("Vector2 multiply", "[vector_2]") {
   w = Vector2::multiply(u, 1.5);
-  REQUIRE((w == Vector2(1.5, 3.0)) == true);
-  REQUIRE((w == Vector2(1.6, 3.0)) == false);
-  REQUIRE((w == Vector2(1.5, 3.1)) == false);
+  REQUIRE((w.x == 1.5 && w.y == 3.0) == true);
+  REQUIRE((w.x == 1.6 && w.y == 3.0) == false);
+  REQUIRE((w.x == 1.5 && w.y == 3.1) == false);
 }
 
 TEST_CASE("Vector2 divide", "[vector_2]") {
   w = Vector2::divide(u, 2.0);
-  REQUIRE((w == Vector2(0.5, 1.0)) == true);
-  REQUIRE((w == Vector2(0.6, 1.0)) == false);
-  REQUIRE((w == Vector2(0.5, 1.1)) == false);
+  REQUIRE((w.x == 0.5 && w.y == 1.0) == true);
+  REQUIRE((w.x == 0.6 && w.y == 1.0) == false);
+  REQUIRE((w.x == 0.5 && w.y == 1.1) == false);
 }
 
 TEST_CASE("Vector2 magnitude", "[vector_2]") {
@@ -52,5 +52,5 @@ TEST_CASE("Vector2 limit", "[vector_2]") {
   double n = 2.0;
   double magnitude = Vector2::magnitude(u);
   w = Vector2::limit(u, n);
-  REQUIRE((w == Vector2(u.x / magnitude * n, u.y / magnitude * n)) == true);
+  REQUIRE((w.x == u.x / magnitude * n && w.y == u.y / magnitude * n) == true);
 }
