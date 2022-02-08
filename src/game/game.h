@@ -1,7 +1,8 @@
 #pragma once
 
+#include <SDL.h>
+
 #include "../game_object/game_object.h"
-#include "SDL.h"
 
 class Game {
  public:
