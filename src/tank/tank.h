@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../game_object/game_object.h"
+#include "game_object/game_object.h"
 #include "tank_graphics_component.h"
 #include "tank_input_component.h"
 #include "tank_physics_component.h"

@@ -1,6 +1,6 @@
 #include "game.h"
 
-#include "../tank/tank.h"
+#include "tank/tank.h"
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
