@@ -1,7 +1,5 @@
 #include "game.h"
 
-#include "tank/tank.h"
-
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
@@ -11,21 +9,15 @@ Game::Game() : isRunning_(true) {
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
-bool Game::initialize() {
-  for (int i = 0; i < kMaxObjects; i++) {
-    objects[i] = nullptr;
-  }
+bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
 
-  GameObject* tank = Tank::createTank();
-  tank->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
-  tank->width = 100;
-  tank->height = 100;
-  objects[0] = tank;
-
-  return SDL_Init(SDL_INIT_VIDEO) == 0;
+void Game::terminate() {
+  SDL_DestroyRenderer(renderer_);
+  SDL_DestroyWindow(window_);
+  SDL_Quit();
 }
 
-void Game::start(bool isSmokeTest) {
+void Game::run(bool isSmokeTest) {
   double previous = static_cast<double>(SDL_GetTicks64());
   double lag = 0.0;
 
@@ -49,11 +41,6 @@ void Game::start(bool isSmokeTest) {
   }
 }
 
-void Game::stop() {
-  SDL_DestroyWindow(window_);
-  SDL_Quit();
-}
-
 void Game::input() {
   SDL_Event event;
 
@@ -62,20 +49,12 @@ void Game::input() {
       isRunning_ = false;
     }
 
-    for (int i = 0; i < kMaxObjects; i++) {
-      if (objects[i] != nullptr) {
-        objects[i]->input(event);
-      }
-    }
+    // TODO(Victor): Process input for entities.
   }
 }
 
 void Game::update() {
-  for (int i = 0; i < kMaxObjects; i++) {
-    if (objects[i] != nullptr) {
-      objects[i]->update(*this);
-    }
-  }
+  // TODO(Victor): Update entities.
 }
 
 void Game::render(double delay) {
@@ -84,11 +63,8 @@ void Game::render(double delay) {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  for (int i = 0; i < kMaxObjects; i++) {
-    if (objects[i] != nullptr) {
-      objects[i]->render(renderer_, delay);
-    }
-  }
+  (void)delay;
+  // TODO(Victor): Render entities.
 
   SDL_RenderPresent(renderer_);
 }
