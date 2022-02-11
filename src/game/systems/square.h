@@ -48,16 +48,16 @@ class Square {
     int height = 100;
 
     for (int i = 0; i < game.totalEntities(); i++) {
-      SDL_Point point;
+       Vector2 position;
 
       if (delay > 0) {
         Vector2 velocity = Vector2::multiply(physics[i].velocity, delay);
-        Vector2 position = Vector2::add(transforms[i].position, velocity);
-        point = Utilities::getTopLeftPoint(position, width, height);
+        position = Vector2::add(transforms[i].position, velocity);
       } else {
-        point =
-            Utilities::getTopLeftPoint(transforms[i].position, width, height);
+        position = transforms[i].position;
       }
+
+      SDL_Point point = Utilities::getTopLeftPoint(position, width, height);
 
       SDL_Rect box = {point.x, point.y, width, height};
 
