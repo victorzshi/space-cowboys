@@ -2,8 +2,8 @@
 
 #include <SDL.h>
 
-#include "components/transform.h"
 #include "components/physics.h"
+#include "components/transform.h"
 
 class Game {
  public:
