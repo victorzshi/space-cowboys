@@ -48,7 +48,7 @@ class Square {
     int height = 100;
 
     for (int i = 0; i < game.totalEntities(); i++) {
-       Vector2 position;
+      Vector2 position;
 
       if (delay > 0) {
         Vector2 velocity = Vector2::multiply(physics[i].velocity, delay);
