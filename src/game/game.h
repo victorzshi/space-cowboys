@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 
+#include "ecs/ecs.h"
+
 class Game {
  public:
   Game();
@@ -21,6 +23,8 @@ class Game {
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
+
+  ECS ecs;
 
   void input();
   void update();

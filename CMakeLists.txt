@@ -19,6 +19,7 @@ target_sources(main PRIVATE
   "src/services/logger/release_logger/release_logger.cc"
   "src/utilities/vector_2/vector_2.cc"
   "src/game/game.cc"
+  "src/ecs/ecs.cc"
 )
 target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)

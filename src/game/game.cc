@@ -49,13 +49,11 @@ void Game::input() {
       isRunning_ = false;
     }
 
-    // TODO(Victor): Process input for entities.
+    ecs.input(event);
   }
 }
 
-void Game::update() {
-  // TODO(Victor): Update entities.
-}
+void Game::update() { ecs.update(); }
 
 void Game::render(double delay) {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -63,8 +61,7 @@ void Game::render(double delay) {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  (void)delay;
-  // TODO(Victor): Render entities.
+  ecs.render(renderer_, delay);
 
   SDL_RenderPresent(renderer_);
 }
