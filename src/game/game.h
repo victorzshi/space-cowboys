@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "components/transform.h"
+#include "components/physics.h"
 
 class Game {
  public:
@@ -30,6 +31,7 @@ class Game {
   int totalEntities_;
 
   Transform* transforms_;
+  Physics* physics_;
 
   void input();
   void update();

@@ -13,18 +13,19 @@ Game::Game() : isRunning_(true), totalEntities_(0) {
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
   transforms_ = new Transform[kMaxEntities];
+  physics_ = new Physics[kMaxEntities];
 
   int entity = createEntity();
-  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+  addTransform(entity, {Vector2(20.0, 20.0)});
 
   entity = createEntity();
-  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+  addTransform(entity, {Vector2(20.0, kScreenHeight - 20.0)});
 
   entity = createEntity();
-  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+  addTransform(entity, {Vector2(kScreenWidth - 20.0, 20.0)});
 
   entity = createEntity();
-  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+  addTransform(entity, {Vector2(kScreenWidth - 20.0, kScreenHeight - 20.0)});
 }
 
 bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
@@ -71,11 +72,11 @@ void Game::input() {
       isRunning_ = false;
     }
 
-    // TODO(Victor): Test input.
+    Square::inputPositions(*this, event, physics_);
   }
 }
 
-void Game::update() { Square::updatePositions(*this, transforms_); }
+void Game::update() { Square::updatePositions(*this, transforms_, physics_); }
 
 void Game::render(double delay) {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -83,8 +84,7 @@ void Game::render(double delay) {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  (void)delay;
-  Square::renderPositions(*this, transforms_);
+  Square::renderPositions(*this, delay, transforms_, physics_);
 
   SDL_RenderPresent(renderer_);
 }
