@@ -1,12 +1,30 @@
 #include "game.h"
 
-Game::Game() : isRunning_(true) {
+#include <assert.h>
+
+#include "systems/square.h"
+
+Game::Game() : isRunning_(true), totalEntities_(0) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+  transforms_ = new Transform[kMaxEntities];
+
+  int entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth / 2, kScreenHeight / 2)});
 }
 
 bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
@@ -16,6 +34,10 @@ void Game::terminate() {
   SDL_DestroyWindow(window_);
   SDL_Quit();
 }
+
+SDL_Renderer* Game::renderer() { return renderer_; }
+
+int Game::totalEntities() { return totalEntities_; }
 
 void Game::run(bool isSmokeTest) {
   double previous = static_cast<double>(SDL_GetTicks64());
@@ -49,11 +71,11 @@ void Game::input() {
       isRunning_ = false;
     }
 
-    ecs.input(event);
+    // TODO(Victor): Test input.
   }
 }
 
-void Game::update() { ecs.update(); }
+void Game::update() { Square::updatePositions(*this, transforms_); }
 
 void Game::render(double delay) {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -61,7 +83,19 @@ void Game::render(double delay) {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  ecs.render(renderer_, delay);
+  (void)delay;
+  Square::renderPositions(*this, transforms_);
 
   SDL_RenderPresent(renderer_);
+}
+
+int Game::createEntity() {
+  assert(totalEntities_ < kMaxEntities);
+
+  ++totalEntities_;
+  return totalEntities_ - 1;
+}
+
+void Game::addTransform(int entity, Transform transform) {
+  transforms_[entity] = transform;
 }
