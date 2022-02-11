@@ -10,10 +10,12 @@ int main(int argc, char *argv[]) {
   }
 
   Game game = Game();
+
   if (game.initialize()) {
-    game.start(isSmokeTest);
-    game.stop();
+    game.run(isSmokeTest);
   }
+
+  game.terminate();
 
   return 0;
 }

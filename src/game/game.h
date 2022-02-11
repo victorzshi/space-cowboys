@@ -2,29 +2,41 @@
 
 #include <SDL.h>
 
-#include "game_object/game_object.h"
+#include "components/physics.h"
+#include "components/transform.h"
 
 class Game {
  public:
   Game();
+
   bool initialize();
-  void start(bool isSmokeTest = false);
-  void stop();
-  void input();
-  void update();
-  void render(double delay);
+  void terminate();
+
+  SDL_Renderer* renderer();
+  int totalEntities();
+
+  void run(bool isSmokeTest = false);
 
  private:
   static const int kScreenWidth = 640;
   static const int kScreenHeight = 480;
   static const int kTicksPerUpdate = 16;
   static const int kSmokeTestDuration = 1000;
-  static const int kMaxObjects = 2;
-
-  bool isRunning_;
+  static const int kMaxEntities = 10;
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
 
-  GameObject* objects[kMaxObjects];
+  bool isRunning_;
+  int totalEntities_;
+
+  Transform* transforms_;
+  Physics* physics_;
+
+  void input();
+  void update();
+  void render(double delay);
+
+  int createEntity();
+  void addTransform(int entity, Transform transform);
 };

@@ -1,31 +1,46 @@
 #include "game.h"
 
-#include "tank/tank.h"
+#include <assert.h>
 
-Game::Game() : isRunning_(true) {
+#include "systems/square.h"
+
+Game::Game() : isRunning_(true), totalEntities_(0) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+  transforms_ = new Transform[kMaxEntities];
+  physics_ = new Physics[kMaxEntities];
+
+  int entity = createEntity();
+  addTransform(entity, {Vector2(20.0, 20.0)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(20.0, kScreenHeight - 20.0)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth - 20.0, 20.0)});
+
+  entity = createEntity();
+  addTransform(entity, {Vector2(kScreenWidth - 20.0, kScreenHeight - 20.0)});
 }
 
-bool Game::initialize() {
-  for (int i = 0; i < kMaxObjects; i++) {
-    objects[i] = nullptr;
-  }
+bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
 
-  GameObject* tank = Tank::createTank();
-  tank->position = Vector2(kScreenWidth / 2.0, kScreenHeight / 2.0);
-  tank->width = 100;
-  tank->height = 100;
-  objects[0] = tank;
-
-  return SDL_Init(SDL_INIT_VIDEO) == 0;
+void Game::terminate() {
+  SDL_DestroyRenderer(renderer_);
+  SDL_DestroyWindow(window_);
+  SDL_Quit();
 }
 
-void Game::start(bool isSmokeTest) {
+SDL_Renderer* Game::renderer() { return renderer_; }
+
+int Game::totalEntities() { return totalEntities_; }
+
+void Game::run(bool isSmokeTest) {
   double previous = static_cast<double>(SDL_GetTicks64());
   double lag = 0.0;
 
@@ -49,11 +64,6 @@ void Game::start(bool isSmokeTest) {
   }
 }
 
-void Game::stop() {
-  SDL_DestroyWindow(window_);
-  SDL_Quit();
-}
-
 void Game::input() {
   SDL_Event event;
 
@@ -62,21 +72,11 @@ void Game::input() {
       isRunning_ = false;
     }
 
-    for (int i = 0; i < kMaxObjects; i++) {
-      if (objects[i] != nullptr) {
-        objects[i]->input(event);
-      }
-    }
+    Square::inputPositions(*this, event, physics_);
   }
 }
 
-void Game::update() {
-  for (int i = 0; i < kMaxObjects; i++) {
-    if (objects[i] != nullptr) {
-      objects[i]->update(*this);
-    }
-  }
-}
+void Game::update() { Square::updatePositions(*this, transforms_, physics_); }
 
 void Game::render(double delay) {
   SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -84,11 +84,18 @@ void Game::render(double delay) {
 
   SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  for (int i = 0; i < kMaxObjects; i++) {
-    if (objects[i] != nullptr) {
-      objects[i]->render(renderer_, delay);
-    }
-  }
+  Square::renderPositions(*this, delay, transforms_, physics_);
 
   SDL_RenderPresent(renderer_);
+}
+
+int Game::createEntity() {
+  assert(totalEntities_ < kMaxEntities);
+
+  ++totalEntities_;
+  return totalEntities_ - 1;
+}
+
+void Game::addTransform(int entity, Transform transform) {
+  transforms_[entity] = transform;
 }
