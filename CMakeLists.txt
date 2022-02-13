@@ -14,11 +14,11 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/main.cc" 
+  "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
   "src/vec_2/vec_2.cc"
-  "src/world/world.cc"
 )
 target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)

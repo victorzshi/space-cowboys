@@ -5,9 +5,9 @@
 #include "components/physics.h"
 #include "components/transform.h"
 
-class World {
+class Game {
  public:
-  World();
+  Game();
 
   bool initialize();
   void terminate();

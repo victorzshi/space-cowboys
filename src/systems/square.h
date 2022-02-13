@@ -1,14 +1,14 @@
 #pragma once
 
 #include "utils/utils.h"
-#include "world/world.h"
+#include "game/game.h"
 
 class Square {
  public:
-  static void inputPositions(World& world, SDL_Event event, Physics* physics) {
+  static void inputPositions(Game& game, SDL_Event event, Physics* physics) {
     double speed = 0.1;
 
-    for (int i = 0; i < world.totalEntities(); i++) {
+    for (int i = 0; i < game.totalEntities(); i++) {
       if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         switch (event.key.keysym.sym) {
           case SDLK_LEFT:
@@ -31,7 +31,7 @@ class Square {
     }
   }
 
-  static void updatePositions(World& game, Transform* transforms,
+  static void updatePositions(Game& game, Transform* transforms,
                               Physics* physics) {
     for (int i = 0; i < game.totalEntities(); i++) {
       physics[i].velocity =
@@ -42,7 +42,7 @@ class Square {
     }
   }
 
-  static void renderPositions(World& game, double delay, Transform* transforms,
+  static void renderPositions(Game& game, double delay, Transform* transforms,
                               Physics* physics) {
     int width = 100;
     int height = 100;
