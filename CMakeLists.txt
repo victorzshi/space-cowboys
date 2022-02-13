@@ -17,8 +17,8 @@ target_sources(main PRIVATE
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
-  "src/utilities/vector_2/vector_2.cc"
-  "src/game/game.cc"
+  "src/vec_2/vec_2.cc"
+  "src/world/world.cc"
 )
 target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
@@ -53,8 +53,8 @@ target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 # tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
-  "src/utilities/vector_2/vector_2.cc"
-  "src/utilities/vector_2/vector_2.test.cc"
+  "src/vec_2/vec_2.cc"
+  "src/vec_2/vec_2.test.cc"
 )
 target_include_directories(tests PRIVATE "src")
 target_link_libraries(tests PRIVATE Catch2::Catch2)
