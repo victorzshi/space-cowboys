@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Dependencies via vcpkg.cmake
 find_package(SDL2 CONFIG REQUIRED)
+find_package(sdl2-image CONFIG REQUIRED)
 find_package(Catch2 CONFIG REQUIRED)
 
 # main target
@@ -22,7 +23,7 @@ target_sources(main PRIVATE
   "src/vec_2/vec_2.cc"
 )
 target_include_directories(main PRIVATE "src")
-target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main)
+target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image)
 
 # Manually link X11 library on Linux
 if(UNIX AND NOT APPLE)

@@ -1,5 +1,9 @@
 #include "game.h"
 
+#include <SDL_image.h>
+
+#include "services/locator.h"
+
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
@@ -8,10 +12,27 @@ Game::Game() : isRunning_(true) {
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-  entities_.initialize(kScreenWidth, kScreenHeight);
+  entities_.initialize(kScreenWidth, kScreenHeight, renderer_);
 }
 
-bool Game::initialize() { return SDL_Init(SDL_INIT_VIDEO) == 0; }
+bool Game::initialize() {
+  bool success = true;
+
+  // Initialize SDL
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    Locator::logger().print("SDL could not initialize!");
+    success = false;
+  }
+
+  // Initialize PNG loading
+  int imgFlags = IMG_INIT_PNG;
+  if (!(IMG_Init(imgFlags) & imgFlags)) {
+    Locator::logger().print("SDL_image could not initialize!");
+    success = false;
+  }
+
+  return success;
+}
 
 void Game::terminate() {
   SDL_DestroyRenderer(renderer_);
