@@ -2,11 +2,11 @@
 
 #include <SDL.h>
 
-#include "vector_2/vector_2.h"
+#include "vec_2/vec_2.h"
 
-class Utilities {
+class Utils {
  public:
-  static SDL_Point getTopLeftPoint(Vector2 position, int width, int height) {
+  static SDL_Point topLeftPoint(Vec2 position, int width, int height) {
     double offsetX = position.x - width * 0.5;
     double offsetY = position.y - height * 0.5;
 

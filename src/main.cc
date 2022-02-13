@@ -1,5 +1,5 @@
-#include "game/game.h"
 #include "services/locator.h"
+#include "world/world.h"
 
 int main(int argc, char *argv[]) {
   Locator::initialize();
@@ -9,13 +9,13 @@ int main(int argc, char *argv[]) {
     isSmokeTest = true;
   }
 
-  Game game = Game();
+  World world = World();
 
-  if (game.initialize()) {
-    game.run(isSmokeTest);
+  if (world.initialize()) {
+    world.run(isSmokeTest);
   }
 
-  game.terminate();
+  world.terminate();
 
   return 0;
 }
