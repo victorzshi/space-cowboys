@@ -1,5 +1,5 @@
-#include "world/world.h"
 #include "services/locator.h"
+#include "world/world.h"
 
 int main(int argc, char *argv[]) {
   Locator::initialize();

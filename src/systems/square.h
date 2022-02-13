@@ -1,7 +1,7 @@
 #pragma once
 
-#include "world/world.h"
 #include "utils/utils.h"
+#include "world/world.h"
 
 class Square {
  public:
