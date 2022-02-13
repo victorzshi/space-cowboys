@@ -1,14 +1,16 @@
 #pragma once
 
+#include "entities/entities.h"
 #include "utils/utils.h"
-#include "game/game.h"
 
 class Square {
  public:
-  static void inputPositions(Game& game, SDL_Event event, Physics* physics) {
+  static void inputPositions(Entities& entities, SDL_Event event) {
     double speed = 0.1;
 
-    for (int i = 0; i < game.totalEntities(); i++) {
+    Physics* physics = entities.physics;
+
+    for (int i = 0; i < entities.size(); i++) {
       if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         switch (event.key.keysym.sym) {
           case SDLK_LEFT:
@@ -31,9 +33,11 @@ class Square {
     }
   }
 
-  static void updatePositions(Game& game, Transform* transforms,
-                              Physics* physics) {
-    for (int i = 0; i < game.totalEntities(); i++) {
+  static void updatePositions(Entities& entities) {
+    Physics* physics = entities.physics;
+    Transform* transforms = entities.transforms;
+
+    for (int i = 0; i < entities.size(); i++) {
       physics[i].velocity =
           Vec2::add(physics[i].velocity, physics[i].acceleration);
 
@@ -42,12 +46,15 @@ class Square {
     }
   }
 
-  static void renderPositions(Game& game, double delay, Transform* transforms,
-                              Physics* physics) {
+  static void renderPositions(Entities& entities, SDL_Renderer* renderer,
+                              double delay) {
     int width = 100;
     int height = 100;
 
-    for (int i = 0; i < game.totalEntities(); i++) {
+    Physics* physics = entities.physics;
+    Transform* transforms = entities.transforms;
+
+    for (int i = 0; i < entities.size(); i++) {
       Vec2 position;
 
       if (delay > 0) {
@@ -61,7 +68,7 @@ class Square {
 
       SDL_Rect box = {point.x, point.y, width, height};
 
-      SDL_RenderDrawRect(game.renderer(), &box);
+      SDL_RenderDrawRect(renderer, &box);
     }
   }
 };
