@@ -1,8 +1,12 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_ttf.h>
+
+#include <sstream>
 
 #include "entities/entities.h"
+#include "texture/texture.h"
 
 class Game {
  public:

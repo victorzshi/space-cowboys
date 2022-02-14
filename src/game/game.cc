@@ -11,8 +11,8 @@ Game::Game() : isRunning_(true) {
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
-  // window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-   window_, -1, SDL_RENDERER_ACCELERATED);
+      // window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+      window_, -1, SDL_RENDERER_ACCELERATED);
 }
 
 bool Game::initialize() {
@@ -51,6 +51,16 @@ void Game::terminate() {
 }
 
 void Game::run(bool isSmokeTest) {
+#ifdef DEBUG
+  int startTime = static_cast<int>(SDL_GetTicks64());
+  int totalFrames = 0;
+  TTF_Font* font =
+      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 32);
+  SDL_Color color = {255, 255, 255, 255};
+  std::stringstream text;
+  Texture texture;
+#endif
+
   double previous = static_cast<double>(SDL_GetTicks64());
   double lag = 0.0;
 
@@ -73,8 +83,18 @@ void Game::run(bool isSmokeTest) {
 
     // Update state
     while (lag >= kTicksPerUpdate) {
-      entities_.update(renderer_);
+      entities_.update();
       lag -= kTicksPerUpdate;
+
+#ifdef DEBUG
+      int currentTime = static_cast<int>(SDL_GetTicks64());
+      double totalTime = (currentTime - startTime) / 1000.0;
+
+      text.str("");
+      text << "Average FPS " << totalFrames / totalTime;
+
+      texture.load_text(renderer_, font, text.str().c_str(), color);
+#endif
     }
 
     // Render graphics
@@ -84,6 +104,11 @@ void Game::run(bool isSmokeTest) {
     SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
     entities_.render(renderer_, lag / kTicksPerUpdate);
+
+#ifdef DEBUG
+    texture.render(renderer_, 0, 0);
+    ++totalFrames;
+#endif
 
     SDL_RenderPresent(renderer_);
 

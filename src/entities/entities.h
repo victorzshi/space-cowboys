@@ -1,14 +1,10 @@
 #pragma once
 
 #include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <sstream>
 
 #include "components/physics.h"
 #include "components/sprite.h"
 #include "components/transform.h"
-#include "texture/texture.h"
 
 class Entities {
  public:
@@ -23,7 +19,7 @@ class Entities {
   Transform* transforms();
 
   void input(SDL_Event event);
-  void update(SDL_Renderer* renderer);
+  void update();
   void render(SDL_Renderer* renderer, double delay);
 
  private:
@@ -41,16 +37,4 @@ class Entities {
   void addPhysics(int entity, Physics physics);
   void addSprite(int entity, Sprite sprite);
   void addTransform(int entity, Transform transform);
-
-#ifdef DEBUG
-  int start_time;
-  int frame_total;
-  int update_total;
-  TTF_Font* debug_font;
-  SDL_Color debug_font_color;
-  std::stringstream frame_text;
-  std::stringstream update_text;
-  Texture frames_per_second_texture;
-  Texture updates_per_second_texture;
-#endif
 };
