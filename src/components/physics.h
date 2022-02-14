@@ -1,9 +1,9 @@
 #pragma once
 
-#include "vector2/vector2.h"
+#include "vec2/vec2.h"
 
 struct Physics {
   float speed = 0.0;
-  Vector2 velocity;
-  Vector2 acceleration;
+  Vec2 velocity = Vec2();
+  Vec2 acceleration = Vec2();
 };

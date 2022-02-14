@@ -13,10 +13,10 @@ class RenderSprite {
     for (int i = 0; i < entities.size(); i++) {
       if (sprites[i].texture == nullptr) continue;
 
-      Vector2 position;
+      Vec2 position;
 
       if (delay > 0) {
-        Vector2 velocity = physics[i].velocity * delay;
+        Vec2 velocity = physics[i].velocity * delay;
         position = transforms[i].position + velocity;
       } else {
         position = transforms[i].position;
