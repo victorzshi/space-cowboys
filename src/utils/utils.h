@@ -2,7 +2,7 @@
 
 #include <SDL.h>
 
-#include "vec_2/vec_2.h"
+#include "vec2/vec2.h"
 
 class Utils {
  public:
@@ -10,8 +10,10 @@ class Utils {
     double offsetX = position.x - width * 0.5;
     double offsetY = position.y - height * 0.5;
 
-    SDL_Point point = {static_cast<int>(round(offsetX)),
-                       static_cast<int>(round(offsetY))};
+    int x = static_cast<int>(round(offsetX));
+    int y = static_cast<int>(round(offsetY));
+
+    SDL_Point point = {x, y};
 
     return point;
   }

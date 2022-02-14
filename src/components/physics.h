@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vec_2/vec_2.h"
+#include "vec2/vec2.h"
 
 struct Physics {
   double speed = 0.0;
