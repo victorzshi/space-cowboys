@@ -21,7 +21,8 @@ void Entities::initialize(int screenWidth, int screenHeight,
   SDL_Surface* loadedSurface = IMG_Load("../../data/space-invader.png");
   spaceInvader = SDL_CreateTextureFromSurface(renderer, loadedSurface);
   SDL_FreeSurface(loadedSurface);
-  Sprite sprite = {spaceInvader};
+  Sprite sprite;
+  sprite.texture = spaceInvader;
 
   // Initialize random number
   unsigned int seed = static_cast<unsigned int>(time(nullptr));
@@ -31,8 +32,15 @@ void Entities::initialize(int screenWidth, int screenHeight,
     int entity = createEntity();
     int width = rand() % screenWidth;
     int height = rand() % screenHeight;
-    addTransform(entity, {Vec2(width, height), 50, 50});
-    addPhysics(entity, {0.1, Vec2(0.0, rand() % 5 + 1)});
+    Transform transform;
+    transform.position = Vec2(width, height);
+    transform.width = 50;
+    transform.height = 50;
+    addTransform(entity, transform);
+    Physics physics;
+    physics.speed = 0.1;
+    physics.velocity = Vec2(0.0, rand() % 5 + 1);
+    addPhysics(entity, physics);
     addSprite(entity, sprite);
   }
 }
