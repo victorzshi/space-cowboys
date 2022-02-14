@@ -1,5 +1,5 @@
-#include "services/locator.h"
 #include "game/game.h"
+#include "services/locator.h"
 
 int main(int argc, char *argv[]) {
   Locator::initialize();
