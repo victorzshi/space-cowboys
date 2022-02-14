@@ -5,7 +5,7 @@
 
 class RenderSprite {
  public:
-  static void render(Entities& entities, SDL_Renderer* renderer, double delay) {
+  static void render(Entities& entities, SDL_Renderer* renderer, float delay) {
     Physics* physics = entities.physics();
     Transform* transforms = entities.transforms();
     Sprite* sprites = entities.sprites();
