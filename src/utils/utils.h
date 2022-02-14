@@ -4,11 +4,11 @@
 
 #include <cmath>
 
-#include "vec2/vec2.h"
+#include "vector2/vector2.h"
 
 class Utils {
  public:
-  static SDL_Point topLeftPoint(Vec2 position, int width, int height) {
+  static SDL_Point topLeftPoint(Vector2 position, int width, int height) {
     float offsetX = static_cast<float>(width * 0.5);
     float offsetY = static_cast<float>(height * 0.5);
 

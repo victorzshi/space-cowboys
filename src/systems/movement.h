@@ -9,7 +9,7 @@ class Movement {
 
     for (int i = 0; i < entities.size(); i++) {
       if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
-        Vec2 v;
+        Vector2 v;
         switch (event.key.keysym.sym) {
           case SDLK_LEFT:
             v.x = -physics[i].speed;
