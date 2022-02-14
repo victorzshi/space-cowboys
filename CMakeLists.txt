@@ -59,6 +59,8 @@ add_executable(tests)
 target_sources(tests PRIVATE 
   "src/vec2/vec2.cc"
   "src/vec2/vec2.test.cc"
+  "src/vector2/vector2.cc"
+  "src/vector2/vector2.test.cc"
 )
 target_include_directories(tests PRIVATE "src")
 target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2)
