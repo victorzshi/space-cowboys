@@ -1,6 +1,7 @@
 #include "game.h"
 
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "services/locator.h"
 
@@ -10,9 +11,8 @@ Game::Game() : isRunning_(true) {
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
-      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-  entities_.initialize(kScreenWidth, kScreenHeight, renderer_);
+  // window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+   window_, -1, SDL_RENDERER_ACCELERATED);
 }
 
 bool Game::initialize() {
@@ -31,12 +31,22 @@ bool Game::initialize() {
     success = false;
   }
 
+  // Initialize SDL_ttf
+  if (TTF_Init() == -1) {
+    Locator::logger().print("SDL_ttf could not initialize!");
+    success = false;
+  }
+
+  // Initialize entities
+  entities_.initialize(kScreenWidth, kScreenHeight, renderer_);
+
   return success;
 }
 
 void Game::terminate() {
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
+  TTF_Quit();
   SDL_Quit();
 }
 
@@ -63,7 +73,7 @@ void Game::run(bool isSmokeTest) {
 
     // Update state
     while (lag >= kTicksPerUpdate) {
-      entities_.update();
+      entities_.update(renderer_);
       lag -= kTicksPerUpdate;
     }
 

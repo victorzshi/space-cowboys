@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Dependencies via vcpkg.cmake
 find_package(SDL2 CONFIG REQUIRED)
-find_package(sdl2-image CONFIG REQUIRED)
+find_package(SDL2-image CONFIG REQUIRED)
+find_package(SDL2-ttf CONFIG REQUIRED)
 find_package(Catch2 CONFIG REQUIRED)
 
 # main target
@@ -21,9 +22,10 @@ target_sources(main PRIVATE
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
   "src/vec_2/vec_2.cc"
+  "src/texture/texture.cc"
 )
 target_include_directories(main PRIVATE "src")
-target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image)
+target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image SDL2::SDL2_ttf)
 
 # Manually link X11 library on Linux
 if(UNIX AND NOT APPLE)
