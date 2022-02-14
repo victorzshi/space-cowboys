@@ -30,16 +30,17 @@ void Entities::initialize(int screenWidth, int screenHeight,
 
   for (int i = 0; i < kMaxSize; i++) {
     int entity = createEntity();
-    int width = rand() % screenWidth;
-    int height = rand() % screenHeight;
+    float width = static_cast<float>(rand() % screenWidth);
+    float height = static_cast<float>(rand() % screenHeight);
     Transform transform;
-    transform.position = Vec2(width, height);
+    transform.position.x = width;
+    transform.position.y = height;
     transform.width = 50;
     transform.height = 50;
     addTransform(entity, transform);
     Physics physics;
-    physics.speed = 0.1;
-    physics.velocity = Vec2(0.0, rand() % 5 + 1);
+    physics.speed = 0.1f;
+    physics.velocity.y = static_cast<float>(rand() % 5 + 1);
     addPhysics(entity, physics);
     addSprite(entity, sprite);
   }
@@ -63,7 +64,7 @@ void Entities::update() {
   UpdatePosition::update(*this);
 }
 
-void Entities::render(SDL_Renderer* renderer, double delay) {
+void Entities::render(SDL_Renderer* renderer, float delay) {
   RenderSprite::render(*this, renderer, delay);
 }
 

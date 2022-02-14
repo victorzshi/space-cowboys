@@ -5,7 +5,7 @@
 
 class RenderSprite {
  public:
-  static void render(Entities& entities, SDL_Renderer* renderer, double delay) {
+  static void render(Entities& entities, SDL_Renderer* renderer, float delay) {
     Physics* physics = entities.physics();
     Transform* transforms = entities.transforms();
     Sprite* sprites = entities.sprites();
@@ -13,11 +13,11 @@ class RenderSprite {
     for (int i = 0; i < entities.size(); i++) {
       if (sprites[i].texture == nullptr) continue;
 
-      Vec2 position;
+      Vector2 position;
 
       if (delay > 0) {
-        Vec2 velocity = Vec2::multiply(physics[i].velocity, delay);
-        position = Vec2::add(transforms[i].position, velocity);
+        Vector2 velocity = physics[i].velocity * delay;
+        position = transforms[i].position + velocity;
       } else {
         position = transforms[i].position;
       }

@@ -11,8 +11,7 @@ Game::Game() : isRunning_(true) {
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
-      // window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-      window_, -1, SDL_RENDERER_ACCELERATED);
+      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
 bool Game::initialize() {
@@ -61,14 +60,14 @@ void Game::run(bool isSmokeTest) {
   Texture texture;
 #endif
 
-  double previous = static_cast<double>(SDL_GetTicks64());
-  double lag = 0.0;
+  float previous = static_cast<float>(SDL_GetTicks64());
+  float lag = 0.0f;
 
   SDL_Event event;
 
   while (isRunning_) {
-    double current = static_cast<double>(SDL_GetTicks64());
-    double elapsed = current - previous;
+    float current = static_cast<float>(SDL_GetTicks64());
+    float elapsed = current - previous;
     previous = current;
     lag += elapsed;
 

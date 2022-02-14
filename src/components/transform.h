@@ -1,9 +1,9 @@
 #pragma once
 
-#include "vec_2/vec_2.h"
+#include "vector2/vector2.h"
 
 struct Transform {
-  Vec2 position = Vec2();
+  Vector2 position = Vector2();
   int width = 0;
   int height = 0;
 };

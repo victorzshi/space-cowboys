@@ -9,11 +9,9 @@ class UpdatePosition {
     Transform* transforms = entities.transforms();
 
     for (int i = 0; i < entities.size(); i++) {
-      physics[i].velocity =
-          Vec2::add(physics[i].velocity, physics[i].acceleration);
+      physics[i].velocity = physics[i].velocity + physics[i].acceleration;
 
-      transforms[i].position =
-          Vec2::add(transforms[i].position, physics[i].velocity);
+      transforms[i].position = transforms[i].position + physics[i].velocity;
 
       if (transforms[i].position.y < 0) {
         transforms[i].position.y = 1080;

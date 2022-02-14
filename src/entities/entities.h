@@ -20,7 +20,7 @@ class Entities {
 
   void input(SDL_Event event);
   void update();
-  void render(SDL_Renderer* renderer, double delay);
+  void render(SDL_Renderer* renderer, float delay);
 
  private:
   // static const int kMaxSize = 10000;
