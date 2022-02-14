@@ -1,13 +1,13 @@
 #pragma once
 
-#include "entities/entities.h"
+#include "ecs/ecs.h"
 
 class Movement {
  public:
-  static void input(Entities& entities, SDL_Event event) {
-    Physics* physics = entities.physics();
+  static void input(ECS& ecs, SDL_Event event) {
+    Physics* physics = ecs.physics();
 
-    for (int i = 0; i < entities.size(); i++) {
+    for (int i = 0; i < ecs.size(); i++) {
       if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         Vector2 v;
         switch (event.key.keysym.sym) {

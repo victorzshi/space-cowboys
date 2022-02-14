@@ -6,9 +6,9 @@
 #include "components/sprite.h"
 #include "components/transform.h"
 
-class Entities {
+class ECS {
  public:
-  Entities();
+  ECS();
 
   void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
   // TODO(Victor): Add terminate() for fonts/images.
@@ -26,6 +26,7 @@ class Entities {
   static const int kMaxSize = 10000;
 
   int size_;
+
   Physics* physics_;
   Sprite* sprites_;
   Transform* transforms_;

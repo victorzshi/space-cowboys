@@ -3,7 +3,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+#include <sstream>
+
 #include "services/locator.h"
+#include "texture/texture.h"
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
@@ -37,7 +40,7 @@ bool Game::initialize() {
   }
 
   // Initialize entities
-  entities_.initialize(kScreenWidth, kScreenHeight, renderer_);
+  ecs_.initialize(kScreenWidth, kScreenHeight, renderer_);
 
   return success;
 }
@@ -77,12 +80,12 @@ void Game::run(bool isSmokeTest) {
         isRunning_ = false;
       }
 
-      entities_.input(event);
+      ecs_.input(event);
     }
 
     // Update state
     while (lag >= kTicksPerUpdate) {
-      entities_.update();
+      ecs_.update();
       lag -= kTicksPerUpdate;
 
 #ifdef DEBUG
@@ -105,7 +108,7 @@ void Game::run(bool isSmokeTest) {
     SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
     float delay = static_cast<float>(lag) / kTicksPerUpdate;
-    entities_.render(renderer_, delay);
+    ecs_.render(renderer_, delay);
 
 #ifdef DEBUG
     texture.render(renderer_, 0, 0);
