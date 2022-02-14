@@ -63,6 +63,10 @@ void ECS::update() {
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderClear(renderer);
+
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
   RenderSprite::render(*this, renderer, delay);
 }
 

@@ -102,11 +102,6 @@ void Game::run(bool isSmokeTest) {
     }
 
     // Render graphics
-    SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderClear(renderer_);
-
-    SDL_SetRenderDrawColor(renderer_, 255, 255, 255, SDL_ALPHA_OPAQUE);
-
     float delay = static_cast<float>(lag) / kTicksPerUpdate;
     ecs_.render(renderer_, delay);
 
@@ -122,4 +117,21 @@ void Game::run(bool isSmokeTest) {
       isRunning_ = false;
     }
   }
+}
+
+void Game::benchmark() {
+  Locator::logger().print("Starting benchmark...");
+
+  int totalUpdates = 1000;
+
+  Uint64 ecsStartTime = SDL_GetTicks64();
+  for (int i = 0; i < totalUpdates; i++) {
+    ecs_.update();
+    ecs_.render(renderer_, 0.0f);
+    SDL_RenderPresent(renderer_);
+  }
+  Uint64 ecsEndTime = SDL_GetTicks64() - ecsStartTime;
+
+  Locator::logger().print("ECS total time (ms):");
+  Locator::logger().print(std::to_string(ecsEndTime).c_str());
 }

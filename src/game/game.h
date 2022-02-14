@@ -12,6 +12,7 @@ class Game {
   void terminate();
 
   void run(bool isSmokeTest = false);
+  void benchmark();
 
  private:
   static const int kScreenWidth = 1920;

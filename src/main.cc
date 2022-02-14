@@ -12,7 +12,8 @@ int main(int argc, char *argv[]) {
   Game game = Game();
 
   if (game.initialize()) {
-    game.run(isSmokeTest);
+    //game.run(isSmokeTest);
+    game.benchmark();
   }
 
   game.terminate();
