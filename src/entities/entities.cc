@@ -33,13 +33,14 @@ void Entities::initialize(int screenWidth, int screenHeight,
     float width = static_cast<float>(rand() % screenWidth);
     float height = static_cast<float>(rand() % screenHeight);
     Transform transform;
-    transform.position = Vec2(width, height);
+    transform.position = Vector2{width, height};
     transform.width = 50;
     transform.height = 50;
     addTransform(entity, transform);
     Physics physics;
     physics.speed = 0.1f;
-    physics.velocity = Vec2(0.0, rand() % 5 + 1);
+    float falling = static_cast<float>(rand() % 5 + 1);
+    physics.velocity = Vector2{0.0, falling};
     addPhysics(entity, physics);
     addSprite(entity, sprite);
   }

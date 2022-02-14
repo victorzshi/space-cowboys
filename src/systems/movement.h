@@ -11,16 +11,16 @@ class Movement {
       if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
         switch (event.key.keysym.sym) {
           case SDLK_LEFT:
-            physics[i].acceleration = Vec2(-physics[i].speed, 0.0);
+            physics[i].acceleration = Vector2{-physics[i].speed, 0.0};
             break;
           case SDLK_RIGHT:
-            physics[i].acceleration = Vec2(physics[i].speed, 0.0);
+            physics[i].acceleration = Vector2{physics[i].speed, 0.0};
             break;
           case SDLK_UP:
-            physics[i].acceleration = Vec2(0.0, -physics[i].speed);
+            physics[i].acceleration = Vector2{0.0, -physics[i].speed};
             break;
           case SDLK_DOWN:
-            physics[i].acceleration = Vec2(0.0, physics[i].speed);
+            physics[i].acceleration = Vector2{0.0, physics[i].speed};
             break;
         }
       }

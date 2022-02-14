@@ -11,8 +11,7 @@ Game::Game() : isRunning_(true) {
                              kScreenHeight, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
-      // window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-      window_, -1, SDL_RENDERER_ACCELERATED);
+      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
 bool Game::initialize() {

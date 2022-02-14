@@ -1,3 +1,5 @@
+#define CATCH_CONFIG_MAIN
+
 #include "vector2.h"
 
 #include "catch.hpp"
