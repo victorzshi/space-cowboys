@@ -23,10 +23,7 @@ class Entities {
   void render(SDL_Renderer* renderer, float delay);
 
  private:
-  // static const int kMaxSize = 10000;
-  // static const int kMaxSize = 20000;
-  // static const int kMaxSize = 25000;
-  static const int kMaxSize = 27000;  // This is about the max for 60 fps
+  static const int kMaxSize = 10000;
 
   int size_;
   Physics* physics_;
