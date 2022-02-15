@@ -14,14 +14,14 @@ class UpdatePosition {
       transforms[i].position = transforms[i].position + physics[i].velocity;
 
       if (transforms[i].position.y < 0) {
-        transforms[i].position.y = 1080;
-      } else if (transforms[i].position.y > 1080) {
+        transforms[i].position.y = 720;
+      } else if (transforms[i].position.y > 720) {
         transforms[i].position.y = 0;
       }
 
       if (transforms[i].position.x < 0) {
-        transforms[i].position.x = 1920;
-      } else if (transforms[i].position.x > 1920) {
+        transforms[i].position.x = 1280;
+      } else if (transforms[i].position.x > 1280) {
         transforms[i].position.x = 0;
       }
     }

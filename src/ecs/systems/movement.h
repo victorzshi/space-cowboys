@@ -29,6 +29,8 @@ class Movement {
             break;
         }
         physics[i].acceleration = v;
+      } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
+        physics[i].acceleration = Vector2();
       }
     }
   }

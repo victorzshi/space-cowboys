@@ -23,7 +23,7 @@ class ECS {
   void render(SDL_Renderer* renderer, float delay);
 
  private:
-  static const int kMaxSize = 10000;
+  static const int kMaxSize = 20000;
 
   int size_;
 
