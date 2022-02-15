@@ -1,16 +1,16 @@
 #pragma once
 
-#include "entities/entities.h"
+#include "ecs/ecs.h"
 #include "utils/utils.h"
 
 class RenderSprite {
  public:
-  static void render(Entities& entities, SDL_Renderer* renderer, float delay) {
-    Physics* physics = entities.physics();
-    Transform* transforms = entities.transforms();
-    Sprite* sprites = entities.sprites();
+  static void render(ECS& ecs, SDL_Renderer* renderer, float delay) {
+    Physics* physics = ecs.physics();
+    Transform* transforms = ecs.transforms();
+    Sprite* sprites = ecs.sprites();
 
-    for (int i = 0; i < entities.size(); i++) {
+    for (int i = 0; i < ecs.size(); i++) {
       if (sprites[i].texture == nullptr) continue;
 
       Vector2 position;

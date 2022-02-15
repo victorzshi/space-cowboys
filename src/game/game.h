@@ -1,12 +1,8 @@
 #pragma once
 
 #include <SDL.h>
-#include <SDL_ttf.h>
 
-#include <sstream>
-
-#include "entities/entities.h"
-#include "texture/texture.h"
+#include "ecs/ecs.h"
 
 class Game {
  public:
@@ -23,9 +19,9 @@ class Game {
   static const int kTicksPerUpdate = 16;
   static const int kSmokeTestDuration = 1000;
 
+  bool isRunning_;
+
   SDL_Window* window_;
   SDL_Renderer* renderer_;
-  Entities entities_;
-
-  bool isRunning_;
+  ECS ecs_;
 };

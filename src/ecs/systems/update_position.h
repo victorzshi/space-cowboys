@@ -1,14 +1,14 @@
 #pragma once
 
-#include "entities/entities.h"
+#include "ecs/ecs.h"
 
 class UpdatePosition {
  public:
-  static void update(Entities& entities) {
-    Physics* physics = entities.physics();
-    Transform* transforms = entities.transforms();
+  static void update(ECS& ecs) {
+    Physics* physics = ecs.physics();
+    Transform* transforms = ecs.transforms();
 
-    for (int i = 0; i < entities.size(); i++) {
+    for (int i = 0; i < ecs.size(); i++) {
       physics[i].velocity = physics[i].velocity + physics[i].acceleration;
 
       transforms[i].position = transforms[i].position + physics[i].velocity;

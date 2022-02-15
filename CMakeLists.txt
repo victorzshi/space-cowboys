@@ -17,7 +17,7 @@ add_executable(main)
 target_sources(main PRIVATE 
   "src/main.cc" 
   "src/game/game.cc"
-  "src/entities/entities.cc"
+  "src/ecs/ecs.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"

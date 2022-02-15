@@ -16,11 +16,11 @@ Vector2 Vector2::normalize() const {
 }
 
 Vector2 Vector2::limit(float n) const {
+  Vector2 v = *this;
   if (this->lengthSquared() > n * n) {
-    Vector2 v = this->normalize() * n;
-    return v;
+    v = this->normalize() * n;
   }
-  return *this;
+  return v;
 }
 
 Vector2 Vector2::operator+(const Vector2& v) const {

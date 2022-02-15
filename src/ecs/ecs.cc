@@ -1,4 +1,4 @@
-#include "entities.h"
+#include "ecs.h"
 
 #include <SDL_image.h>
 #include <assert.h>
@@ -8,10 +8,10 @@
 #include "systems/render_sprite.h"
 #include "systems/update_position.h"
 
-Entities::Entities() : size_(0) {}
+ECS::ECS() : size_(0) {}
 
-void Entities::initialize(int screenWidth, int screenHeight,
-                          SDL_Renderer* renderer) {
+void ECS::initialize(int screenWidth, int screenHeight,
+                     SDL_Renderer* renderer) {
   physics_ = new Physics[kMaxSize];
   sprites_ = new Sprite[kMaxSize];
   transforms_ = new Transform[kMaxSize];
@@ -30,11 +30,9 @@ void Entities::initialize(int screenWidth, int screenHeight,
 
   for (int i = 0; i < kMaxSize; i++) {
     int entity = createEntity();
-    float width = static_cast<float>(rand() % screenWidth);
-    float height = static_cast<float>(rand() % screenHeight);
     Transform transform;
-    transform.position.x = width;
-    transform.position.y = height;
+    transform.position.x = static_cast<float>(rand() % screenWidth);
+    transform.position.y = static_cast<float>(rand() % screenHeight);
     transform.width = 50;
     transform.height = 50;
     addTransform(entity, transform);
@@ -46,43 +44,45 @@ void Entities::initialize(int screenWidth, int screenHeight,
   }
 }
 
-int Entities::size() { return size_; }
+int ECS::size() { return size_; }
 
-Physics* Entities::physics() { return physics_; }
+Physics* ECS::physics() { return physics_; }
 
-Sprite* Entities::sprites() { return sprites_; }
+Sprite* ECS::sprites() { return sprites_; }
 
-Transform* Entities::transforms() { return transforms_; }
+Transform* ECS::transforms() { return transforms_; }
 
-void Entities::input(SDL_Event event) {
+void ECS::input(SDL_Event event) {
   //
   Movement::input(*this, event);
 }
 
-void Entities::update() {
+void ECS::update() {
   //
   UpdatePosition::update(*this);
 }
 
-void Entities::render(SDL_Renderer* renderer, float delay) {
+void ECS::render(SDL_Renderer* renderer, float delay) {
+  SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+  SDL_RenderClear(renderer);
+
+  SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
   RenderSprite::render(*this, renderer, delay);
 }
 
-int Entities::createEntity() {
+int ECS::createEntity() {
   assert(size_ < kMaxSize);
 
   ++size_;
   return size_ - 1;
 }
 
-void Entities::addPhysics(int entity, Physics physics) {
+void ECS::addPhysics(int entity, Physics physics) {
   physics_[entity] = physics;
 }
 
-void Entities::addSprite(int entity, Sprite sprite) {
-  sprites_[entity] = sprite;
-}
+void ECS::addSprite(int entity, Sprite sprite) { sprites_[entity] = sprite; }
 
-void Entities::addTransform(int entity, Transform transform) {
+void ECS::addTransform(int entity, Transform transform) {
   transforms_[entity] = transform;
 }
