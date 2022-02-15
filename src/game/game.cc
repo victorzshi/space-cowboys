@@ -46,6 +46,7 @@ bool Game::initialize() {
 }
 
 void Game::terminate() {
+  ecs_.terminate();
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   TTF_Quit();
