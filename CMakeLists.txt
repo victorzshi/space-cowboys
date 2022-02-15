@@ -15,14 +15,15 @@ find_package(Catch2 CONFIG REQUIRED)
 # main target
 add_executable(main)
 target_sources(main PRIVATE 
-  "src/main.cc" 
-  "src/game/game.cc"
   "src/ecs/ecs.cc"
+  "src/ecs/systems/alien/alien_system.cc"
+  "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
-  "src/vector2/vector2.cc"
   "src/texture/texture.cc"
+  "src/vector2/vector2.cc"
+  "src/main.cc" 
 )
 target_include_directories(main PRIVATE "src")
 target_link_libraries(main PRIVATE SDL2::SDL2 SDL2::SDL2main SDL2::SDL2_image SDL2::SDL2_ttf)
