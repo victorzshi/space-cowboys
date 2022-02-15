@@ -14,7 +14,6 @@ class AlienSystem {
   void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
   void terminate();
 
-  void input(SDL_Event event);
   void updatePosition();
   void renderSprite(SDL_Renderer* renderer, float delay);
   void renderCollider(SDL_Renderer* renderer);
@@ -24,8 +23,10 @@ class AlienSystem {
 
   int size_;
 
-  Collider* colliders_;
+  Collider* collider_;
   Physics* physics_;
-  Sprite* sprites_;
-  Transform* transforms_;
+  Sprite* sprite_;
+  Transform* transform_;
+
+  bool isOutOfBounds();
 };

@@ -7,7 +7,7 @@ void ECS::initialize(int screenWidth, int screenHeight,
 
 void ECS::terminate() { alienSystem.terminate(); }
 
-void ECS::input(SDL_Event event) { alienSystem.input(event); }
+void ECS::input(SDL_Event event) { (void)event; }
 
 void ECS::update() { alienSystem.updatePosition(); }
 

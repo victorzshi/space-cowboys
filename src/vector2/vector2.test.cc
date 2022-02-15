@@ -25,6 +25,11 @@ TEST_CASE("Vector2 subtract", "[vec2]") {
   REQUIRE(u == Vector2(-2.0f, -2.0f));
   REQUIRE(u != Vector2(-2.1f, -2.0f));
   REQUIRE(u != Vector2(-2.0f, -2.1f));
+
+  u -= u;
+  REQUIRE(u == Vector2(0.0f, 0.0f));
+  REQUIRE(u != Vector2(0.1f, 0.0f));
+  REQUIRE(u != Vector2(0.0f, 0.1f));
 }
 
 TEST_CASE("Vector2 multiply", "[vec2]") {

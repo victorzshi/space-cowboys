@@ -43,6 +43,12 @@ Vector2 Vector2::operator-(const Vector2& v) const {
   return u;
 }
 
+Vector2& Vector2::operator-=(const Vector2& v) {
+  x -= v.x;
+  y -= v.y;
+  return *this;
+}
+
 Vector2 Vector2::operator*(float n) const {
   Vector2 u;
   u.x = this->x * n;
