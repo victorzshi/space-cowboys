@@ -9,9 +9,8 @@ class UpdatePosition {
     Transform* transforms = ecs.transforms();
 
     for (int i = 0; i < ecs.size(); i++) {
-      physics[i].velocity = physics[i].velocity + physics[i].acceleration;
-
-      transforms[i].position = transforms[i].position + physics[i].velocity;
+      physics[i].velocity += physics[i].acceleration;
+      transforms[i].position += physics[i].velocity;
 
       if (transforms[i].position.y < 0) {
         transforms[i].position.y = 720;

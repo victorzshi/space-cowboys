@@ -18,6 +18,8 @@ class Vector2 {
 
   Vector2 operator+(const Vector2& v) const;
 
+  Vector2& operator+=(const Vector2& v);
+
   Vector2 operator-(const Vector2& v) const;
 
   Vector2 operator*(float n) const;
