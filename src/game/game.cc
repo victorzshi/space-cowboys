@@ -118,20 +118,3 @@ void Game::run(bool isSmokeTest) {
     }
   }
 }
-
-void Game::benchmark() {
-  Locator::logger().print("Starting benchmark...");
-
-  int totalUpdates = 1000;
-
-  Uint64 ecsStartTime = SDL_GetTicks64();
-  for (int i = 0; i < totalUpdates; i++) {
-    ecs_.update();
-    ecs_.render(renderer_, 0.0f);
-    SDL_RenderPresent(renderer_);
-  }
-  Uint64 ecsEndTime = SDL_GetTicks64() - ecsStartTime;
-
-  Locator::logger().print("ECS total time (ms):");
-  Locator::logger().print(std::to_string(ecsEndTime).c_str());
-}
