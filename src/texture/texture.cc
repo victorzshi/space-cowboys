@@ -2,42 +2,31 @@
 
 #include <SDL_ttf.h>
 
-Texture::Texture() {
-  texture = nullptr;
+#include "utils/utils.h"
 
-  width = 0;
-  height = 0;
-}
+Texture::Texture() : rect({0, 0, 0, 0}), texture_(nullptr) {}
 
-void Texture::load_text(SDL_Renderer* renderer, TTF_Font* font,
-                        std::string text, SDL_Color color) {
+void Texture::setText(SDL_Renderer* renderer, TTF_Font* font, std::string text,
+                      SDL_Color color) {
   free();
 
   SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
 
-  texture = SDL_CreateTextureFromSurface(renderer, surface);
-
-  width = surface->w;
-  height = surface->h;
+  rect.w = surface->w;
+  rect.h = surface->h;
+  texture_ = SDL_CreateTextureFromSurface(renderer, surface);
 
   SDL_FreeSurface(surface);
 }
 
-int Texture::get_width() { return width; }
-
-int Texture::get_height() { return height; }
-
-void Texture::render(SDL_Renderer* renderer, int x, int y) {
-  SDL_Rect render_target = {x, y, width, height};
-
-  SDL_RenderCopy(renderer, texture, nullptr, &render_target);
+void Texture::render(SDL_Renderer* renderer) {
+  SDL_RenderCopy(renderer, texture_, nullptr, &rect);
 }
 
 void Texture::free() {
-  if (texture != nullptr) {
-    SDL_DestroyTexture(texture);
-    texture = nullptr;
-    width = 0;
-    height = 0;
+  if (texture_ != nullptr) {
+    SDL_DestroyTexture(texture_);
+    texture_ = nullptr;
+    rect = {0, 0, 0, 0};
   }
 }

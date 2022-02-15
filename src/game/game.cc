@@ -97,7 +97,7 @@ void Game::run(bool isSmokeTest) {
       text.str("");
       text << "Average FPS " << fps;
 
-      texture.load_text(renderer_, font, text.str().c_str(), color);
+      texture.setText(renderer_, font, text.str().c_str(), color);
 #endif
     }
 
@@ -106,7 +106,7 @@ void Game::run(bool isSmokeTest) {
     ecs_.render(renderer_, delay);
 
 #ifdef DEBUG
-    texture.render(renderer_, 0, 0);
+    texture.render(renderer_);
     ++totalFrames;
 #endif
 

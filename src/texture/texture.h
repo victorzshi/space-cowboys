@@ -5,25 +5,21 @@
 
 #include <string>
 
+#include "vector2/vector2.h"
+
 class Texture {
  public:
   Texture();
 
-  void load_text(SDL_Renderer* renderer, TTF_Font* font, std::string text,
-                 SDL_Color color);
+  SDL_Rect rect;
 
-  int get_width();
+  void setText(SDL_Renderer* renderer, TTF_Font* font, std::string text,
+                SDL_Color color);
 
-  int get_height();
-
-  void render(SDL_Renderer* renderer, int x, int y);
+  void render(SDL_Renderer* renderer);
 
   void free();
 
  private:
-  SDL_Texture* texture;
-
-  int width;
-
-  int height;
+  SDL_Texture* texture_;
 };
