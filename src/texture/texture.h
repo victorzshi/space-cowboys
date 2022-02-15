@@ -14,7 +14,7 @@ class Texture {
   SDL_Rect rect;
 
   void setText(SDL_Renderer* renderer, TTF_Font* font, std::string text,
-                SDL_Color color);
+               SDL_Color color);
 
   void render(SDL_Renderer* renderer);
 
