@@ -39,7 +39,7 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
     collider_[i].rect.w = alienWidth;
     collider_[i].rect.h = alienHeight;
 
-    physics_[i].speed = 5.0f;
+    physics_[i].speed = 1.0f;
 
     ai_[i].nextDirection = Direction::kLeft;
     ai_[i].goalHeight = transform_[i].position.y;
@@ -78,18 +78,12 @@ void AlienSystem::updateDirection() {
 
     if (ai_[i].nextDirection == Direction::kDown &&
         transform_[i].position.y >= ai_[i].goalHeight) {
-      if (ai_[i].prevDirection == Direction::kLeft) {
-        ai_[i].nextDirection = Direction::kRight;
-      } else if (ai_[i].prevDirection == Direction::kRight) {
-        ai_[i].nextDirection = Direction::kLeft;
-      }
+      ai_[i].nextDirection = ai_[i].prevDirection == Direction::kLeft
+                                 ? Direction::kRight
+                                 : Direction::kLeft;
       ai_[i].prevDirection = Direction::kDown;
     }
-  }
-}
 
-void AlienSystem::updatePosition() {
-  for (int i = 0; i < size_; i++) {
     switch (ai_[i].nextDirection) {
       case Direction::kLeft:
         physics_[i].velocity.x = -physics_[i].speed;
@@ -104,7 +98,11 @@ void AlienSystem::updatePosition() {
         physics_[i].velocity.y = physics_[i].speed;
         break;
     }
+  }
+}
 
+void AlienSystem::updatePosition() {
+  for (int i = 0; i < size_; i++) {
     transform_[i].position += physics_[i].velocity;
     collider_[i].update(transform_[i].position);
   }
