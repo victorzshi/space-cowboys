@@ -10,8 +10,8 @@
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
-                             SDL_WINDOWPOS_UNDEFINED, kScreenWidth,
-                             kScreenHeight, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_UNDEFINED, kScreenWidth_,
+                             kScreenHeight_, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -40,7 +40,7 @@ bool Game::initialize() {
   }
 
   // Initialize entities
-  ecs_.initialize(kScreenWidth, kScreenHeight, renderer_);
+  ecs_.initialize(kScreenWidth_, kScreenHeight_, renderer_);
 
   return success;
 }
@@ -84,10 +84,13 @@ void Game::run(bool isSmokeTest) {
       ecs_.input(event);
     }
 
+    // Run AI
+    ecs_.ai();
+
     // Update state
-    while (lag >= kTicksPerUpdate) {
+    while (lag >= kTicksPerUpdate_) {
       ecs_.update();
-      lag -= kTicksPerUpdate;
+      lag -= kTicksPerUpdate_;
 
 #ifdef DEBUG
       Uint64 currentTime = SDL_GetTicks64();
@@ -103,7 +106,7 @@ void Game::run(bool isSmokeTest) {
     }
 
     // Render graphics
-    float delay = static_cast<float>(lag) / kTicksPerUpdate;
+    float delay = static_cast<float>(lag) / kTicksPerUpdate_;
     ecs_.render(renderer_, delay);
 
 #ifdef DEBUG
@@ -114,7 +117,7 @@ void Game::run(bool isSmokeTest) {
     SDL_RenderPresent(renderer_);
 
     // Handle testing
-    if (isSmokeTest && current > kSmokeTestDuration) {
+    if (isSmokeTest && current > kSmokeTestDuration_) {
       isRunning_ = false;
     }
   }
