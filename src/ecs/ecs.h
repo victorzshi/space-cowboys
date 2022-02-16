@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "systems/alien/alien_system.h"
+#include "systems/tank/tank_system.h"
 
 class ECS {
  public:
@@ -15,4 +16,5 @@ class ECS {
 
  private:
   AlienSystem alienSystem;
+  TankSystem tankSystem;
 };

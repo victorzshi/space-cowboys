@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 
 AlienSystem::AlienSystem() {
+  ai_ = new AI[kMaxSize_];
   collider_ = new Collider[kMaxSize_];
   physics_ = new Physics[kMaxSize_];
   sprite_ = new Sprite[kMaxSize_];
@@ -23,13 +24,11 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
   int startX = screenWidth / 2 - spawnWidth / 2 + alienWidth / 2;
   int startY = screenHeight / 4 - spawnHeight / 2 + alienHeight / 2;
 
-  // Load space invader image
   SDL_Texture* spaceInvader = nullptr;
-  SDL_Surface* loadedSurface = IMG_Load("../../data/space-invader.png");
+  SDL_Surface* loadedSurface = IMG_Load("../../data/images/alien.png");
   spaceInvader = SDL_CreateTextureFromSurface(renderer, loadedSurface);
   SDL_FreeSurface(loadedSurface);
 
-  int count = 0;
   int spawnX = startX;
   int spawnY = startY;
   for (int i = 0; i < kMaxSize_; i++) {
@@ -39,15 +38,17 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
     collider_[i].rect.w = alienWidth;
     collider_[i].rect.h = alienHeight;
 
-    physics_[i].velocity.x = -5.0f;
+    physics_[i].speed = 1.0f;
+
+    ai_[i].nextDirection = Direction::kLeft;
+    ai_[i].goalHeight = transform_[i].position.y;
 
     sprite_[i].texture = spaceInvader;
 
-    size_ = i;
+    size_ = i + 1;
 
-    ++count;
     spawnX += alienWidth;
-    if (count % columns == 0) {
+    if (size_ % columns == 0) {
       spawnX = startX;
       spawnY += alienHeight;
     }
@@ -55,14 +56,51 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
 }
 
 void AlienSystem::terminate() {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_DestroyTexture(sprite_[i].texture);
     sprite_[i].texture = nullptr;
   }
 }
 
+void AlienSystem::updateDirection() {
+  // TODO(Victor): State machine would be better suited for this logic.
+  for (int i = 0; i < size_; i++) {
+    if (ai_[i].isPathEnd) {
+      ai_[i].isPathEnd = false;
+
+      ai_[i].prevDirection = ai_[i].nextDirection;
+      ai_[i].nextDirection = Direction::kDown;
+
+      ai_[i].goalHeight += static_cast<float>(collider_[i].rect.h);
+    }
+
+    if (ai_[i].nextDirection == Direction::kDown &&
+        transform_[i].position.y >= ai_[i].goalHeight) {
+      ai_[i].nextDirection = ai_[i].prevDirection == Direction::kLeft
+                                 ? Direction::kRight
+                                 : Direction::kLeft;
+      ai_[i].prevDirection = Direction::kDown;
+    }
+
+    switch (ai_[i].nextDirection) {
+      case Direction::kLeft:
+        physics_[i].velocity.x = -physics_[i].speed;
+        physics_[i].velocity.y = 0.0f;
+        break;
+      case Direction::kRight:
+        physics_[i].velocity.x = physics_[i].speed;
+        physics_[i].velocity.y = 0.0f;
+        break;
+      case Direction::kDown:
+        physics_[i].velocity.x = 0.0f;
+        physics_[i].velocity.y = physics_[i].speed;
+        break;
+    }
+  }
+}
+
 void AlienSystem::updatePosition() {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     transform_[i].position += physics_[i].velocity;
     collider_[i].update(transform_[i].position);
   }
@@ -71,15 +109,13 @@ void AlienSystem::updatePosition() {
     for (int i = 0; i <= size_; i++) {
       transform_[i].position -= physics_[i].velocity;
       collider_[i].update(transform_[i].position);
-
-      // TODO(Victor): AI needs to control move direction.
-      physics_[i].velocity.x *= -1;
+      ai_[i].isPathEnd = true;
     }
   }
 }
 
 void AlienSystem::renderSprite(SDL_Renderer* renderer, float delay) {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_Rect rect;
 
     if (delay > 0) {
@@ -100,13 +136,14 @@ void AlienSystem::renderSprite(SDL_Renderer* renderer, float delay) {
 void AlienSystem::renderCollider(SDL_Renderer* renderer) {
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_RenderDrawRect(renderer, &collider_[i].rect);
   }
 }
 
 bool AlienSystem::isOutOfBounds() {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
+    // TODO(Victor): Remove hardcoded screen dimensions.
     if (transform_[i].position.x < 0 || transform_[i].position.x > 1280) {
       return true;
     }

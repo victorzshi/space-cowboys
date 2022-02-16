@@ -17,6 +17,7 @@ add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
   "src/ecs/systems/alien/alien_system.cc"
+  "src/ecs/systems/tank/tank_system.cc"
   "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"

@@ -14,10 +14,10 @@ class Game {
   void run(bool isSmokeTest = false);
 
  private:
-  static const int kScreenWidth = 1280;
-  static const int kScreenHeight = 720;
-  static const int kTicksPerUpdate = 16;
-  static const int kSmokeTestDuration = 1000;
+  static const int kScreenWidth_ = 1280;
+  static const int kScreenHeight_ = 720;
+  static const int kTicksPerUpdate_ = 16;
+  static const int kSmokeTestDuration_ = 1000;
 
   bool isRunning_;
 
