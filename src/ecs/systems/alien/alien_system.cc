@@ -65,6 +65,7 @@ void AlienSystem::terminate() {
 }
 
 void AlienSystem::updateDirection() {
+  // TODO(Victor): State machine would be better suited for this logic.
   for (int i = 0; i < size_; i++) {
     if (ai_[i].isPathEnd) {
       ai_[i].isPathEnd = false;
@@ -74,8 +75,9 @@ void AlienSystem::updateDirection() {
 
       ai_[i].goalHeight += static_cast<float>(collider_[i].rect.h);
     }
-    
-    if (transform_[i].position.y >= ai_[i].goalHeight) {
+
+    if (ai_[i].nextDirection == Direction::kDown &&
+        transform_[i].position.y >= ai_[i].goalHeight) {
       if (ai_[i].prevDirection == Direction::kLeft) {
         ai_[i].nextDirection = Direction::kRight;
       } else if (ai_[i].prevDirection == Direction::kRight) {
