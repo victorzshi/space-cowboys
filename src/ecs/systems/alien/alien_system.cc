@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 
 AlienSystem::AlienSystem() {
+  ai_ = new AI[kMaxSize_];
   collider_ = new Collider[kMaxSize_];
   physics_ = new Physics[kMaxSize_];
   sprite_ = new Sprite[kMaxSize_];
@@ -29,7 +30,6 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
   spaceInvader = SDL_CreateTextureFromSurface(renderer, loadedSurface);
   SDL_FreeSurface(loadedSurface);
 
-  int count = 0;
   int spawnX = startX;
   int spawnY = startY;
   for (int i = 0; i < kMaxSize_; i++) {
@@ -39,15 +39,18 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
     collider_[i].rect.w = alienWidth;
     collider_[i].rect.h = alienHeight;
 
-    physics_[i].velocity.x = -5.0f;
+    physics_[i].speed = -5.0f;
+    physics_[i].velocity.x = physics_[i].speed;
+
+    ai_[i].direction = Direction::kLeft;
 
     sprite_[i].texture = spaceInvader;
 
-    size_ = i;
+    // Account for 0 index
+    size_ = i + 1;
 
-    ++count;
     spawnX += alienWidth;
-    if (count % columns == 0) {
+    if (size_ % columns == 0) {
       spawnX = startX;
       spawnY += alienHeight;
     }
@@ -55,31 +58,42 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
 }
 
 void AlienSystem::terminate() {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_DestroyTexture(sprite_[i].texture);
     sprite_[i].texture = nullptr;
   }
 }
 
-void AlienSystem::updatePosition() {
-  for (int i = 0; i <= size_; i++) {
-    transform_[i].position += physics_[i].velocity;
-    collider_[i].update(transform_[i].position);
+void AlienSystem::updateDirection() {
+  // Check all alien positions
+  // If any are out of bounds, update ALL directions
+  if (isOutOfBounds()) {
+    for (int i = 0; i < size_; i++) {
+      switch (ai_[i].direction) {
+        case Direction::kLeft:
+          ai_[i].direction = Direction::kRight;
+          physics_[i].velocity.x = physics_[i].speed;
+          break;
+        case Direction::kRight:
+          ai_[i].direction = Direction::kLeft;
+          physics_[i].velocity.x = -physics_[i].speed;
+          break;
+      }
+    }
   }
 
-  if (isOutOfBounds()) {
-    for (int i = 0; i <= size_; i++) {
-      transform_[i].position -= physics_[i].velocity;
-      collider_[i].update(transform_[i].position);
 
-      // TODO(Victor): AI needs to control move direction.
-      physics_[i].velocity.x *= -1;
-    }
+}
+
+void AlienSystem::updatePosition() {
+  for (int i = 0; i < size_; i++) {
+    transform_[i].position += physics_[i].velocity;
+    collider_[i].update(transform_[i].position);
   }
 }
 
 void AlienSystem::renderSprite(SDL_Renderer* renderer, float delay) {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_Rect rect;
 
     if (delay > 0) {
@@ -100,13 +114,13 @@ void AlienSystem::renderSprite(SDL_Renderer* renderer, float delay) {
 void AlienSystem::renderCollider(SDL_Renderer* renderer) {
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     SDL_RenderDrawRect(renderer, &collider_[i].rect);
   }
 }
 
 bool AlienSystem::isOutOfBounds() {
-  for (int i = 0; i <= size_; i++) {
+  for (int i = 0; i < size_; i++) {
     if (transform_[i].position.x < 0 || transform_[i].position.x > 1280) {
       return true;
     }

@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
@@ -14,6 +15,7 @@ class AlienSystem {
   void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
   void terminate();
 
+  void updateDirection();
   void updatePosition();
   void renderSprite(SDL_Renderer* renderer, float delay);
   void renderCollider(SDL_Renderer* renderer);
@@ -23,6 +25,7 @@ class AlienSystem {
 
   int size_;
 
+  AI* ai_;
   Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;

@@ -10,6 +10,7 @@ class ECS {
   void terminate();
 
   void input(SDL_Event event);
+  void ai();
   void update();
   void render(SDL_Renderer* renderer, float delay);
 

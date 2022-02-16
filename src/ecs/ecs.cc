@@ -9,6 +9,8 @@ void ECS::terminate() { alienSystem.terminate(); }
 
 void ECS::input(SDL_Event event) { (void)event; }
 
+void ECS::ai() { alienSystem.updateDirection(); }
+
 void ECS::update() { alienSystem.updatePosition(); }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
@@ -16,5 +18,8 @@ void ECS::render(SDL_Renderer* renderer, float delay) {
   SDL_RenderClear(renderer);
 
   alienSystem.renderSprite(renderer, delay);
+
+#ifdef DEBUG
   alienSystem.renderCollider(renderer);
+#endif
 }
