@@ -24,9 +24,8 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
   int startX = screenWidth / 2 - spawnWidth / 2 + alienWidth / 2;
   int startY = screenHeight / 4 - spawnHeight / 2 + alienHeight / 2;
 
-  // Load space invader image
   SDL_Texture* spaceInvader = nullptr;
-  SDL_Surface* loadedSurface = IMG_Load("../../data/space-invader.png");
+  SDL_Surface* loadedSurface = IMG_Load("../../data/images/alien.png");
   spaceInvader = SDL_CreateTextureFromSurface(renderer, loadedSurface);
   SDL_FreeSurface(loadedSurface);
 
@@ -46,7 +45,6 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
 
     sprite_[i].texture = spaceInvader;
 
-    // Account for 0 index
     size_ = i + 1;
 
     spawnX += alienWidth;
