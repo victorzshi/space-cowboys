@@ -80,12 +80,8 @@ void Game::run(bool isSmokeTest) {
       if (event.type == SDL_QUIT) {
         isRunning_ = false;
       }
-
       ecs_.input(event);
     }
-
-    // Run AI
-    ecs_.ai();
 
     // Update state
     while (lag >= kTicksPerUpdate_) {

@@ -39,10 +39,10 @@ void AlienSystem::initialize(int screenWidth, int screenHeight,
     collider_[i].rect.w = alienWidth;
     collider_[i].rect.h = alienHeight;
 
-    physics_[i].speed = -5.0f;
-    physics_[i].velocity.x = physics_[i].speed;
+    physics_[i].speed = 5.0f;
 
-    ai_[i].direction = Direction::kLeft;
+    ai_[i].nextDirection = Direction::kLeft;
+    ai_[i].goalHeight = transform_[i].position.y;
 
     sprite_[i].texture = spaceInvader;
 
@@ -65,30 +65,54 @@ void AlienSystem::terminate() {
 }
 
 void AlienSystem::updateDirection() {
-  // Check all alien positions
-  // If any are out of bounds, update ALL directions
-  if (isOutOfBounds()) {
-    for (int i = 0; i < size_; i++) {
-      switch (ai_[i].direction) {
-        case Direction::kLeft:
-          ai_[i].direction = Direction::kRight;
-          physics_[i].velocity.x = physics_[i].speed;
-          break;
-        case Direction::kRight:
-          ai_[i].direction = Direction::kLeft;
-          physics_[i].velocity.x = -physics_[i].speed;
-          break;
+  for (int i = 0; i < size_; i++) {
+    if (ai_[i].isPathEnd) {
+      ai_[i].isPathEnd = false;
+
+      ai_[i].prevDirection = ai_[i].nextDirection;
+      ai_[i].nextDirection = Direction::kDown;
+
+      ai_[i].goalHeight += static_cast<float>(collider_[i].rect.h);
+    }
+    
+    if (transform_[i].position.y >= ai_[i].goalHeight) {
+      if (ai_[i].prevDirection == Direction::kLeft) {
+        ai_[i].nextDirection = Direction::kRight;
+      } else if (ai_[i].prevDirection == Direction::kRight) {
+        ai_[i].nextDirection = Direction::kLeft;
       }
+      ai_[i].prevDirection = Direction::kDown;
     }
   }
-
-
 }
 
 void AlienSystem::updatePosition() {
   for (int i = 0; i < size_; i++) {
+    switch (ai_[i].nextDirection) {
+      case Direction::kLeft:
+        physics_[i].velocity.x = -physics_[i].speed;
+        physics_[i].velocity.y = 0.0f;
+        break;
+      case Direction::kRight:
+        physics_[i].velocity.x = physics_[i].speed;
+        physics_[i].velocity.y = 0.0f;
+        break;
+      case Direction::kDown:
+        physics_[i].velocity.x = 0.0f;
+        physics_[i].velocity.y = physics_[i].speed;
+        break;
+    }
+
     transform_[i].position += physics_[i].velocity;
     collider_[i].update(transform_[i].position);
+  }
+
+  if (isOutOfBounds()) {
+    for (int i = 0; i <= size_; i++) {
+      transform_[i].position -= physics_[i].velocity;
+      collider_[i].update(transform_[i].position);
+      ai_[i].isPathEnd = true;
+    }
   }
 }
 
@@ -121,6 +145,7 @@ void AlienSystem::renderCollider(SDL_Renderer* renderer) {
 
 bool AlienSystem::isOutOfBounds() {
   for (int i = 0; i < size_; i++) {
+    // TODO(Victor): Remove hardcoded screen dimensions.
     if (transform_[i].position.x < 0 || transform_[i].position.x > 1280) {
       return true;
     }
