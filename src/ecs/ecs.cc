@@ -7,7 +7,7 @@
 #include "systems/process_tank_input.h"
 #include "systems/render_collider.h"
 #include "systems/render_sprite.h"
-#include "systems/resolve_bullet_collision.h"
+#include "systems/resolve_bullet_hit.h"
 #include "systems/update_alien_position.h"
 #include "systems/update_bullet_position.h"
 #include "systems/update_tank_position.h"
@@ -45,7 +45,7 @@ void ECS::update() {
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
   UpdateBulletPosition::update(*this);
-  ResolveBulletCollision::update(*this);
+  ResolveBulletHit::update(*this);
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {

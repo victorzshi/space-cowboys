@@ -2,7 +2,7 @@
 
 #include "ecs/ecs.h"
 
-class ResolveBulletCollision {
+class ResolveBulletHit {
  public:
   static void update(ECS& ecs) {
     Active* active = ecs.active;
@@ -21,9 +21,26 @@ class ResolveBulletCollision {
         if (physics[bullet].isCollision(physics[alien].collider)) {
           active[bullet].state = false;
           active[alien].state = false;
+
+          increaseAlienSpeed(ecs);
+
           break;
         }
       }
+    }
+  }
+
+ private:
+  static void increaseAlienSpeed(ECS& ecs) {
+    Active* active = ecs.active;
+    Physics* physics = ecs.physics;
+
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
+
+      if (active[id].isNotActive()) continue;
+
+      physics[id].deltaVelocity += 0.5f;
     }
   }
 };

@@ -45,14 +45,15 @@ class ProcessTankInput {
     Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
-      int id = ecs.bulletIds[i];
+      int bullet = ecs.bulletIds[i];
 
-      if (active[id].isNotActive()) {
+      if (active[bullet].isNotActive()) {
         int tank = ecs.tankIds[0];
 
-        active[id].state = true;
-        physics[id].velocity.y = -physics[id].deltaVelocity;
-        transform[id].position = transform[tank].position;
+        active[bullet].state = true;
+        physics[bullet].velocity.y = -physics[bullet].deltaVelocity;
+        transform[bullet].position = transform[tank].position;
+
         break;
       }
     }
