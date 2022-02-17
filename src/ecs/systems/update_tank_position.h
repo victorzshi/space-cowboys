@@ -14,14 +14,14 @@ class UpdateTankPosition {
     physics[id].velocity += physics[id].acceleration;
     physics[id].velocity = physics[id].velocity.limit(3.0f);
     transform[id].position += physics[id].velocity;
+    collider[id].update(transform[id].position);
 
     if (ecs.isOutOfBounds(collider[id].rect)) {
       transform[id].position -= physics[id].velocity;
+      collider[id].update(transform[id].position);
 
-      physics[id].velocity = Vector2();
-      physics[id].acceleration = Vector2();
+      physics[id].velocity.x = 0.0f;
+      physics[id].acceleration.x = 0.0f;
     }
-
-    collider[id].update(transform[id].position);
   }
 };
