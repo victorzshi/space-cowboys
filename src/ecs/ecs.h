@@ -5,7 +5,6 @@
 #include <vector>
 
 #include "ecs/components/ai.h"
-#include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
@@ -20,12 +19,14 @@ class ECS {
   std::vector<int> allIds;
   std::vector<int> alienIds;
   std::vector<int> tankIds;
+  std::vector<int> bulletIds;
 
   AI* ai();
-  Collider* collider();
   Physics* physics();
   Sprite* sprite();
   Transform* transform();
+
+  int createEntity();
 
   void input(SDL_Event event);
   void update();
@@ -34,7 +35,7 @@ class ECS {
   bool isOutOfBounds(SDL_Rect rect);
 
  private:
-  static const int kMaxSize_ = 56;
+  static const int kMaxSize_ = 100;
 
   int size_;
 
@@ -44,12 +45,11 @@ class ECS {
   SDL_Renderer* renderer_;
 
   AI* ai_;
-  Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;
   Transform* transform_;
 
-  int createEntity();
-  void createAliens();
-  void createTank();
+  void initializeAliens();
+  void initializeTank();
+  void initializeBullets();
 };

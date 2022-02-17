@@ -10,7 +10,6 @@ class ChooseAlienDirection {
     AI* ai = ecs.ai();
     Transform* transform = ecs.transform();
     Physics* physics = ecs.physics();
-    Collider* collider = ecs.collider();
 
     for (size_t i = 0; i < ecs.alienIds.size(); i++) {
       int id = ecs.alienIds[i];
@@ -21,7 +20,7 @@ class ChooseAlienDirection {
         ai[id].prevDirection = ai[id].nextDirection;
         ai[id].nextDirection = Direction::kDown;
 
-        ai[id].goalHeight += static_cast<float>(collider[id].rect.h);
+        ai[id].goalHeight += static_cast<float>(physics[id].collider.h);
       }
 
       if (ai[id].nextDirection == Direction::kDown &&

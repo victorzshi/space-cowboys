@@ -8,11 +8,11 @@
 #include "systems/render_collider.h"
 #include "systems/render_sprite.h"
 #include "systems/update_alien_position.h"
+#include "systems/update_bullet_position.h"
 #include "systems/update_tank_position.h"
 
 ECS::ECS() : size_(0), screenWidth_(0), screenHeight_(0), renderer_(nullptr) {
   ai_ = new AI[kMaxSize_];
-  collider_ = new Collider[kMaxSize_];
   physics_ = new Physics[kMaxSize_];
   sprite_ = new Sprite[kMaxSize_];
   transform_ = new Transform[kMaxSize_];
@@ -24,8 +24,9 @@ void ECS::initialize(int screenWidth, int screenHeight,
   screenHeight_ = screenHeight;
   renderer_ = renderer;
 
-  createAliens();
-  createTank();
+  initializeAliens();
+  initializeTank();
+  initializeBullets();
 }
 
 void ECS::terminate() {
@@ -37,13 +38,17 @@ void ECS::terminate() {
 
 AI* ECS::ai() { return ai_; }
 
-Collider* ECS::collider() { return collider_; }
-
 Physics* ECS::physics() { return physics_; }
 
 Sprite* ECS::sprite() { return sprite_; }
 
 Transform* ECS::transform() { return transform_; }
+
+int ECS::createEntity() {
+  assert(size_ < kMaxSize_);
+  size_++;
+  return size_ - 1;  // Array index starts at 0
+}
 
 void ECS::input(SDL_Event event) { ProcessTankInput::input(*this, event); }
 
@@ -51,6 +56,7 @@ void ECS::update() {
   UpdateTankPosition::update(*this);
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
+  UpdateBulletPosition::update(*this);
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
@@ -71,15 +77,9 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
          bottomRightY > screenHeight_;
 }
 
-int ECS::createEntity() {
-  assert(size_ < kMaxSize_);
-  size_++;
-  return size_ - 1;  // Array index starts at 0
-}
-
-void ECS::createAliens() {
-  int alienWidth = 36;
-  int alienHeight = 36;
+void ECS::initializeAliens() {
+  int alienWidth = 72;
+  int alienHeight = 72;
 
   int rows = 5;
   int columns = 11;
@@ -104,10 +104,10 @@ void ECS::createAliens() {
     transform_[id].position.x = static_cast<float>(spawnX);
     transform_[id].position.y = static_cast<float>(spawnY);
 
-    collider_[id].rect.w = alienWidth;
-    collider_[id].rect.h = alienHeight;
-
+    physics_[id].isActive = true;
     physics_[id].deltaVelocity = 1.0f;
+    physics_[id].collider.w = alienWidth;
+    physics_[id].collider.h = alienHeight;
 
     ai_[id].nextDirection = Direction::kLeft;
     ai_[id].goalHeight = transform_[id].position.y;
@@ -123,7 +123,7 @@ void ECS::createAliens() {
   }
 }
 
-void ECS::createTank() {
+void ECS::initializeTank() {
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/tank.png");
 
@@ -135,10 +135,31 @@ void ECS::createTank() {
   transform_[id].position.x = static_cast<float>(screenWidth_ / 2);
   transform_[id].position.y = static_cast<float>(screenHeight_ - 100);
 
+  physics_[id].isActive = true;
   physics_[id].deltaAcceleration = 0.1f;
-
-  collider_[id].rect.w = 36;
-  collider_[id].rect.h = 36;
+  physics_[id].collider.w = 72;
+  physics_[id].collider.h = 72;
 
   sprite_[id].texture = texture;
+}
+
+void ECS::initializeBullets() {
+  SDL_Texture* texture =
+      Utils::createTexture(renderer_, "../../data/images/bullet.png");
+
+  int totalBullets = 10;
+
+  for (int i = 0; i < totalBullets; i++) {
+    int id = createEntity();
+
+    allIds.push_back(id);
+    bulletIds.push_back(id);
+
+    physics_[id].isActive = false;
+    physics_[id].deltaVelocity = 5.0f;
+    physics_[id].collider.w = 36;
+    physics_[id].collider.h = 36;
+
+    sprite_[id].texture = texture;
+  }
 }
