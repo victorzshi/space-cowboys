@@ -19,8 +19,7 @@ struct Physics {
   }
 
   bool isCollision(SDL_Rect other) {
-    return collider.x <= other.x + other.w &&
-           collider.y <= other.y + other.h &&
+    return collider.x <= other.x + other.w && collider.y <= other.y + other.h &&
            collider.x + collider.w >= other.x &&
            collider.y + collider.h >= other.y;
   }
