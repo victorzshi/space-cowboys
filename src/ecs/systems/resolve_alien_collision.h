@@ -7,8 +7,8 @@ class ResolveAlienCollision {
   static void update(ECS& ecs) {
     Transform* transform = ecs.transform();
 
-    for (size_t i = 0; i < ecs.aliens.size(); i++) {
-      int id = ecs.aliens[i];
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
 
       if (ecs.isOutOfBounds(transform[id].position)) {
         shiftAliens(ecs);
@@ -24,8 +24,8 @@ class ResolveAlienCollision {
     Collider* collider = ecs.collider();
     AI* ai = ecs.ai();
 
-    for (size_t i = 0; i < ecs.aliens.size(); i++) {
-      int id = ecs.aliens[i];
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
 
       transform[id].position -= physics[id].velocity;
       collider[id].update(transform[id].position);

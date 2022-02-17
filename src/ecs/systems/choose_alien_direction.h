@@ -12,8 +12,8 @@ class ChooseAlienDirection {
     Physics* physics = ecs.physics();
     Collider* collider = ecs.collider();
 
-    for (size_t i = 0; i < ecs.aliens.size(); i++) {
-      int id = ecs.aliens[i];
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
 
       if (ai[id].isPathEnd) {
         ai[id].isPathEnd = false;

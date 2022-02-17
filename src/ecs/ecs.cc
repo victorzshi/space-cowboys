@@ -34,8 +34,6 @@ void ECS::terminate() {
   }
 }
 
-int ECS::size() { return size_; }
-
 AI* ECS::ai() { return ai_; }
 
 Collider* ECS::collider() { return collider_; }
@@ -96,7 +94,8 @@ void ECS::createAliens() {
   for (int i = 0; i < rows * columns; i++) {
     int id = createEntity();
 
-    aliens.push_back(id);
+    allIds.push_back(id);
+    alienIds.push_back(id);
 
     transform_[id].position.x = static_cast<float>(spawnX);
     transform_[id].position.y = static_cast<float>(spawnY);
@@ -125,6 +124,9 @@ void ECS::createTank() {
       Utils::createTexture(renderer_, "../../data/images/tank.png");
 
   int id = createEntity();
+
+  allIds.push_back(id);
+  tankIds.push_back(id);
 
   transform_[id].position.x = static_cast<float>(screenWidth_ / 2);
   transform_[id].position.y = static_cast<float>(screenHeight_ / 2);

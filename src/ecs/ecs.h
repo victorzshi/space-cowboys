@@ -17,9 +17,10 @@ class ECS {
   void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
   void terminate();
 
-  std::vector<int> aliens;
+  std::vector<int> allIds;
+  std::vector<int> alienIds;
+  std::vector<int> tankIds;
 
-  int size();
   AI* ai();
   Collider* collider();
   Physics* physics();

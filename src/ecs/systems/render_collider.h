@@ -9,8 +9,10 @@ class RenderCollider {
 
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
 
-    for (int i = 0; i < ecs.size(); i++) {
-      SDL_RenderDrawRect(renderer, &collider[i].rect);
+    for (size_t i = 0; i < ecs.allIds.size(); i++) {
+      int id = ecs.allIds[i];
+
+      SDL_RenderDrawRect(renderer, &collider[id].rect);
     }
   }
 };

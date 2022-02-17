@@ -10,23 +10,25 @@ class RenderSprite {
     Collider* collider = ecs.collider();
     Sprite* sprite = ecs.sprite();
 
-    for (int i = 0; i < ecs.size(); i++) {
-      if (sprite[i].texture == nullptr) continue;
+    for (size_t i = 0; i < ecs.allIds.size(); i++) {
+      int id = ecs.allIds[i];
+
+      if (sprite[id].texture == nullptr) continue;
 
       SDL_Rect rect;
 
       if (delay > 0) {
-        Vector2 velocity = physics[i].velocity * delay;
-        Vector2 position = transform[i].position + velocity;
+        Vector2 velocity = physics[id].velocity * delay;
+        Vector2 position = transform[id].position + velocity;
 
-        SDL_Point point = Utils::topLeftPoint(position, collider[i].rect);
+        SDL_Point point = Utils::topLeftPoint(position, collider[id].rect);
 
-        rect = {point.x, point.y, collider[i].rect.w, collider[i].rect.h};
+        rect = {point.x, point.y, collider[id].rect.w, collider[id].rect.h};
       } else {
-        rect = collider[i].rect;
+        rect = collider[id].rect;
       }
 
-      SDL_RenderCopy(renderer, sprite[i].texture, nullptr, &rect);
+      SDL_RenderCopy(renderer, sprite[id].texture, nullptr, &rect);
     }
   }
 };

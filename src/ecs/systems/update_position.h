@@ -9,10 +9,12 @@ class UpdatePosition {
     Physics* physics = ecs.physics();
     Collider* collider = ecs.collider();
 
-    for (int i = 0; i < ecs.size(); i++) {
-      physics[i].velocity += physics[i].acceleration;
-      transform[i].position += physics[i].velocity;
-      collider[i].update(transform[i].position);
+    for (size_t i = 0; i < ecs.allIds.size(); i++) {
+      int id = ecs.allIds[i];
+
+      physics[id].velocity += physics[id].acceleration;
+      transform[id].position += physics[id].velocity;
+      collider[id].update(transform[id].position);
     }
   }
 };
