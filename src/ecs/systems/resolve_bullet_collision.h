@@ -2,7 +2,7 @@
 
 #include "ecs/ecs.h"
 
-class CheckBulletHit {
+class ResolveBulletCollision {
  public:
   static void update(ECS& ecs) {
     Active* active = ecs.active;
@@ -16,8 +16,12 @@ class CheckBulletHit {
       for (size_t j = 0; j < ecs.alienIds.size(); j++) {
         int alien = ecs.alienIds[j];
 
+        if (active[alien].isNotActive()) continue;
+
         if (physics[bullet].isCollision(physics[alien].collider)) {
           active[bullet].state = false;
+          active[alien].state = false;
+          break;
         }
       }
     }

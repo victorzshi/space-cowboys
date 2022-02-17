@@ -12,14 +12,10 @@ class UpdateBulletPosition {
     for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
       int id = ecs.bulletIds[i];
 
-      if (active[id].isActive()) {
-        transform[id].position += physics[id].velocity;
-        physics[id].updateCollider(transform[id].position);
-      }
-    }
+      if (active[id].isNotActive()) continue;
 
-    for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
-      int id = ecs.bulletIds[i];
+      transform[id].position += physics[id].velocity;
+      physics[id].updateCollider(transform[id].position);
 
       if (ecs.isOutOfBounds(physics[id].collider)) {
         active[id].state = false;

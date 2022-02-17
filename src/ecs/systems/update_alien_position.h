@@ -5,18 +5,17 @@
 class UpdateAlienPosition {
  public:
   static void update(ECS& ecs) {
+    Active* active = ecs.active;
     Transform* transform = ecs.transform;
     Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.alienIds.size(); i++) {
       int id = ecs.alienIds[i];
 
+      if (active[id].isNotActive()) continue;
+
       transform[id].position += physics[id].velocity;
       physics[id].updateCollider(transform[id].position);
-    }
-
-    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
-      int id = ecs.alienIds[i];
 
       if (ecs.isOutOfBounds(physics[id].collider)) {
         shiftAllAliens(ecs);

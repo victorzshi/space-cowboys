@@ -5,9 +5,12 @@
 class ProcessTankInput {
  public:
   static void input(ECS& ecs, SDL_Event event) {
+    Active* active = ecs.active;
     Physics* physics = ecs.physics;
 
     int id = ecs.tankIds[0];
+
+    if (active[id].isNotActive()) return;
 
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
       switch (event.key.keysym.sym) {
@@ -45,11 +48,11 @@ class ProcessTankInput {
       int id = ecs.bulletIds[i];
 
       if (active[id].isNotActive()) {
-        int tankId = ecs.tankIds[0];
+        int tank = ecs.tankIds[0];
 
         active[id].state = true;
         physics[id].velocity.y = -physics[id].deltaVelocity;
-        transform[id].position = transform[tankId].position;
+        transform[id].position = transform[tank].position;
         break;
       }
     }
