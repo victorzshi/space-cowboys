@@ -78,8 +78,8 @@ int ECS::createEntity() {
 }
 
 void ECS::createAliens() {
-  int alienWidth = 50;
-  int alienHeight = 50;
+  int alienWidth = 72;
+  int alienHeight = 72;
 
   int rows = 5;
   int columns = 11;
@@ -137,8 +137,8 @@ void ECS::createTank() {
 
   physics_[id].deltaAcceleration = 0.1f;
 
-  collider_[id].rect.w = 50;
-  collider_[id].rect.h = 50;
+  collider_[id].rect.w = 72;
+  collider_[id].rect.h = 72;
 
   sprite_[id].texture = texture;
 }
