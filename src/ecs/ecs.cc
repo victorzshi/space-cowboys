@@ -6,6 +6,7 @@
 #include "systems/choose_alien_direction.h"
 #include "systems/render_collider.h"
 #include "systems/render_sprite.h"
+#include "systems/resolve_alien_collision.h"
 #include "systems/update_position.h"
 
 ECS::ECS() : size_(0), screenWidth_(0), screenHeight_(0), renderer_(nullptr) {
@@ -23,6 +24,7 @@ void ECS::initialize(int screenWidth, int screenHeight,
   renderer_ = renderer;
 
   createAliens();
+  createTank();
 }
 
 void ECS::terminate() {
@@ -44,14 +46,12 @@ Sprite* ECS::sprite() { return sprite_; }
 
 Transform* ECS::transform() { return transform_; }
 
-void ECS::input(SDL_Event event) {
-  //
-  (void)event;
-}
+void ECS::input(SDL_Event event) { (void)event; }
 
 void ECS::update() {
   ChooseAlienDirection::update(*this);
   UpdatePosition::update(*this);
+  ResolveAlienCollision::update(*this);
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
@@ -62,18 +62,11 @@ void ECS::render(SDL_Renderer* renderer, float delay) {
 #endif
 }
 
-bool ECS::isOutOfBounds() {
-  for (int i = 0; i < size_; i++) {
-    int x = static_cast<int>(roundf(transform_[i].position.x));
-    int y = static_cast<int>(roundf(transform_[i].position.y));
-    if (x < 0 || x > screenWidth_) {
-      return true;
-    }
-    if (y < 0 || y > screenHeight_) {
-      return true;
-    }
-  }
-  return false;
+bool ECS::isOutOfBounds(Vector2 position) {
+  int x = static_cast<int>(roundf(position.x));
+  int y = static_cast<int>(roundf(position.y));
+
+  return x < 0 || x > screenWidth_ || y < 0 || y > screenHeight_;
 }
 
 int ECS::createEntity() {
@@ -95,28 +88,29 @@ void ECS::createAliens() {
   int startX = screenWidth_ / 2 - spawnWidth / 2 + alienWidth / 2;
   int startY = screenHeight_ / 4 - spawnHeight / 2 + alienHeight / 2;
 
-  SDL_Texture* texture = nullptr;
-  SDL_Surface* surface = IMG_Load("../../data/images/alien.png");
-  texture = SDL_CreateTextureFromSurface(renderer_, surface);
-  SDL_FreeSurface(surface);
+  SDL_Texture* texture =
+      Utils::createTexture(renderer_, "../../data/images/alien.png");
 
   int spawnX = startX;
   int spawnY = startY;
   for (int i = 0; i < rows * columns; i++) {
-    int entity = createEntity();
+    int id = createEntity();
 
-    transform_[entity].position.x = static_cast<float>(spawnX);
-    transform_[entity].position.y = static_cast<float>(spawnY);
+    aliens.push_back(id);
 
-    collider_[entity].rect.w = alienWidth;
-    collider_[entity].rect.h = alienHeight;
+    transform_[id].position.x = static_cast<float>(spawnX);
+    transform_[id].position.y = static_cast<float>(spawnY);
 
-    physics_[entity].speed = 1.0f;
+    collider_[id].rect.w = alienWidth;
+    collider_[id].rect.h = alienHeight;
 
-    ai_[entity].nextDirection = Direction::kLeft;
-    ai_[entity].goalHeight = transform_[entity].position.y;
+    physics_[id].deltaVelocity = 1.0f;
 
-    sprite_[entity].texture = texture;
+    ai_[id].nextDirection = Direction::kLeft;
+    ai_[id].goalHeight = transform_[id].position.y;
+    ai_[id].isPathEnd = false;
+
+    sprite_[id].texture = texture;
 
     spawnX += alienWidth;
     if ((i + 1) % columns == 0) {
@@ -124,4 +118,19 @@ void ECS::createAliens() {
       spawnY += alienHeight;
     }
   }
+}
+
+void ECS::createTank() {
+  SDL_Texture* texture =
+      Utils::createTexture(renderer_, "../../data/images/tank.png");
+
+  int id = createEntity();
+
+  transform_[id].position.x = static_cast<float>(screenWidth_ / 2);
+  transform_[id].position.y = static_cast<float>(screenHeight_ / 2);
+
+  collider_[id].rect.w = 50;
+  collider_[id].rect.h = 50;
+
+  sprite_[id].texture = texture;
 }

@@ -12,38 +12,38 @@ class ChooseAlienDirection {
     Physics* physics = ecs.physics();
     Collider* collider = ecs.collider();
 
-    for (int i = 0; i < ecs.size(); i++) {
-      if (ai[i].isPathEnd) {
-        ai[i].isPathEnd = false;
+    for (size_t i = 0; i < ecs.aliens.size(); i++) {
+      int id = ecs.aliens[i];
 
-        ai[i].prevDirection = ai[i].nextDirection;
-        ai[i].nextDirection = Direction::kDown;
+      if (ai[id].isPathEnd) {
+        ai[id].isPathEnd = false;
 
-        ai[i].goalHeight += static_cast<float>(collider[i].rect.h);
+        ai[id].prevDirection = ai[id].nextDirection;
+        ai[id].nextDirection = Direction::kDown;
+
+        ai[id].goalHeight += static_cast<float>(collider[id].rect.h);
       }
 
-      if (ai[i].nextDirection == Direction::kDown &&
-          transform[i].position.y >= ai[i].goalHeight) {
-        ai[i].nextDirection = ai[i].prevDirection == Direction::kLeft
-                                  ? Direction::kRight
-                                  : Direction::kLeft;
-        ai[i].prevDirection = Direction::kDown;
+      if (ai[id].nextDirection == Direction::kDown &&
+          transform[id].position.y >= ai[id].goalHeight) {
+        ai[id].nextDirection = ai[id].prevDirection == Direction::kLeft
+                                       ? Direction::kRight
+                                       : Direction::kLeft;
+        ai[id].prevDirection = Direction::kDown;
       }
 
-      switch (ai[i].nextDirection) {
+      switch (ai[id].nextDirection) {
         case Direction::kLeft:
-          physics[i].velocity.x = -physics[i].speed;
-          physics[i].velocity.y = 0.0f;
+          physics[id].velocity.x = -physics[id].deltaVelocity;
+          physics[id].velocity.y = 0.0f;
           break;
         case Direction::kRight:
-          physics[i].velocity.x = physics[i].speed;
-          physics[i].velocity.y = 0.0f;
+          physics[id].velocity.x = physics[id].deltaVelocity;
+          physics[id].velocity.y = 0.0f;
           break;
         case Direction::kDown:
-          physics[i].velocity.x = 0.0f;
-          physics[i].velocity.y = physics[i].speed;
-          break;
-        case Direction::kNone:
+          physics[id].velocity.x = 0.0f;
+          physics[id].velocity.y = physics[id].deltaVelocity;
           break;
       }
     }

@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 
+#include <vector>
+
 #include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
@@ -15,6 +17,8 @@ class ECS {
   void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
   void terminate();
 
+  std::vector<int> aliens;
+
   int size();
   AI* ai();
   Collider* collider();
@@ -26,10 +30,10 @@ class ECS {
   void update();
   void render(SDL_Renderer* renderer, float delay);
 
-  bool isOutOfBounds();
+  bool isOutOfBounds(Vector2 position);
 
  private:
-  static const int kMaxSize_ = 55;
+  static const int kMaxSize_ = 56;
 
   int size_;
 
@@ -45,6 +49,6 @@ class ECS {
   Transform* transform_;
 
   int createEntity();
-
   void createAliens();
+  void createTank();
 };
