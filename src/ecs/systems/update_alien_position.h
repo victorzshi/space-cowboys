@@ -5,8 +5,8 @@
 class UpdateAlienPosition {
  public:
   static void update(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.alienIds.size(); i++) {
       int id = ecs.alienIds[i];
@@ -27,9 +27,9 @@ class UpdateAlienPosition {
 
  private:
   static void shiftAllAliens(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
-    AI* ai = ecs.ai();
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
+    AI* ai = ecs.ai;
 
     for (size_t j = 0; j < ecs.alienIds.size(); j++) {
       int id = ecs.alienIds[j];

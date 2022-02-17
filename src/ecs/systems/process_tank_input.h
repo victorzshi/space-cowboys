@@ -5,7 +5,7 @@
 class ProcessTankInput {
  public:
   static void input(ECS& ecs, SDL_Event event) {
-    Physics* physics = ecs.physics();
+    Physics* physics = ecs.physics;
 
     int id = ecs.tankIds[0];
 
@@ -37,16 +37,17 @@ class ProcessTankInput {
 
  private:
   static void shootBullet(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Active* active = ecs.active;
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
       int id = ecs.bulletIds[i];
 
-      if (!physics[id].isActive) {
+      if (active[id].isNotActive()) {
         int tankId = ecs.tankIds[0];
 
-        physics[id].isActive = true;
+        active[id].state = true;
         physics[id].velocity.y = -physics[id].deltaVelocity;
         transform[id].position = transform[tankId].position;
         break;

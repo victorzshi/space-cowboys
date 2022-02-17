@@ -5,8 +5,8 @@
 class UpdateTankPosition {
  public:
   static void update(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     int id = ecs.tankIds[0];
 

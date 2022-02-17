@@ -6,7 +6,6 @@
 #include "vector2/vector2.h"
 
 struct Physics {
-  bool isActive;
   float deltaVelocity;
   float deltaAcceleration;
   Vector2 velocity;
