@@ -2,30 +2,39 @@
 
 #include "ecs/ecs.h"
 
-class ResolveAlienCollision {
+class UpdateAlienPosition {
  public:
   static void update(ECS& ecs) {
     Transform* transform = ecs.transform();
+    Physics* physics = ecs.physics();
+    Collider* collider = ecs.collider();
 
     for (size_t i = 0; i < ecs.alienIds.size(); i++) {
       int id = ecs.alienIds[i];
 
-      if (ecs.isOutOfBounds(transform[id].position)) {
-        shiftAliens(ecs);
+      transform[id].position += physics[id].velocity;
+      collider[id].update(transform[id].position);
+    }
+
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
+
+      if (ecs.isOutOfBounds(collider[id].rect)) {
+        shiftAllAliens(ecs);
         break;
       }
     }
   }
 
  private:
-  static void shiftAliens(ECS& ecs) {
+  static void shiftAllAliens(ECS& ecs) {
     Transform* transform = ecs.transform();
     Physics* physics = ecs.physics();
     Collider* collider = ecs.collider();
     AI* ai = ecs.ai();
 
-    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
-      int id = ecs.alienIds[i];
+    for (size_t j = 0; j < ecs.alienIds.size(); j++) {
+      int id = ecs.alienIds[j];
 
       transform[id].position -= physics[id].velocity;
       collider[id].update(transform[id].position);

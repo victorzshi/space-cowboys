@@ -31,7 +31,7 @@ class ECS {
   void update();
   void render(SDL_Renderer* renderer, float delay);
 
-  bool isOutOfBounds(Vector2 position);
+  bool isOutOfBounds(SDL_Rect rect);
 
  private:
   static const int kMaxSize_ = 56;

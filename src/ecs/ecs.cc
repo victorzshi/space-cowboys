@@ -4,10 +4,11 @@
 #include <assert.h>
 
 #include "systems/choose_alien_direction.h"
+#include "systems/process_tank_input.h"
 #include "systems/render_collider.h"
 #include "systems/render_sprite.h"
-#include "systems/resolve_alien_collision.h"
-#include "systems/update_position.h"
+#include "systems/update_alien_position.h"
+#include "systems/update_tank_position.h"
 
 ECS::ECS() : size_(0), screenWidth_(0), screenHeight_(0), renderer_(nullptr) {
   ai_ = new AI[kMaxSize_];
@@ -44,12 +45,12 @@ Sprite* ECS::sprite() { return sprite_; }
 
 Transform* ECS::transform() { return transform_; }
 
-void ECS::input(SDL_Event event) { (void)event; }
+void ECS::input(SDL_Event event) { ProcessTankInput::input(*this, event); }
 
 void ECS::update() {
+  UpdateTankPosition::update(*this);
   ChooseAlienDirection::update(*this);
-  UpdatePosition::update(*this);
-  ResolveAlienCollision::update(*this);
+  UpdateAlienPosition::update(*this);
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
@@ -60,11 +61,14 @@ void ECS::render(SDL_Renderer* renderer, float delay) {
 #endif
 }
 
-bool ECS::isOutOfBounds(Vector2 position) {
-  int x = static_cast<int>(roundf(position.x));
-  int y = static_cast<int>(roundf(position.y));
+bool ECS::isOutOfBounds(SDL_Rect rect) {
+  int topLeftX = rect.x;
+  int topLeftY = rect.y;
+  int bottomRightX = rect.x + rect.w;
+  int bottomRightY = rect.y + rect.h;
 
-  return x < 0 || x > screenWidth_ || y < 0 || y > screenHeight_;
+  return topLeftX < 0 || topLeftY < 0 || bottomRightX > screenWidth_ ||
+         bottomRightY > screenHeight_;
 }
 
 int ECS::createEntity() {
@@ -129,7 +133,9 @@ void ECS::createTank() {
   tankIds.push_back(id);
 
   transform_[id].position.x = static_cast<float>(screenWidth_ / 2);
-  transform_[id].position.y = static_cast<float>(screenHeight_ / 2);
+  transform_[id].position.y = static_cast<float>(screenHeight_ - 100);
+
+  physics_[id].deltaAcceleration = 0.1f;
 
   collider_[id].rect.w = 50;
   collider_[id].rect.h = 50;
