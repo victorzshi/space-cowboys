@@ -41,10 +41,10 @@ void TankSystem::inputDirection(SDL_Event event) {
     if (event.type == SDL_KEYDOWN && event.key.repeat == 0) {
       switch (event.key.keysym.sym) {
         case SDLK_LEFT:
-          //physics_[i].acceleration.x = -physics_[i].speed;
+          // physics_[i].acceleration.x = -physics_[i].speed;
           break;
         case SDLK_RIGHT:
-          //physics_[i].acceleration.x = physics_[i].speed;
+          // physics_[i].acceleration.x = physics_[i].speed;
           break;
       }
     } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {

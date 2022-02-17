@@ -27,8 +27,8 @@ class ChooseAlienDirection {
       if (ai[id].nextDirection == Direction::kDown &&
           transform[id].position.y >= ai[id].goalHeight) {
         ai[id].nextDirection = ai[id].prevDirection == Direction::kLeft
-                                       ? Direction::kRight
-                                       : Direction::kLeft;
+                                   ? Direction::kRight
+                                   : Direction::kLeft;
         ai[id].prevDirection = Direction::kDown;
       }
 
