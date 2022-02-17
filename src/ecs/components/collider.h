@@ -5,7 +5,7 @@
 #include "utils/utils.h"
 
 struct Collider {
-  SDL_Rect rect;
+  SDL_Rect rect = {0, 0, 0, 0};
 
   void update(Vector2 position) {
     SDL_Point point = Utils::topLeftPoint(position, this->rect);

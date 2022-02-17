@@ -1,5 +1,7 @@
 #include "vector2.h"
 
+#include <assert.h>
+
 #include "utils/utils.h"
 
 Vector2::Vector2() : x(0.0f), y(0.0f) {}
@@ -11,6 +13,7 @@ float Vector2::length() const { return sqrt(x * x + y * y); }
 float Vector2::lengthSquared() const { return x * x + y * y; }
 
 Vector2 Vector2::normalize() const {
+  assert(this->length() > 0);
   Vector2 v = *this / this->length();
   return v;
 }
