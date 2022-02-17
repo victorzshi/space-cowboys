@@ -3,5 +3,5 @@
 #include "vector2/vector2.h"
 
 struct Transform {
-  Vector2 position = Vector2();
+  Vector2 position;
 };

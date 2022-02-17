@@ -6,5 +6,5 @@ struct AI {
   Direction nextDirection;
   Direction prevDirection;
   float goalHeight;
-  bool isPathEnd = false;
+  bool isPathEnd;
 };

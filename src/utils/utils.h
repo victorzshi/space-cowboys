@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_image.h>
 
 #include <cmath>
 
@@ -21,5 +22,14 @@ class Utils {
 
   static bool isEqual(float a, float b, float epsilon = 1.0f / 1000) {
     return abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f);
+  }
+
+  static SDL_Texture* createTexture(SDL_Renderer* renderer, const char* file) {
+    SDL_Texture* texture = nullptr;
+    SDL_Surface* surface = IMG_Load(file);
+    texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_FreeSurface(surface);
+
+    return texture;
   }
 };
