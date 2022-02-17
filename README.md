@@ -28,6 +28,10 @@ cmake -B build
 cmake --build build
 ```
 
+## About
+
+Graphics provided by Twemoji ([CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)).
+
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)

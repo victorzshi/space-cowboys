@@ -7,21 +7,20 @@ class UpdateTankPosition {
   static void update(ECS& ecs) {
     Transform* transform = ecs.transform();
     Physics* physics = ecs.physics();
-    Collider* collider = ecs.collider();
 
     int id = ecs.tankIds[0];
 
     physics[id].velocity += physics[id].acceleration;
     physics[id].velocity = physics[id].velocity.limit(3.0f);
     transform[id].position += physics[id].velocity;
+    physics[id].updateCollider(transform[id].position);
 
-    if (ecs.isOutOfBounds(collider[id].rect)) {
+    if (ecs.isOutOfBounds(physics[id].collider)) {
       transform[id].position -= physics[id].velocity;
+      physics[id].updateCollider(transform[id].position);
 
-      physics[id].velocity = Vector2();
-      physics[id].acceleration = Vector2();
+      physics[id].velocity.x = 0.0f;
+      physics[id].acceleration.x = 0.0f;
     }
-
-    collider[id].update(transform[id].position);
   }
 };

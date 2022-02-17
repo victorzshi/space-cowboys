@@ -17,10 +17,40 @@ class ProcessTankInput {
         case SDLK_RIGHT:
           physics[id].acceleration.x = physics[id].deltaAcceleration;
           break;
+        case SDLK_SPACE:
+          shootBullet(ecs);
+          break;
       }
-    } else if (event.type == SDL_KEYUP && event.key.repeat == 0) {
-      physics[id].acceleration.x = 0.0f;
-      physics[id].velocity.x = 0.0f;
+    } else if (event.type == SDL_KEYUP) {
+      switch (event.key.keysym.sym) {
+        case SDLK_LEFT:
+          physics[id].acceleration.x = 0.0f;
+          physics[id].velocity.x = 0.0f;
+          break;
+        case SDLK_RIGHT:
+          physics[id].acceleration.x = 0.0f;
+          physics[id].velocity.x = 0.0f;
+          break;
+      }
+    }
+  }
+
+ private:
+  static void shootBullet(ECS& ecs) {
+    Transform* transform = ecs.transform();
+    Physics* physics = ecs.physics();
+
+    for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
+      int id = ecs.bulletIds[i];
+
+      if (!physics[id].isActive) {
+        int tankId = ecs.tankIds[0];
+
+        physics[id].isActive = true;
+        physics[id].velocity.y = -physics[id].deltaVelocity;
+        transform[id].position = transform[tankId].position;
+        break;
+      }
     }
   }
 };
