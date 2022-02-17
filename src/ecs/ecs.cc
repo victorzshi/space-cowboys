@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <assert.h>
 
+#include "systems/check_bullet_hit.h"
 #include "systems/choose_alien_direction.h"
 #include "systems/process_tank_input.h"
 #include "systems/render_collider.h"
@@ -57,6 +58,7 @@ void ECS::update() {
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
   UpdateBulletPosition::update(*this);
+  CheckBulletHit::update(*this);
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {

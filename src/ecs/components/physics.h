@@ -17,4 +17,11 @@ struct Physics {
     SDL_Point point = Utils::topLeftPoint(position, this->collider);
     collider = SDL_Rect{point.x, point.y, collider.w, collider.h};
   }
+
+  bool isCollision(SDL_Rect other) {
+    return collider.x <= other.x + other.w &&
+           collider.y <= other.y + other.h &&
+           collider.x + collider.w >= other.x &&
+           collider.y + collider.h >= other.y;
+  }
 };
