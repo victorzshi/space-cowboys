@@ -5,14 +5,15 @@
 class RenderSprite {
  public:
   static void render(ECS& ecs, SDL_Renderer* renderer, float delay) {
-    Physics* physics = ecs.physics();
-    Transform* transform = ecs.transform();
-    Sprite* sprite = ecs.sprite();
+    Active* active = ecs.active;
+    Physics* physics = ecs.physics;
+    Transform* transform = ecs.transform;
+    Sprite* sprite = ecs.sprite;
 
     for (size_t i = 0; i < ecs.allIds.size(); i++) {
       int id = ecs.allIds[i];
 
-      if (sprite[id].texture == nullptr) continue;
+      if (active[id].isNotActive() || sprite[id].texture == nullptr) continue;
 
       SDL_Rect collider = physics[id].collider;
 

@@ -7,12 +7,15 @@ class ChooseAlienDirection {
   static void update(ECS& ecs) {
     // TODO(Victor): State machine would be better suited for this logic.
 
-    AI* ai = ecs.ai();
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Active* active = ecs.active;
+    AI* ai = ecs.ai;
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.alienIds.size(); i++) {
       int id = ecs.alienIds[i];
+
+      if (active[id].isNotActive()) continue;
 
       if (ai[id].isPathEnd) {
         ai[id].isPathEnd = false;

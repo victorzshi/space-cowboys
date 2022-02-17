@@ -5,10 +5,13 @@
 class UpdateTankPosition {
  public:
   static void update(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Active* active = ecs.active;
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     int id = ecs.tankIds[0];
+
+    if (active[id].isNotActive()) return;
 
     physics[id].velocity += physics[id].acceleration;
     physics[id].velocity = physics[id].velocity.limit(3.0f);

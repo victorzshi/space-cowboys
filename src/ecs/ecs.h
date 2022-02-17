@@ -4,6 +4,7 @@
 
 #include <vector>
 
+#include "ecs/components/active.h"
 #include "ecs/components/ai.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
@@ -21,12 +22,11 @@ class ECS {
   std::vector<int> tankIds;
   std::vector<int> bulletIds;
 
-  AI* ai();
-  Physics* physics();
-  Sprite* sprite();
-  Transform* transform();
-
-  int createEntity();
+  Active* active;
+  AI* ai;
+  Physics* physics;
+  Sprite* sprite;
+  Transform* transform;
 
   void input(SDL_Event event);
   void update();
@@ -44,11 +44,7 @@ class ECS {
 
   SDL_Renderer* renderer_;
 
-  AI* ai_;
-  Physics* physics_;
-  Sprite* sprite_;
-  Transform* transform_;
-
+  int createEntity();
   void initializeAliens();
   void initializeTank();
   void initializeBullets();

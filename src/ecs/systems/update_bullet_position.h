@@ -5,24 +5,20 @@
 class UpdateBulletPosition {
  public:
   static void update(ECS& ecs) {
-    Transform* transform = ecs.transform();
-    Physics* physics = ecs.physics();
+    Active* active = ecs.active;
+    Transform* transform = ecs.transform;
+    Physics* physics = ecs.physics;
 
     for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
       int id = ecs.bulletIds[i];
 
-      if (physics[id].isActive) {
-        transform[id].position += physics[id].velocity;
-        physics[id].updateCollider(transform[id].position);
-      }
-    }
+      if (active[id].isNotActive()) continue;
 
-    for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
-      int id = ecs.bulletIds[i];
+      transform[id].position += physics[id].velocity;
+      physics[id].updateCollider(transform[id].position);
 
       if (ecs.isOutOfBounds(physics[id].collider)) {
-        physics[id].isActive = false;
-        physics[id].velocity.y = 0.0f;
+        active[id].state = false;
       }
     }
   }
