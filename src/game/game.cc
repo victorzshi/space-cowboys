@@ -6,7 +6,6 @@
 #include <sstream>
 
 #include "services/locator.h"
-#include "texture/texture.h"
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
@@ -61,7 +60,9 @@ void Game::run(bool isSmokeTest) {
       TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 12);
   SDL_Color color = {0, 255, 0, 255};
   std::stringstream text;
-  Texture texture;
+  SDL_Surface* surface = nullptr;
+  SDL_Texture* texture = nullptr;
+  SDL_Rect rect = {0, 0, 0, 0};
 #endif
 
   Uint64 previous = SDL_GetTicks64();
@@ -97,7 +98,9 @@ void Game::run(bool isSmokeTest) {
       text.str("");
       text << fps;
 
-      texture.setText(renderer_, font, text.str().c_str(), color);
+      surface = TTF_RenderText_Solid(font, text.str().c_str(), color);
+      texture = SDL_CreateTextureFromSurface(renderer_, surface);
+      rect = {0, 0, surface->w, surface->h};
 #endif
     }
 
@@ -109,7 +112,7 @@ void Game::run(bool isSmokeTest) {
     ecs_.render(renderer_, delay);
 
 #ifdef DEBUG
-    texture.render(renderer_);
+    SDL_RenderCopy(renderer_, texture, nullptr, &rect);
     ++totalFrames;
 #endif
 
