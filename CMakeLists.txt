@@ -20,7 +20,6 @@ target_sources(main PRIVATE
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
-  "src/texture/texture.cc"
   "src/vector2/vector2.cc"
   "src/main.cc" 
 )
