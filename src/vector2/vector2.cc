@@ -2,7 +2,7 @@
 
 #include <assert.h>
 
-#include "utils/utils.h"
+#include <cmath>
 
 Vector2::Vector2() : x(0.0f), y(0.0f) {}
 
@@ -67,9 +67,13 @@ Vector2 Vector2::operator/(float n) const {
 }
 
 bool Vector2::operator==(const Vector2& v) const {
-  return Utils::isEqual(x, v.x) && Utils::isEqual(y, v.y);
+  return isEqual(x, v.x) && isEqual(y, v.y);
 }
 
 bool Vector2::operator!=(const Vector2& v) const {
-  return !Utils::isEqual(x, v.x) || !Utils::isEqual(y, v.y);
+  return !isEqual(x, v.x) || !isEqual(y, v.y);
+}
+
+bool Vector2::isEqual(float a, float b, float epsilon) {
+  return abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f);
 }

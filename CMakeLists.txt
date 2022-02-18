@@ -59,10 +59,9 @@ add_executable(tests)
 target_sources(tests PRIVATE 
   "src/vector2/vector2.cc"
   "src/vector2/vector2.test.cc"
-  "src/utils/utils.cc"
 )
 target_include_directories(tests PRIVATE "src")
-target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2 SDL2::SDL2_image)
+target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 # Add unit tests
 include(CTest)

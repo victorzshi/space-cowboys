@@ -2,12 +2,6 @@
 
 #include <SDL_image.h>
 
-#include <cmath>
-
-bool Utils::isEqual(float a, float b) {
-  return abs(a - b) <= kEpsilon_ * (abs(a) + abs(b) + 1.0f);
-}
-
 SDL_Point Utils::topLeftPoint(Vector2 position, SDL_Rect rect) {
   float offsetX = static_cast<float>(rect.w) * 0.5f;
   float offsetY = static_cast<float>(rect.h) * 0.5f;

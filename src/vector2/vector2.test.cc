@@ -3,7 +3,6 @@
 #include "vector2.h"
 
 #include "catch.hpp"
-#include "utils/utils.h"
 
 Vector2 v = Vector2(1.0f, 2.0f);
 Vector2 w = Vector2(3.0f, 4.0f);
@@ -48,9 +47,9 @@ TEST_CASE("Vector2 divide", "[vector2]") {
 
 TEST_CASE("Vector2 length", "[vector2]") {
   float length = v.length();
-  REQUIRE(Utils::isEqual(length, sqrt(5)));
-  REQUIRE(!Utils::isEqual(length, sqrt(4)));
-  REQUIRE(!Utils::isEqual(length, sqrt(6)));
+  REQUIRE(Vector2::isEqual(length, sqrt(5)));
+  REQUIRE(!Vector2::isEqual(length, sqrt(4)));
+  REQUIRE(!Vector2::isEqual(length, sqrt(6)));
 }
 
 TEST_CASE("Vector2 normalize", "[vector2]") {
