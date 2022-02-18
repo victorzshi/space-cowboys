@@ -8,7 +8,7 @@ Vector2::Vector2() : x(0.0f), y(0.0f) {}
 
 Vector2::Vector2(float newX, float newY) : x(newX), y(newY) {}
 
-float Vector2::length() const { return sqrt(x * x + y * y); }
+float Vector2::length() const { return sqrtf(x * x + y * y); }
 
 float Vector2::lengthSquared() const { return x * x + y * y; }
 
