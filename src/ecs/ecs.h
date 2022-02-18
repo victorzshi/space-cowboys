@@ -10,6 +10,18 @@
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
 
+struct Grid {
+  struct Size {
+    int width;
+    int height;
+  };
+  Size cell;
+  Size gutter;
+  int rows;
+  int columns;
+  SDL_Point center;
+};
+
 class ECS {
  public:
   ECS();
@@ -21,6 +33,7 @@ class ECS {
   std::vector<int> alienIds;
   std::vector<int> tankIds;
   std::vector<int> bulletIds;
+  std::vector<int> wallIds;
 
   Active* active;
   AI* ai;
@@ -35,7 +48,7 @@ class ECS {
   bool isOutOfBounds(SDL_Rect rect);
 
  private:
-  static const int kMaxSize_ = 100;
+  static const int kMaxSize_ = 1000;
 
   int size_;
 
@@ -48,4 +61,7 @@ class ECS {
   void initializeAliens();
   void initializeTank();
   void initializeBullets();
+  void initializeWalls();
+
+  std::vector<Vector2> generateGridPositions(Grid grid);
 };

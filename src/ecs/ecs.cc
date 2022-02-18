@@ -29,6 +29,7 @@ void ECS::initialize(int screenWidth, int screenHeight,
   initializeTank();
   initializeAliens();
   initializeBullets();
+  initializeWalls();
 }
 
 void ECS::terminate() {
@@ -73,24 +74,23 @@ int ECS::createEntity() {
 }
 
 void ECS::initializeAliens() {
-  int alienWidth = 72;
-  int alienHeight = 72;
+  int alienSize = 72;
 
-  int rows = 5;
-  int columns = 11;
-
-  int spawnWidth = columns * alienWidth;
-  int spawnHeight = rows * alienHeight;
-
-  int startX = screenWidth_ / 2 - spawnWidth / 2 + alienWidth / 2;
-  int startY = screenHeight_ / 4 - spawnHeight / 2 + alienHeight / 2;
+  Grid grid;
+  grid.cell.width = alienSize;
+  grid.cell.height = alienSize;
+  grid.gutter.width = alienSize / 4;
+  grid.gutter.height = alienSize / 4;
+  grid.rows = 5;
+  grid.columns = 11;
+  grid.center.x = screenWidth_ / 2;
+  grid.center.y = screenHeight_ / 4;
 
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/alien.png");
 
-  int spawnX = startX;
-  int spawnY = startY;
-  for (int i = 0; i < rows * columns; i++) {
+  std::vector<Vector2> positions = generateGridPositions(grid);
+  for (size_t i = 0; i < positions.size(); i++) {
     int id = createEntity();
 
     allIds.push_back(id);
@@ -98,24 +98,17 @@ void ECS::initializeAliens() {
 
     active[id].state = true;
 
-    transform[id].position.x = static_cast<float>(spawnX);
-    transform[id].position.y = static_cast<float>(spawnY);
+    transform[id].position = positions[i];
 
     physics[id].deltaVelocity = 1.0f;
-    physics[id].collider.w = alienWidth;
-    physics[id].collider.h = alienHeight;
+    physics[id].collider.w = alienSize;
+    physics[id].collider.h = alienSize;
 
     ai[id].nextDirection = Direction::kLeft;
     ai[id].goalHeight = transform[id].position.y;
     ai[id].isPathEnd = false;
 
     sprite[id].texture = texture;
-
-    spawnX += alienWidth;
-    if ((i + 1) % columns == 0) {
-      spawnX = startX;
-      spawnY += alienHeight;
-    }
   }
 }
 
@@ -160,4 +153,76 @@ void ECS::initializeBullets() {
 
     sprite[id].texture = texture;
   }
+}
+
+void ECS::initializeWalls() {
+  int wallSize = 48;
+
+  Grid grid;
+  grid.cell.width = wallSize;
+  grid.cell.height = wallSize;
+  grid.gutter.width = 0;
+  grid.gutter.height = 0;
+  grid.rows = 4;
+  grid.columns = 4;
+  grid.center.x = screenWidth_ / 2;
+  grid.center.y = screenHeight_ - 300;
+
+  SDL_Texture* texture =
+      Utils::createTexture(renderer_, "../../data/images/wall.png");
+
+  std::vector<Vector2> positions = generateGridPositions(grid);
+  // TODO(Victor): Create 4 grids and join them.
+
+  for (size_t i = 0; i < positions.size(); i++) {
+    int id = createEntity();
+
+    allIds.push_back(id);
+    wallIds.push_back(id);
+
+    active[id].state = true;
+
+    transform[id].position = positions[i];
+
+    int x = static_cast<int>(roundf(positions[i].x));
+    int y = static_cast<int>(roundf(positions[i].y));
+
+    physics[id].collider.x = x - (wallSize / 2);
+    physics[id].collider.y = y - (wallSize / 2);
+    physics[id].collider.w = wallSize;
+    physics[id].collider.h = wallSize;
+
+    sprite[id].texture = texture;
+  }
+}
+
+std::vector<Vector2> ECS::generateGridPositions(Grid grid) {
+  int gridWidth = grid.cell.width * grid.columns;
+  gridWidth += grid.gutter.width * (grid.columns - 1);
+  int gridHeight = grid.cell.height * grid.rows;
+  gridHeight += grid.gutter.height * (grid.rows - 1);
+
+  int startX = grid.center.x - gridWidth / 2 + grid.cell.width / 2;
+  int startY = grid.center.y - gridHeight / 2 + grid.cell.height / 2;
+
+  int spawnX = startX;
+  int spawnY = startY;
+
+  std::vector<Vector2> positions;
+  for (int i = 0; i < grid.rows * grid.columns; i++) {
+    Vector2 position;
+
+    position.x = static_cast<float>(spawnX);
+    position.y = static_cast<float>(spawnY);
+
+    positions.push_back(position);
+
+    spawnX += grid.cell.width + grid.gutter.width;
+    if ((i + 1) % grid.columns == 0) {
+      spawnX = startX;
+      spawnY += grid.cell.height + grid.gutter.height;
+    }
+  }
+
+  return positions;
 }
