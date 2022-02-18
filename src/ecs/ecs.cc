@@ -146,7 +146,7 @@ void ECS::initializeBullets() {
   float bulletDeltaVelocity = 5.0f;
 
   SDL_Texture* texture =
-      Utils::createTexture(renderer_, "../../data/images/bullet.png");
+      Utils::createTexture(renderer_, "../../data/images/tank-bullet.png");
 
   for (int i = 0; i < totalBullets; i++) {
     int id = createEntity();
