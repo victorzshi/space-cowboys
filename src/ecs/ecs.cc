@@ -26,10 +26,15 @@ void ECS::initialize(int screenWidth, int screenHeight,
   screenHeight_ = screenHeight;
   renderer_ = renderer;
 
-  initializeTank();
-  initializeAliens();
-  initializeBullets();
-  initializeWalls();
+  initializeTank(SDL_Point{screenWidth_ / 2, screenHeight_ - 50}, 18, 0.1f);
+
+  initializeAliens(SDL_Point{screenWidth_ / 2, screenHeight_ / 4}, 5, 11, 18,
+                   1.0f);
+
+  initializeBullets(10, 9, 5.0f);
+
+  initializeWalls(SDL_Point{screenWidth_ / 2, screenHeight_ - 100}, 4, 5, 5,
+                  9);
 }
 
 void ECS::terminate() {
@@ -73,18 +78,16 @@ int ECS::createEntity() {
   return size_ - 1;  // Array index starts at 0
 }
 
-void ECS::initializeAliens() {
-  int alienSize = 72;
-
+void ECS::initializeAliens(SDL_Point center, int rows, int columns,
+                           int alienWidth, float alienDeltaVelocity) {
   Grid grid;
-  grid.cell.width = alienSize;
-  grid.cell.height = alienSize;
-  grid.gutter.width = alienSize / 4;
-  grid.gutter.height = alienSize / 4;
-  grid.rows = 5;
-  grid.columns = 11;
-  grid.center.x = screenWidth_ / 2;
-  grid.center.y = screenHeight_ / 4;
+  grid.cell.width = alienWidth;
+  grid.cell.height = alienWidth;
+  grid.gutter.width = alienWidth / 4;
+  grid.gutter.height = alienWidth / 4;
+  grid.rows = rows;
+  grid.columns = columns;
+  grid.center = center;
 
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/alien.png");
@@ -100,9 +103,9 @@ void ECS::initializeAliens() {
 
     transform[id].position = positions[i];
 
-    physics[id].deltaVelocity = 1.0f;
-    physics[id].collider.w = alienSize;
-    physics[id].collider.h = alienSize;
+    physics[id].deltaVelocity = alienDeltaVelocity;
+    physics[id].collider.w = alienWidth;
+    physics[id].collider.h = alienWidth;
 
     ai[id].nextDirection = Direction::kLeft;
     ai[id].goalHeight = transform[id].position.y;
@@ -112,7 +115,8 @@ void ECS::initializeAliens() {
   }
 }
 
-void ECS::initializeTank() {
+void ECS::initializeTank(SDL_Point center, int tankWidth,
+                         float tankDeltaAcceleration) {
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/tank.png");
 
@@ -123,21 +127,20 @@ void ECS::initializeTank() {
 
   active[id].state = true;
 
-  transform[id].position.x = static_cast<float>(screenWidth_ / 2);
-  transform[id].position.y = static_cast<float>(screenHeight_ - 100);
+  transform[id].position.x = static_cast<float>(center.x);
+  transform[id].position.y = static_cast<float>(center.y);
 
-  physics[id].deltaAcceleration = 0.1f;
-  physics[id].collider.w = 72;
-  physics[id].collider.h = 72;
+  physics[id].deltaAcceleration = tankDeltaAcceleration;
+  physics[id].collider.w = tankWidth;
+  physics[id].collider.h = tankWidth;
 
   sprite[id].texture = texture;
 }
 
-void ECS::initializeBullets() {
+void ECS::initializeBullets(int totalBullets, int bulletWidth,
+                            float bulletDeltaVelocity) {
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/bullet.png");
-
-  int totalBullets = 10;
 
   for (int i = 0; i < totalBullets; i++) {
     int id = createEntity();
@@ -147,32 +150,46 @@ void ECS::initializeBullets() {
 
     active[id].state = false;
 
-    physics[id].deltaVelocity = 5.0f;
-    physics[id].collider.w = 36;
-    physics[id].collider.h = 36;
+    physics[id].deltaVelocity = bulletDeltaVelocity;
+    physics[id].collider.w = bulletWidth;
+    physics[id].collider.h = bulletWidth;
 
     sprite[id].texture = texture;
   }
 }
 
-void ECS::initializeWalls() {
-  int wallSize = 48;
+void ECS::initializeWalls(SDL_Point center, int totalWalls, int rows,
+                          int columns, int wallWidth) {
+  std::vector<Grid> grids;
+  int spawnX = screenWidth_ / totalWalls / 2;
+  int spawnY = center.y;
+  for (int i = 0; i < totalWalls; i++) {
+    Grid grid;
+    grid.cell.width = wallWidth;
+    grid.cell.height = wallWidth;
+    grid.gutter.width = 0;
+    grid.gutter.height = 0;
+    grid.rows = rows;
+    grid.columns = columns;
+    grid.center.x = spawnX;
+    grid.center.y = spawnY;
 
-  Grid grid;
-  grid.cell.width = wallSize;
-  grid.cell.height = wallSize;
-  grid.gutter.width = 0;
-  grid.gutter.height = 0;
-  grid.rows = 4;
-  grid.columns = 4;
-  grid.center.x = screenWidth_ / 2;
-  grid.center.y = screenHeight_ - 300;
+    grids.push_back(grid);
+
+    spawnX += screenWidth_ / totalWalls;
+  }
+
+  std::vector<Vector2> positions;
+  for (size_t i = 0; i < grids.size(); i++) {
+    std::vector<Vector2> currentPositions = generateGridPositions(grids[i]);
+
+    for (size_t j = 0; j < currentPositions.size(); j++) {
+      positions.push_back(currentPositions[j]);
+    }
+  }
 
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/wall.png");
-
-  std::vector<Vector2> positions = generateGridPositions(grid);
-  // TODO(Victor): Create 4 grids and join them.
 
   for (size_t i = 0; i < positions.size(); i++) {
     int id = createEntity();
@@ -187,10 +204,10 @@ void ECS::initializeWalls() {
     int x = static_cast<int>(roundf(positions[i].x));
     int y = static_cast<int>(roundf(positions[i].y));
 
-    physics[id].collider.x = x - (wallSize / 2);
-    physics[id].collider.y = y - (wallSize / 2);
-    physics[id].collider.w = wallSize;
-    physics[id].collider.h = wallSize;
+    physics[id].collider.x = x - (wallWidth / 2);
+    physics[id].collider.y = y - (wallWidth / 2);
+    physics[id].collider.w = wallWidth;
+    physics[id].collider.h = wallWidth;
 
     sprite[id].texture = texture;
   }

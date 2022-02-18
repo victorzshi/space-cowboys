@@ -4,7 +4,7 @@
 #include "logger/release_logger/release_logger.h"
 
 void Locator::initialize() {
-#if DEBUG
+#ifdef DEBUG
   logger_ = new DebugLogger();
 #else
   logger_ = new ReleaseLogger();

@@ -58,10 +58,14 @@ class ECS {
   SDL_Renderer* renderer_;
 
   int createEntity();
-  void initializeAliens();
-  void initializeTank();
-  void initializeBullets();
-  void initializeWalls();
+  void initializeAliens(SDL_Point center, int rows, int columns, int alienWidth,
+                        float alienDeltaVelocity);
+  void initializeTank(SDL_Point center, int tankWidth,
+                      float tankDeltaAcceleration);
+  void initializeBullets(int totalBullets, int bulletWidth,
+                         float bulletDeltaVelocity);
+  void initializeWalls(SDL_Point center, int totalWalls, int rows, int columns,
+                       int wallWidth);
 
   std::vector<Vector2> generateGridPositions(Grid grid);
 };
