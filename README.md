@@ -4,7 +4,7 @@
 
 C++ clone of Taito's arcade game Space Invaders (1978).
 
-> TODO: Add gameplay gif.
+![Gameplay](space-invaders.gif)
 
 ## Installation
 
