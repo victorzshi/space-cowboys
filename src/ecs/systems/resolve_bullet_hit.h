@@ -27,6 +27,21 @@ class ResolveBulletHit {
           break;
         }
       }
+
+      if (active[bullet].isNotActive()) continue;
+
+      for (size_t k = 0; k < ecs.wallIds.size(); k++) {
+        int wall = ecs.wallIds[k];
+
+        if (active[wall].isNotActive()) continue;
+
+        if (physics[bullet].isCollision(physics[wall].collider)) {
+          active[bullet].state = false;
+          active[wall].state = false;
+
+          break;
+        }
+      }
     }
   }
 
@@ -40,7 +55,7 @@ class ResolveBulletHit {
 
       if (active[id].isNotActive()) continue;
 
-      physics[id].deltaVelocity += 0.5f;
+      physics[id].deltaVelocity += physics[id].deltaVelocity * 0.05f;
     }
   }
 };

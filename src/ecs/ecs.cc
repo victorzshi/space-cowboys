@@ -29,6 +29,7 @@ void ECS::initialize(int screenWidth, int screenHeight,
   initializeTank();
   initializeAliens();
   initializeBullets();
+  initializeWalls();
 }
 
 void ECS::terminate() {
@@ -73,24 +74,26 @@ int ECS::createEntity() {
 }
 
 void ECS::initializeAliens() {
-  int alienWidth = 72;
-  int alienHeight = 72;
-
-  int rows = 5;
+  int rows = 4;
   int columns = 11;
+  int alienWidth = 36;
+  float alienDeltaVelocity = 1.0f;
+  SDL_Point center = {screenWidth_ / 2, rows * alienWidth};
 
-  int spawnWidth = columns * alienWidth;
-  int spawnHeight = rows * alienHeight;
-
-  int startX = screenWidth_ / 2 - spawnWidth / 2 + alienWidth / 2;
-  int startY = screenHeight_ / 4 - spawnHeight / 2 + alienHeight / 2;
+  Grid grid;
+  grid.cell.width = alienWidth;
+  grid.cell.height = alienWidth;
+  grid.gutter.width = alienWidth / 4;
+  grid.gutter.height = alienWidth / 4;
+  grid.rows = rows;
+  grid.columns = columns;
+  grid.center = center;
 
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/alien.png");
 
-  int spawnX = startX;
-  int spawnY = startY;
-  for (int i = 0; i < rows * columns; i++) {
+  std::vector<Vector2> positions = generateGridPositions(grid);
+  for (size_t i = 0; i < positions.size(); i++) {
     int id = createEntity();
 
     allIds.push_back(id);
@@ -98,28 +101,25 @@ void ECS::initializeAliens() {
 
     active[id].state = true;
 
-    transform[id].position.x = static_cast<float>(spawnX);
-    transform[id].position.y = static_cast<float>(spawnY);
+    transform[id].position = positions[i];
 
-    physics[id].deltaVelocity = 1.0f;
+    physics[id].deltaVelocity = alienDeltaVelocity;
     physics[id].collider.w = alienWidth;
-    physics[id].collider.h = alienHeight;
+    physics[id].collider.h = alienWidth;
 
     ai[id].nextDirection = Direction::kLeft;
     ai[id].goalHeight = transform[id].position.y;
     ai[id].isPathEnd = false;
 
     sprite[id].texture = texture;
-
-    spawnX += alienWidth;
-    if ((i + 1) % columns == 0) {
-      spawnX = startX;
-      spawnY += alienHeight;
-    }
   }
 }
 
 void ECS::initializeTank() {
+  SDL_Point center = {screenWidth_ / 2, screenHeight_ - 50};
+  int tankWidth = 72;
+  float tankDeltaAcceleration = 0.1f;
+
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/tank.png");
 
@@ -130,21 +130,23 @@ void ECS::initializeTank() {
 
   active[id].state = true;
 
-  transform[id].position.x = static_cast<float>(screenWidth_ / 2);
-  transform[id].position.y = static_cast<float>(screenHeight_ - 100);
+  transform[id].position.x = static_cast<float>(center.x);
+  transform[id].position.y = static_cast<float>(center.y);
 
-  physics[id].deltaAcceleration = 0.1f;
-  physics[id].collider.w = 72;
-  physics[id].collider.h = 72;
+  physics[id].deltaAcceleration = tankDeltaAcceleration;
+  physics[id].collider.w = tankWidth;
+  physics[id].collider.h = tankWidth;
 
   sprite[id].texture = texture;
 }
 
 void ECS::initializeBullets() {
+  int totalBullets = 10;
+  int bulletWidth = 18;
+  float bulletDeltaVelocity = 5.0f;
+
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/bullet.png");
-
-  int totalBullets = 10;
 
   for (int i = 0; i < totalBullets; i++) {
     int id = createEntity();
@@ -154,10 +156,101 @@ void ECS::initializeBullets() {
 
     active[id].state = false;
 
-    physics[id].deltaVelocity = 5.0f;
-    physics[id].collider.w = 36;
-    physics[id].collider.h = 36;
+    physics[id].deltaVelocity = bulletDeltaVelocity;
+    physics[id].collider.w = bulletWidth;
+    physics[id].collider.h = bulletWidth;
 
     sprite[id].texture = texture;
   }
+}
+
+void ECS::initializeWalls() {
+  SDL_Point center = {screenWidth_ / 2, screenHeight_ - 200};
+  int totalWalls = 4;
+  int rows = 3;
+  int columns = 5;
+  int wallWidth = 36;
+
+  std::vector<Grid> grids;
+  int spawnX = screenWidth_ / totalWalls / 2;
+  int spawnY = center.y;
+  for (int i = 0; i < totalWalls; i++) {
+    Grid grid;
+    grid.cell.width = wallWidth;
+    grid.cell.height = wallWidth;
+    grid.gutter.width = 0;
+    grid.gutter.height = 0;
+    grid.rows = rows;
+    grid.columns = columns;
+    grid.center.x = spawnX;
+    grid.center.y = spawnY;
+
+    grids.push_back(grid);
+
+    spawnX += screenWidth_ / totalWalls;
+  }
+
+  std::vector<Vector2> positions;
+  for (size_t i = 0; i < grids.size(); i++) {
+    std::vector<Vector2> currentPositions = generateGridPositions(grids[i]);
+
+    for (size_t j = 0; j < currentPositions.size(); j++) {
+      positions.push_back(currentPositions[j]);
+    }
+  }
+
+  SDL_Texture* texture =
+      Utils::createTexture(renderer_, "../../data/images/wall.png");
+
+  for (size_t i = 0; i < positions.size(); i++) {
+    int id = createEntity();
+
+    allIds.push_back(id);
+    wallIds.push_back(id);
+
+    active[id].state = true;
+
+    transform[id].position = positions[i];
+
+    int x = static_cast<int>(roundf(positions[i].x));
+    int y = static_cast<int>(roundf(positions[i].y));
+
+    physics[id].collider.x = x - (wallWidth / 2);
+    physics[id].collider.y = y - (wallWidth / 2);
+    physics[id].collider.w = wallWidth;
+    physics[id].collider.h = wallWidth;
+
+    sprite[id].texture = texture;
+  }
+}
+
+std::vector<Vector2> ECS::generateGridPositions(Grid grid) {
+  int gridWidth = grid.cell.width * grid.columns;
+  gridWidth += grid.gutter.width * (grid.columns - 1);
+  int gridHeight = grid.cell.height * grid.rows;
+  gridHeight += grid.gutter.height * (grid.rows - 1);
+
+  int startX = grid.center.x - gridWidth / 2 + grid.cell.width / 2;
+  int startY = grid.center.y - gridHeight / 2 + grid.cell.height / 2;
+
+  int spawnX = startX;
+  int spawnY = startY;
+
+  std::vector<Vector2> positions;
+  for (int i = 0; i < grid.rows * grid.columns; i++) {
+    Vector2 position;
+
+    position.x = static_cast<float>(spawnX);
+    position.y = static_cast<float>(spawnY);
+
+    positions.push_back(position);
+
+    spawnX += grid.cell.width + grid.gutter.width;
+    if ((i + 1) % grid.columns == 0) {
+      spawnX = startX;
+      spawnY += grid.cell.height + grid.gutter.height;
+    }
+  }
+
+  return positions;
 }
