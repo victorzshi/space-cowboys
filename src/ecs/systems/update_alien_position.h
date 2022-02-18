@@ -14,8 +14,15 @@ class UpdateAlienPosition {
 
       if (active[id].isNotActive()) continue;
 
+      physics[id].velocity = physics[id].velocity.limit(2.0f);
       transform[id].position += physics[id].velocity;
       physics[id].updateCollider(transform[id].position);
+    }
+
+    for (size_t i = 0; i < ecs.alienIds.size(); i++) {
+      int id = ecs.alienIds[i];
+
+      if (active[id].isNotActive()) continue;
 
       if (ecs.isOutOfBounds(physics[id].collider)) {
         shiftAllAliens(ecs);

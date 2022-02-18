@@ -26,15 +26,10 @@ void ECS::initialize(int screenWidth, int screenHeight,
   screenHeight_ = screenHeight;
   renderer_ = renderer;
 
-  initializeTank(SDL_Point{screenWidth_ / 2, screenHeight_ - 50}, 18, 0.1f);
-
-  initializeAliens(SDL_Point{screenWidth_ / 2, screenHeight_ / 4}, 5, 11, 18,
-                   1.0f);
-
-  initializeBullets(10, 9, 5.0f);
-
-  initializeWalls(SDL_Point{screenWidth_ / 2, screenHeight_ - 100}, 4, 5, 5,
-                  9);
+  initializeTank();
+  initializeAliens();
+  initializeBullets();
+  initializeWalls();
 }
 
 void ECS::terminate() {
@@ -78,8 +73,13 @@ int ECS::createEntity() {
   return size_ - 1;  // Array index starts at 0
 }
 
-void ECS::initializeAliens(SDL_Point center, int rows, int columns,
-                           int alienWidth, float alienDeltaVelocity) {
+void ECS::initializeAliens() {
+  int rows = 4;
+  int columns = 11;
+  int alienWidth = 36;
+  float alienDeltaVelocity = 1.0f;
+  SDL_Point center = {screenWidth_ / 2, rows * alienWidth};
+
   Grid grid;
   grid.cell.width = alienWidth;
   grid.cell.height = alienWidth;
@@ -115,8 +115,11 @@ void ECS::initializeAliens(SDL_Point center, int rows, int columns,
   }
 }
 
-void ECS::initializeTank(SDL_Point center, int tankWidth,
-                         float tankDeltaAcceleration) {
+void ECS::initializeTank() {
+  SDL_Point center = {screenWidth_ / 2, screenHeight_ - 50};
+  int tankWidth = 72;
+  float tankDeltaAcceleration = 0.1f;
+
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/tank.png");
 
@@ -137,8 +140,11 @@ void ECS::initializeTank(SDL_Point center, int tankWidth,
   sprite[id].texture = texture;
 }
 
-void ECS::initializeBullets(int totalBullets, int bulletWidth,
-                            float bulletDeltaVelocity) {
+void ECS::initializeBullets() {
+  int totalBullets = 10;
+  int bulletWidth = 18;
+  float bulletDeltaVelocity = 5.0f;
+
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/bullet.png");
 
@@ -158,8 +164,13 @@ void ECS::initializeBullets(int totalBullets, int bulletWidth,
   }
 }
 
-void ECS::initializeWalls(SDL_Point center, int totalWalls, int rows,
-                          int columns, int wallWidth) {
+void ECS::initializeWalls() {
+  SDL_Point center = {screenWidth_ / 2, screenHeight_ - 200};
+  int totalWalls = 4;
+  int rows = 3;
+  int columns = 5;
+  int wallWidth = 36;
+
   std::vector<Grid> grids;
   int spawnX = screenWidth_ / totalWalls / 2;
   int spawnY = center.y;

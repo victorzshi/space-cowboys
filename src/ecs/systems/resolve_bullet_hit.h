@@ -55,7 +55,7 @@ class ResolveBulletHit {
 
       if (active[id].isNotActive()) continue;
 
-      physics[id].deltaVelocity += 0.5f;
+      physics[id].deltaVelocity += physics[id].deltaVelocity * 0.05f;
     }
   }
 };

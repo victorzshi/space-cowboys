@@ -58,8 +58,8 @@ void Game::run(bool isSmokeTest) {
   Uint64 startTime = SDL_GetTicks64();
   Uint64 totalFrames = 0;
   TTF_Font* font =
-      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 32);
-  SDL_Color color = {255, 255, 255, 255};
+      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 12);
+  SDL_Color color = {0, 255, 0, 255};
   std::stringstream text;
   Texture texture;
 #endif
@@ -95,7 +95,7 @@ void Game::run(bool isSmokeTest) {
       float fps = static_cast<float>(totalFrames) / totalSeconds;
 
       text.str("");
-      text << "Average FPS " << fps;
+      text << fps;
 
       texture.setText(renderer_, font, text.str().c_str(), color);
 #endif
