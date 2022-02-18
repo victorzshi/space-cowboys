@@ -16,6 +16,8 @@ class Vector2 {
 
   Vector2 limit(float n) const;
 
+  static bool isEqual(float a, float b);
+
   Vector2 operator+(const Vector2& v) const;
 
   Vector2& operator+=(const Vector2& v);
@@ -31,6 +33,4 @@ class Vector2 {
   bool operator==(const Vector2& v) const;
 
   bool operator!=(const Vector2& v) const;
-
-  static bool isEqual(float a, float b);
 };
