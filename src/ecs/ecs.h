@@ -9,6 +9,7 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "systems/bullet_system.h"
 
 struct Grid {
   struct Size {
@@ -32,7 +33,7 @@ class ECS {
   std::vector<int> allIds;
   std::vector<int> alienIds;
   std::vector<int> tankIds;
-  std::vector<int> bulletIds;
+  // std::vector<int> bulletIds;
   std::vector<int> wallIds;
 
   Active* active;
@@ -40,6 +41,8 @@ class ECS {
   Physics* physics;
   Sprite* sprite;
   Transform* transform;
+
+  BulletSystem bulletSystem;
 
   void input(SDL_Event event);
   void update();

@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <assert.h>
 
+#include "services/locator.h"
 #include "systems/choose_alien_direction.h"
 #include "systems/process_tank_input.h"
 #include "systems/render_collider.h"
@@ -39,18 +40,49 @@ void ECS::terminate() {
   }
 }
 
+// void ECS::activateBullet(int id) {
+//   Locator::logger().print("Activating bullet ID:");
+//   Locator::logger().print(std::to_string(id));
+//
+//   if (id >= bulletEnd) return;
+//
+//   assert(id >= bulletActive);
+//
+//   Physics temp = physics[bulletActive];
+//   physics[bulletActive] = physics[id];
+//   physics[id] = temp;
+//
+//   bulletActive++;
+// }
+//
+// void ECS::deactivateBullet(int id) {
+//   Locator::logger().print("Deactivating bullet ID:");
+//   Locator::logger().print(std::to_string(id));
+//
+//   assert(id < bulletActive);
+//
+//   bulletActive--;
+//
+//   Physics temp = physics[bulletActive];
+//   physics[bulletActive] = physics[id];
+//   physics[id] = temp;
+// }
+
 void ECS::input(SDL_Event event) { ProcessTankInput::input(*this, event); }
 
 void ECS::update() {
   UpdateTankPosition::update(*this);
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
-  UpdateBulletPosition::update(*this);
-  ResolveBulletHit::update(*this);
+  // UpdateBulletPosition::update(*this);
+  //  ResolveBulletHit::update(*this);
+  bulletSystem.update();
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
   RenderSprite::render(*this, renderer, delay);
+
+  bulletSystem.render(renderer);
 
 #ifdef DEBUG
   RenderCollider::render(*this, renderer);
@@ -69,6 +101,7 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
 
 int ECS::createEntity() {
   assert(size_ < kMaxSize_);
+
   size_++;
   return size_ - 1;  // Array index starts at 0
 }
@@ -152,16 +185,28 @@ void ECS::initializeBullets() {
     int id = createEntity();
 
     allIds.push_back(id);
-    bulletIds.push_back(id);
+    // bulletIds.push_back(id);
 
     active[id].state = false;
 
+    // TODO(Victor): Is deltaVelocity redundant?
     physics[id].deltaVelocity = bulletDeltaVelocity;
+    physics[id].velocity.y = -physics[id].deltaVelocity;
     physics[id].collider.w = bulletWidth;
     physics[id].collider.h = bulletWidth;
 
     sprite[id].texture = texture;
+
+    bulletSystem.start = id;
+    bulletSystem.active = id;
+    bulletSystem.end = id;
   }
+
+  bulletSystem.start -= totalBullets - 1;
+  bulletSystem.active -= totalBullets - 1;
+
+  bulletSystem.physics = physics;
+  bulletSystem.transform = transform;
 }
 
 void ECS::initializeWalls() {
