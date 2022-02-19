@@ -14,14 +14,15 @@ class Game {
   void run(bool isSmokeTest = false);
 
  private:
-  static const int kScreenWidth_ = 1280;
-  static const int kScreenHeight_ = 720;
-  static const int kTicksPerUpdate_ = 16;
-  static const int kSmokeTestDuration_ = 1000;
+  static const int SCREEN_WIDTH = 1280;
+  static const int SCREEN_HEIGHT = 720;
+  static const int TICKS_PER_UPDATE = 16;
+  static const int SMOKE_TEST_DURATION = 1000;
 
   bool isRunning_;
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
+
   ECS ecs_;
 };

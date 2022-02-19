@@ -1,10 +1,14 @@
 #include "ecs.h"
 
+#include "services/locator.h"
+
 ECS::ECS() {}
 
-void ECS::initialize() {}
-void ECS::terminate() {}
+void ECS::input() { Locator::logger().print("Inputting..."); }
 
-void ECS::input() {}
-void ECS::update() {}
-void ECS::render(float delay) { (void)delay; }
+void ECS::update() { Locator::logger().print("Updating..."); }
+
+void ECS::render(float delay) {
+  (void)delay;
+  Locator::logger().print("Rendering...");
+}

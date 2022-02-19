@@ -4,18 +4,24 @@
 
 class ECSInterface {
  public:
-  ECSInterface() : viewport_({0, 0, 0, 0}), renderer_(nullptr) {}
+  ECSInterface() : viewport_({0, 0, 0, 0}), renderer_(nullptr) {
+    // Initialize memory for component arrays
+  }
   virtual ~ECSInterface() = default;
   ECSInterface(const ECSInterface& other) = default;
 
-  virtual void initialize() = 0;
-  virtual void terminate() = 0;
+  void initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
+    viewport_ = viewport;
+    renderer_ = renderer;
+  }
+  void terminate() {
+    // Do stuff
+  }
 
-  void setViewport(SDL_Rect viewport) { viewport_ = viewport; }
   const SDL_Rect viewport() { return viewport_; }
-
-  void setRenderer(SDL_Renderer* renderer) { renderer_ = renderer; }
   const SDL_Renderer* renderer() { return renderer_; }
+
+  // Array getters
 
   virtual void input() = 0;
   virtual void update() = 0;
@@ -24,4 +30,6 @@ class ECSInterface {
  protected:
   SDL_Rect viewport_;
   SDL_Renderer* renderer_;
+
+  // Arrays
 };
