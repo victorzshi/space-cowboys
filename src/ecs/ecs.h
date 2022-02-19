@@ -33,7 +33,6 @@ class ECS {
   std::vector<int> allIds;
   std::vector<int> alienIds;
   std::vector<int> tankIds;
-  // std::vector<int> bulletIds;
   std::vector<int> wallIds;
 
   Active* active;

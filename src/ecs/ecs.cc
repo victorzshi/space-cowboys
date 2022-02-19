@@ -40,42 +40,12 @@ void ECS::terminate() {
   }
 }
 
-// void ECS::activateBullet(int id) {
-//   Locator::logger().print("Activating bullet ID:");
-//   Locator::logger().print(std::to_string(id));
-//
-//   if (id >= bulletEnd) return;
-//
-//   assert(id >= bulletActive);
-//
-//   Physics temp = physics[bulletActive];
-//   physics[bulletActive] = physics[id];
-//   physics[id] = temp;
-//
-//   bulletActive++;
-// }
-//
-// void ECS::deactivateBullet(int id) {
-//   Locator::logger().print("Deactivating bullet ID:");
-//   Locator::logger().print(std::to_string(id));
-//
-//   assert(id < bulletActive);
-//
-//   bulletActive--;
-//
-//   Physics temp = physics[bulletActive];
-//   physics[bulletActive] = physics[id];
-//   physics[id] = temp;
-// }
-
 void ECS::input(SDL_Event event) { ProcessTankInput::input(*this, event); }
 
 void ECS::update() {
   UpdateTankPosition::update(*this);
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
-  // UpdateBulletPosition::update(*this);
-  //  ResolveBulletHit::update(*this);
   bulletSystem.update();
 }
 
@@ -185,7 +155,6 @@ void ECS::initializeBullets() {
     int id = createEntity();
 
     allIds.push_back(id);
-    // bulletIds.push_back(id);
 
     active[id].state = false;
 

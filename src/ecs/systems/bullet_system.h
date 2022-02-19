@@ -2,11 +2,8 @@
 
 #include <assert.h>
 
-#include <vector>
-
-#include "../components/physics.h"
-#include "../components/transform.h"
-#include "services/locator.h"
+#include "ecs/components/physics.h"
+#include "ecs/components/transform.h"
 
 class BulletSystem {
  public:
@@ -24,24 +21,12 @@ class BulletSystem {
 
     // Set bullet position...
 
-    int id = active;
-    transform[id].position = position;
-
-    //Physics tempPhysics = physics[active];
-    //physics[active] = physics[id];
-    //physics[id] = tempPhysics;
-
-    //Transform tempTransform = transform[active];
-    //transform[active] = transform[id];
-    //transform[id] = tempTransform;
+    transform[active].position = position;
 
     active++;
   }
 
   void deactivateBullet(int id) {
-    Locator::logger().print("Deactivating bullet ID:");
-    Locator::logger().print(std::to_string(id));
-
     assert(id < active);
 
     active--;
