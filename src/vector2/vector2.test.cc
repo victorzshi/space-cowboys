@@ -10,8 +10,8 @@ Vector2 w = Vector2(3.0f, 4.0f);
 TEST_CASE("Vector2 add", "[vector2]") {
   Vector2 u = v + w;
   REQUIRE(u == Vector2(4.0f, 6.0f));
-  //REQUIRE(u != Vector2(4.1f, 6.0f));
-  //REQUIRE(u != Vector2(4.0f, 6.1f));
+  // REQUIRE(u != Vector2(4.1f, 6.0f));
+  // REQUIRE(u != Vector2(4.0f, 6.1f));
 
   u += u;
   REQUIRE(u == Vector2(8.0f, 12.0f));
@@ -48,8 +48,8 @@ TEST_CASE("Vector2 divide", "[vector2]") {
 TEST_CASE("Vector2 length", "[vector2]") {
   float length = v.length();
   REQUIRE(Vector2::almostEquals(length, sqrt(5)));
-  //REQUIRE(!Utils::almostEquals(length, sqrt(4)));
-  //REQUIRE(!Utils::almostEquals(length, sqrt(6)));
+  // REQUIRE(!Utils::almostEquals(length, sqrt(4)));
+  // REQUIRE(!Utils::almostEquals(length, sqrt(6)));
 }
 
 TEST_CASE("Vector2 normalize", "[vector2]") {
