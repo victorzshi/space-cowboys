@@ -1,5 +1,6 @@
 #pragma once
 
+// TODO(Victor): Change to forward declarations.
 #include <SDL.h>
 #include <vector2/vector2.h>
 
@@ -7,6 +8,8 @@
 #include "components/physics.h"
 #include "components/sprite.h"
 #include "components/transform.h"
+
+class Pool;
 
 class ECSInterface {
  public:
@@ -24,6 +27,8 @@ class ECSInterface {
   virtual Physics* physics() = 0;
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
+
+  virtual Pool& bullets() = 0;
 
   virtual int createEntity() = 0;
 

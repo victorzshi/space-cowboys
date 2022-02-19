@@ -32,4 +32,15 @@ class Utils {
 
     return texture;
   }
+
+  static bool isOutOfBounds(SDL_Rect box) {
+    int topLeftX = box.x;
+    int topLeftY = box.y;
+    int bottomRightX = box.x + box.w;
+    int bottomRightY = box.y + box.h;
+
+    // TODO(Victor): Refactor hardcoded values.
+    return topLeftX < 0 || topLeftY < 0 || bottomRightX > 1280 ||
+           bottomRightY > 720;
+  }
 };

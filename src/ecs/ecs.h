@@ -18,6 +18,8 @@ class ECS : public ECSInterface {
   virtual Sprite* sprite() override;
   virtual Transform* transform() override;
 
+  virtual Bullets& bullets() override;
+
   virtual int createEntity() override;
 
   virtual void input() override;
@@ -25,7 +27,9 @@ class ECS : public ECSInterface {
   virtual void render(float delay) override;
 
  private:
-  static const int MAX_ENTITIES = 100;
+  static const int MAX_ENTITIES = 1000;
+
+  int id_;
 
   SDL_Rect viewport_;
   SDL_Renderer* renderer_;
@@ -35,7 +39,5 @@ class ECS : public ECSInterface {
   Sprite* sprite_;
   Transform* transform_;
 
-  int id_;
-
-  Bullets bullets;
+  Bullets bullets_;
 };
