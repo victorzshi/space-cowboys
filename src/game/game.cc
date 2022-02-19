@@ -101,8 +101,8 @@ void Game::run(bool isSmokeTest) {
       SDL_DestroyTexture(texture);
       surface = TTF_RenderText_Solid(font, text.str().c_str(), color);
       texture = SDL_CreateTextureFromSurface(renderer_, surface);
-      SDL_FreeSurface(surface);
       rect = {0, 0, surface->w, surface->h};
+      SDL_FreeSurface(surface);
 #endif
     }
 
