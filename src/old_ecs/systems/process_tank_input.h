@@ -40,22 +40,10 @@ class ProcessTankInput {
 
  private:
   static void shootBullet(ECS& ecs) {
-    Active* active = ecs.active;
     Transform* transform = ecs.transform;
-    Physics* physics = ecs.physics;
 
-    for (size_t i = 0; i < ecs.bulletIds.size(); i++) {
-      int bullet = ecs.bulletIds[i];
+    int tank = ecs.tankIds[0];
 
-      if (active[bullet].isNotActive()) {
-        int tank = ecs.tankIds[0];
-
-        active[bullet].state = true;
-        physics[bullet].velocity.y = -physics[bullet].deltaVelocity;
-        transform[bullet].position = transform[tank].position;
-
-        break;
-      }
-    }
+    ecs.bullets.activate(transform[tank].position);
   }
 };

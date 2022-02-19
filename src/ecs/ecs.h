@@ -1,67 +1,43 @@
 #pragma once
 
-#include <SDL.h>
+#include "ecs_interface.h"
+#include "pools/bullets.h"
 
-#include <vector>
-
-#include "ecs/components/active.h"
-#include "ecs/components/ai.h"
-#include "ecs/components/physics.h"
-#include "ecs/components/sprite.h"
-#include "ecs/components/transform.h"
-
-struct Grid {
-  struct Size {
-    int width;
-    int height;
-  };
-  Size cell;
-  Size gutter;
-  int rows;
-  int columns;
-  SDL_Point center;
-};
-
-class ECS {
+class ECS : public ECSInterface {
  public:
   ECS();
 
-  void initialize(int screenWidth, int screenHeight, SDL_Renderer* renderer);
-  void terminate();
+  virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) override;
+  virtual void terminate() override;
 
-  std::vector<int> allIds;
-  std::vector<int> alienIds;
-  std::vector<int> tankIds;
-  std::vector<int> bulletIds;
-  std::vector<int> wallIds;
+  virtual SDL_Rect& viewport() override;
+  virtual SDL_Renderer* renderer() override;
 
-  Active* active;
-  AI* ai;
-  Physics* physics;
-  Sprite* sprite;
-  Transform* transform;
+  virtual Collider* collider() override;
+  virtual Physics* physics() override;
+  virtual Sprite* sprite() override;
+  virtual Transform* transform() override;
 
-  void input(SDL_Event event);
-  void update();
-  void render(SDL_Renderer* renderer, float delay);
+  virtual Bullets& bullets() override;
 
-  bool isOutOfBounds(SDL_Rect rect);
+  virtual int createEntity() override;
+
+  virtual void input() override;
+  virtual void update() override;
+  virtual void render(float delay) override;
 
  private:
-  static const int kMaxSize_ = 1000;
+  static const int MAX_ENTITIES = 1000;
 
-  int size_;
+  int id_;
 
-  int screenWidth_;
-  int screenHeight_;
-
+  SDL_Rect viewport_;
   SDL_Renderer* renderer_;
 
-  int createEntity();
-  void initializeAliens();
-  void initializeTank();
-  void initializeBullets();
-  void initializeWalls();
+  Collider* collider_;
+  Physics* physics_;
+  Sprite* sprite_;
+  Transform* transform_;
 
-  std::vector<Vector2> generateGridPositions(Grid grid);
+  Bullets bullets_;
 };

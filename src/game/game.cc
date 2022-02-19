@@ -9,8 +9,8 @@
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
-                             SDL_WINDOWPOS_UNDEFINED, kScreenWidth_,
-                             kScreenHeight_, SDL_WINDOW_SHOWN);
+                             SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                             SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
@@ -39,7 +39,8 @@ bool Game::initialize() {
   }
 
   // Initialize entities
-  ecs_.initialize(kScreenWidth_, kScreenHeight_, renderer_);
+  SDL_Rect viewport = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+  ecs_.initialize(viewport, renderer_);
 
   return success;
 }
@@ -81,13 +82,13 @@ void Game::run(bool isSmokeTest) {
       if (event.type == SDL_QUIT) {
         isRunning_ = false;
       }
-      ecs_.input(event);
     }
+    ecs_.input();
 
     // Update state
-    while (lag >= kTicksPerUpdate_) {
+    while (lag >= TICKS_PER_UPDATE) {
       ecs_.update();
-      lag -= kTicksPerUpdate_;
+      lag -= TICKS_PER_UPDATE;
 
 #ifdef DEBUG
       Uint64 currentTime = SDL_GetTicks64();
@@ -98,9 +99,11 @@ void Game::run(bool isSmokeTest) {
       text.str("");
       text << fps;
 
+      SDL_DestroyTexture(texture);
       surface = TTF_RenderText_Solid(font, text.str().c_str(), color);
       texture = SDL_CreateTextureFromSurface(renderer_, surface);
       rect = {0, 0, surface->w, surface->h};
+      SDL_FreeSurface(surface);
 #endif
     }
 
@@ -108,8 +111,8 @@ void Game::run(bool isSmokeTest) {
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer_);
 
-    float delay = static_cast<float>(lag) / kTicksPerUpdate_;
-    ecs_.render(renderer_, delay);
+    float delay = static_cast<float>(lag) / TICKS_PER_UPDATE;
+    ecs_.render(delay);
 
 #ifdef DEBUG
     SDL_RenderCopy(renderer_, texture, nullptr, &rect);
@@ -119,7 +122,7 @@ void Game::run(bool isSmokeTest) {
     SDL_RenderPresent(renderer_);
 
     // Handle testing
-    if (isSmokeTest && current > kSmokeTestDuration_) {
+    if (isSmokeTest && current > SMOKE_TEST_DURATION) {
       isRunning_ = false;
     }
   }

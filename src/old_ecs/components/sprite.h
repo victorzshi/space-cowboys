@@ -1,6 +1,6 @@
 #pragma once
 
-struct SDL_Texture;
+#include <SDL.h>
 
 struct Sprite {
   SDL_Texture* texture;

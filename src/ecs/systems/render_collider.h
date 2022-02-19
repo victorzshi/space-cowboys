@@ -1,25 +1,19 @@
 #pragma once
 
-#include "ecs/ecs.h"
+#include "ecs/ecs_interface.h"
 
 class RenderCollider {
  public:
-  static void render(ECS& ecs, SDL_Renderer* renderer) {
-    Active* active = ecs.active;
-    Physics* physics = ecs.physics;
+  static void render(ECSInterface& ecs) {
+    SDL_Renderer* renderer = ecs.renderer();
+    Collider* collider = ecs.collider();
 
-    for (size_t i = 0; i < ecs.allIds.size(); i++) {
-      int id = ecs.allIds[i];
+    int begin = ecs.bullets().begin();
+    int active = ecs.bullets().active();
 
-      if (active[id].isActive()) {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &physics[id].collider);
-      }
-
-      else if (active[id].isNotActive()) {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderDrawRect(renderer, &physics[id].collider);
-      }
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    for (int id = begin; id < active; id++) {
+      SDL_RenderDrawRect(renderer, &collider[id].box);
     }
   }
 };
