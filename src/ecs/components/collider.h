@@ -1,10 +1,10 @@
 #pragma once
 
+#include "utils/utils.h"
+
 struct SDL_Rect;
 struct SDL_Point;
 struct Vector2;
-
-#include "utils/utils.h"
 
 struct Collider {
   SDL_Rect box;

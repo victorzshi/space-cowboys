@@ -17,6 +17,9 @@ add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
   "src/ecs/pools/bullets/bullets.cc"
+  "src/ecs/systems/process_input/process_input.cc"
+  "src/ecs/systems/render_collider/render_collider.cc"
+  "src/ecs/systems/update_position/update_position.cc"
   "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"

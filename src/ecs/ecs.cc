@@ -6,9 +6,9 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
-#include "ecs/systems/process_input.h"
-#include "ecs/systems/render_collider.h"
-#include "ecs/systems/update_position.h"
+#include "ecs/systems/process_input/process_input.h"
+#include "ecs/systems/render_collider/render_collider.h"
+#include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   collider_ = new Collider[MAX_ENTITIES];
