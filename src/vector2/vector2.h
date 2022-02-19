@@ -30,4 +30,9 @@ struct Vector2 {
   bool operator==(const Vector2& v) const;
 
   bool operator!=(const Vector2& v) const;
+
+  static bool almostEquals(float a, float b);
+
+ private:
+  static constexpr float EPSILON = 1.0f / 1000;
 };
