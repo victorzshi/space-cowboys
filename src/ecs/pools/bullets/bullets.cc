@@ -53,7 +53,8 @@ void Bullets::activate(Engine& e, int id) {
   Transform* transform = e.transform();
 
   // TODO(Victor): Set to tank position
-  transform[active_].position = Vector2(500.0f, 500.0f);
+  transform[active_].position.x = static_cast<float>(e.viewport().w / 2);
+  transform[active_].position.y = static_cast<float>(e.viewport().h - 100);
 
   Transform temp = transform[active_];
   transform[active_] = transform[id];

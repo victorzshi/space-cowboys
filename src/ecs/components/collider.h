@@ -7,13 +7,18 @@
 struct Collider {
   SDL_Rect box;
 
-  void update(Vector2 position) {
-    float offsetX = static_cast<float>(box.w) * 0.5f;
-    float offsetY = static_cast<float>(box.h) * 0.5f;
+  void update(Vector2 position) { box = createBox(position, box); }
+
+  SDL_Rect render(Vector2 position) { return createBox(position, box); }
+
+ private:
+  SDL_Rect createBox(Vector2 position, SDL_Rect rect) {
+    float offsetX = static_cast<float>(rect.w) * 0.5f;
+    float offsetY = static_cast<float>(rect.h) * 0.5f;
 
     int x = static_cast<int>(roundf(position.x - offsetX));
     int y = static_cast<int>(roundf(position.y - offsetY));
 
-    box = SDL_Rect{x, y, box.w, box.h};
+    return SDL_Rect{x, y, rect.w, rect.h};
   }
 };

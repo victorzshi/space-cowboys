@@ -20,6 +20,7 @@ target_sources(main PRIVATE
   "src/ecs/systems/process_input/process_input.cc"
   "src/ecs/systems/render_collider/render_collider.cc"
   "src/ecs/systems/update_position/update_position.cc"
+  "src/ecs/systems/render_sprite/render_sprite.cc"
   "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
