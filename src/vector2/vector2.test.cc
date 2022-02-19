@@ -42,22 +42,28 @@ TEST_CASE("Vector2 subtract", "[vector2]") {
 TEST_CASE("Vector2 multiply", "[vector2]") {
   Vector2 u = v * 1.5f;
   REQUIRE(u == Vector2(1.5f, 3.0f));
-  // REQUIRE(u != Vector2(1.6f, 3.0f));
-  // REQUIRE(u != Vector2(1.5f, 3.1f));
+#ifndef __unix__
+  REQUIRE(u != Vector2(1.6f, 3.0f));
+  REQUIRE(u != Vector2(1.5f, 3.1f));
+#endif
 }
 
 TEST_CASE("Vector2 divide", "[vector2]") {
   Vector2 u = v / 2.0f;
   REQUIRE(u == Vector2(0.5f, 1.0f));
-  // REQUIRE(u != Vector2(0.6f, 1.0f));
-  // REQUIRE(u != Vector2(0.5f, 1.1f));
+#ifndef __unix__
+  REQUIRE(u != Vector2(0.6f, 1.0f));
+  REQUIRE(u != Vector2(0.5f, 1.1f));
+#endif
 }
 
 TEST_CASE("Vector2 length", "[vector2]") {
   float length = v.length();
   REQUIRE(Vector2::almostEquals(length, sqrt(5)));
-  // REQUIRE(!Utils::almostEquals(length, sqrt(4)));
-  // REQUIRE(!Utils::almostEquals(length, sqrt(6)));
+#ifndef __unix__
+  REQUIRE(!Vector2::almostEquals(length, sqrt(4)));
+  REQUIRE(!Vector2::almostEquals(length, sqrt(6)));
+#endif
 }
 
 TEST_CASE("Vector2 normalize", "[vector2]") {
