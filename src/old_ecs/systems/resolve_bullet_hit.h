@@ -2,7 +2,7 @@
 //
 //#include "ecs/ecs.h"
 //
-//class ResolveBulletHit {
+// class ResolveBulletHit {
 // public:
 //  static void update(ECS& ecs) {
 //    Active* active = ecs.active;
