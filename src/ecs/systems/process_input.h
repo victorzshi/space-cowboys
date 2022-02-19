@@ -2,12 +2,12 @@
 
 #include <SDL.h>
 
-#include "ecs/ecs_interface.h"
+#include "ecs/engine.h"
 #include "services/locator.h"
 
 class ProcessInput {
  public:
-  static void input(ECSInterface& ecs) {
+  static void input(Engine& e) {
     const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 
     if (currentKeyStates[SDL_SCANCODE_LEFT]) {
@@ -21,7 +21,7 @@ class ProcessInput {
     if (currentKeyStates[SDL_SCANCODE_SPACE]) {
       Locator::logger().print("Space key pressed");
 
-      ecs.bullets().activate(ecs, ecs.bullets().active());
+      e.bullets().activate(e, e.bullets().active());
     }
   }
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-class ECSInterface;
+class Engine;
 
 class Pool {
  public:
@@ -8,12 +8,12 @@ class Pool {
   virtual ~Pool() = default;
   Pool(const Pool& other) = default;
 
-  virtual void initialize(ECSInterface& ecs, int total) = 0;
+  virtual void initialize(Engine& e, int total) = 0;
 
   virtual int begin() = 0;
   virtual int active() = 0;
   virtual int end() = 0;
 
-  virtual void activate(ECSInterface& ecs, int id) = 0;
-  virtual void deactivate(ECSInterface& ecs, int id) = 0;
+  virtual void activate(Engine& e, int id) = 0;
+  virtual void deactivate(Engine& e, int id) = 0;
 };

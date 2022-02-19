@@ -10,11 +10,11 @@ struct Transform;
 
 class Bullets;
 
-class ECSInterface {
+class Engine {
  public:
-  ECSInterface() {}
-  virtual ~ECSInterface() = default;
-  ECSInterface(const ECSInterface& other) = default;
+  Engine() {}
+  virtual ~Engine() = default;
+  Engine(const Engine& other) = default;
 
   virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) = 0;
   virtual void terminate() = 0;

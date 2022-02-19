@@ -3,9 +3,9 @@
 #include <SDL.h>
 
 #include "ecs/pools/bullets/bullets.h"
-#include "ecs_interface.h"
+#include "engine.h"
 
-class ECS : public ECSInterface {
+class ECS : public Engine {
  public:
   ECS();
 
