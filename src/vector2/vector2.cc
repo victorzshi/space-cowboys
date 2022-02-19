@@ -74,6 +74,7 @@ bool Vector2::operator!=(const Vector2& v) const {
   return !isEqual(x, v.x) || !isEqual(y, v.y);
 }
 
-bool Vector2::isEqual(float a, float b, float epsilon) {
+bool Vector2::isEqual(float a, float b) {
+  float epsilon = 1.0f / 1000;
   return abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f);
 }

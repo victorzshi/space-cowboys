@@ -31,5 +31,5 @@ struct Vector2 {
 
   bool operator!=(const Vector2& v) const;
 
-  static bool isEqual(float a, float b, float epsilon = 1.0f / 1000);
+  static bool isEqual(float a, float b);
 };
