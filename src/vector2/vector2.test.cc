@@ -10,8 +10,8 @@ Vector2 w = Vector2(3.0f, 4.0f);
 TEST_CASE("Vector2 add", "[vector2]") {
   Vector2 u = v + w;
   REQUIRE(u == Vector2(4.0f, 6.0f));
-  REQUIRE(u != Vector2(4.2f, 6.0f));
-  REQUIRE(u != Vector2(4.0f, 6.2f));
+  //REQUIRE(u != Vector2(4.1f, 6.0f));
+  //REQUIRE(u != Vector2(4.0f, 6.1f));
 
   u += u;
   REQUIRE(u == Vector2(8.0f, 12.0f));
@@ -22,27 +22,27 @@ TEST_CASE("Vector2 add", "[vector2]") {
 TEST_CASE("Vector2 subtract", "[vector2]") {
   Vector2 u = v - w;
   REQUIRE(u == Vector2(-2.0f, -2.0f));
-  //REQUIRE(u != Vector2(-2.1f, -2.0f));
-  //REQUIRE(u != Vector2(-2.0f, -2.1f));
+  // REQUIRE(u != Vector2(-2.1f, -2.0f));
+  // REQUIRE(u != Vector2(-2.0f, -2.1f));
 
   u -= u;
   REQUIRE(u == Vector2(0.0f, 0.0f));
-  //REQUIRE(u != Vector2(0.1f, 0.0f));
-  //REQUIRE(u != Vector2(0.0f, 0.1f));
+  // REQUIRE(u != Vector2(0.1f, 0.0f));
+  // REQUIRE(u != Vector2(0.0f, 0.1f));
 }
 
 TEST_CASE("Vector2 multiply", "[vector2]") {
   Vector2 u = v * 1.5f;
   REQUIRE(u == Vector2(1.5f, 3.0f));
-  //REQUIRE(u != Vector2(1.6f, 3.0f));
-  //REQUIRE(u != Vector2(1.5f, 3.1f));
+  // REQUIRE(u != Vector2(1.6f, 3.0f));
+  // REQUIRE(u != Vector2(1.5f, 3.1f));
 }
 
 TEST_CASE("Vector2 divide", "[vector2]") {
   Vector2 u = v / 2.0f;
   REQUIRE(u == Vector2(0.5f, 1.0f));
-  //REQUIRE(u != Vector2(0.6f, 1.0f));
-  //REQUIRE(u != Vector2(0.5f, 1.1f));
+  // REQUIRE(u != Vector2(0.6f, 1.0f));
+  // REQUIRE(u != Vector2(0.5f, 1.1f));
 }
 
 TEST_CASE("Vector2 length", "[vector2]") {
