@@ -1,10 +1,15 @@
 #include "ecs.h"
 
+#include <SDL_image.h>
 #include <assert.h>
 
-#include "systems/process_input.h"
-#include "systems/render_collider.h"
-#include "systems/update_position.h"
+#include "ecs/components/collider.h"
+#include "ecs/components/physics.h"
+#include "ecs/components/sprite.h"
+#include "ecs/components/transform.h"
+#include "ecs/systems/process_input/process_input.h"
+#include "ecs/systems/render_collider/render_collider.h"
+#include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   collider_ = new Collider[MAX_ENTITIES];
@@ -38,6 +43,27 @@ int ECS::createEntity() {
   assert(id_ < MAX_ENTITIES);
   id_++;
   return id_ - 1;  // Array index starts at 0
+}
+
+SDL_Texture* ECS::createTexture(std::string file) {
+  std::string relativePath = "../../data/images/" + file;
+
+  SDL_Texture* texture = nullptr;
+  SDL_Surface* surface = IMG_Load(relativePath.c_str());
+  texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  SDL_FreeSurface(surface);
+
+  return texture;
+}
+
+bool ECS::isOutOfBounds(SDL_Rect rect) {
+  int topLeftX = rect.x;
+  int topLeftY = rect.y;
+  int bottomRightX = rect.x + rect.w;
+  int bottomRightY = rect.y + rect.h;
+
+  return topLeftX < viewport_.x || topLeftY < viewport_.y ||
+         bottomRightX > viewport_.w || bottomRightY > viewport_.h;
 }
 
 void ECS::input() {

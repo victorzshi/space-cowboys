@@ -1,9 +1,11 @@
 #pragma once
 
-#include "ecs_interface.h"
-#include "pools/bullets.h"
+#include <SDL.h>
 
-class ECS : public ECSInterface {
+#include "ecs/pools/bullets/bullets.h"
+#include "engine.h"
+
+class ECS : public Engine {
  public:
   ECS();
 
@@ -21,6 +23,8 @@ class ECS : public ECSInterface {
   virtual Bullets& bullets() override;
 
   virtual int createEntity() override;
+  virtual SDL_Texture* createTexture(std::string file) override;
+  virtual bool isOutOfBounds(SDL_Rect rect) override;
 
   virtual void input() override;
   virtual void update() override;

@@ -1,21 +1,23 @@
 #pragma once
 
-// TODO(Victor): Change to forward declarations.
-#include <SDL.h>
-#include <vector2/vector2.h>
+#include <string>
 
-#include "components/collider.h"
-#include "components/physics.h"
-#include "components/sprite.h"
-#include "components/transform.h"
+struct SDL_Rect;
+struct SDL_Renderer;
+struct SDL_Texture;
 
-class Pool;
+struct Collider;
+struct Physics;
+struct Sprite;
+struct Transform;
 
-class ECSInterface {
+class Bullets;
+
+class Engine {
  public:
-  ECSInterface() {}
-  virtual ~ECSInterface() = default;
-  ECSInterface(const ECSInterface& other) = default;
+  Engine() {}
+  virtual ~Engine() = default;
+  Engine(const Engine& other) = default;
 
   virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) = 0;
   virtual void terminate() = 0;
@@ -28,9 +30,11 @@ class ECSInterface {
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
 
-  virtual Pool& bullets() = 0;
+  virtual Bullets& bullets() = 0;
 
   virtual int createEntity() = 0;
+  virtual SDL_Texture* createTexture(std::string file) = 0;
+  virtual bool isOutOfBounds(SDL_Rect rect) = 0;
 
   virtual void input() = 0;
   virtual void update() = 0;

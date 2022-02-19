@@ -16,6 +16,10 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
+  "src/ecs/pools/bullets/bullets.cc"
+  "src/ecs/systems/process_input/process_input.cc"
+  "src/ecs/systems/render_collider/render_collider.cc"
+  "src/ecs/systems/update_position/update_position.cc"
   "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
@@ -60,7 +64,7 @@ target_sources(tests PRIVATE
   "src/vector2/vector2.test.cc"
 )
 target_include_directories(tests PRIVATE "src")
-target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2)
+target_link_libraries(tests PRIVATE Catch2::Catch2)
 
 # Add unit tests
 include(CTest)
