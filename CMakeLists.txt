@@ -24,6 +24,7 @@ target_sources(main PRIVATE
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
+  "src/utils/utils.cc"
   "src/vector2/vector2.cc"
   "src/main.cc" 
 )
@@ -62,9 +63,10 @@ add_executable(tests)
 target_sources(tests PRIVATE 
   "src/vector2/vector2.cc"
   "src/vector2/vector2.test.cc"
+  "src/utils/utils.cc"
 )
 target_include_directories(tests PRIVATE "src")
-target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2)
+target_link_libraries(tests PRIVATE Catch2::Catch2 SDL2::SDL2 SDL2::SDL2_image)
 
 # Add unit tests
 include(CTest)

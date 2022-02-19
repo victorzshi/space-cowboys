@@ -2,6 +2,8 @@
 
 #include <assert.h>
 
+#include <cmath>
+
 #include "utils/utils.h"
 
 Vector2::Vector2() : x(0.0f), y(0.0f) {}

@@ -1,6 +1,6 @@
 #pragma once
 
-struct Vector2;
+#include <vector2/vector2.h>
 
 struct Physics {
   Vector2 velocity;
