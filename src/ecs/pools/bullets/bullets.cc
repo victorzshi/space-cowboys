@@ -7,7 +7,6 @@
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
 #include "services/locator.h"
-#include "utils/utils.h"
 
 Bullets::Bullets() : begin_(0), active_(0), end_(0) {}
 
@@ -16,8 +15,7 @@ void Bullets::initialize(Engine& e, int total) {
 
   int width = 18;
   float deltaVelocity = 5.0f;
-  SDL_Texture* texture =
-      Utils::createTexture(e.renderer(), "../../data/images/tank-bullet.png");
+  SDL_Texture* texture = e.createTexture("tank-bullet.png");
 
   Physics* physics = e.physics();
   Collider* collider = e.collider();

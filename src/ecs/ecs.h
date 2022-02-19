@@ -23,6 +23,8 @@ class ECS : public Engine {
   virtual Bullets& bullets() override;
 
   virtual int createEntity() override;
+  virtual SDL_Texture* createTexture(std::string file) override;
+  virtual bool isOutOfBounds(SDL_Rect rect) override;
 
   virtual void input() override;
   virtual void update() override;

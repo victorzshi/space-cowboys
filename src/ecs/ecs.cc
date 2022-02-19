@@ -1,5 +1,6 @@
 #include "ecs.h"
 
+#include <SDL_image.h>
 #include <assert.h>
 
 #include "ecs/components/collider.h"
@@ -42,6 +43,27 @@ int ECS::createEntity() {
   assert(id_ < MAX_ENTITIES);
   id_++;
   return id_ - 1;  // Array index starts at 0
+}
+
+SDL_Texture* ECS::createTexture(std::string file) {
+  std::string relativePath = "../../data/images/" + file;
+
+  SDL_Texture* texture = nullptr;
+  SDL_Surface* surface = IMG_Load(relativePath.c_str());
+  texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  SDL_FreeSurface(surface);
+
+  return texture;
+}
+
+bool ECS::isOutOfBounds(SDL_Rect rect) {
+  int topLeftX = rect.x;
+  int topLeftY = rect.y;
+  int bottomRightX = rect.x + rect.w;
+  int bottomRightY = rect.y + rect.h;
+
+  return topLeftX < viewport_.x || topLeftY < viewport_.y ||
+         bottomRightX > viewport_.w || bottomRightY > viewport_.h;
 }
 
 void ECS::input() {

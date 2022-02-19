@@ -1,7 +1,10 @@
 #pragma once
 
+#include <string>
+
 struct SDL_Rect;
 struct SDL_Renderer;
+struct SDL_Texture;
 
 struct Collider;
 struct Physics;
@@ -30,6 +33,8 @@ class Engine {
   virtual Bullets& bullets() = 0;
 
   virtual int createEntity() = 0;
+  virtual SDL_Texture* createTexture(std::string file) = 0;
+  virtual bool isOutOfBounds(SDL_Rect rect) = 0;
 
   virtual void input() = 0;
   virtual void update() = 0;

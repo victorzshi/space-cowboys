@@ -4,7 +4,6 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/transform.h"
 #include "ecs/pools/bullets/bullets.h"
-#include "utils/utils.h"
 
 void UpdatePosition::update(Engine& e) {
   Transform* transform = e.transform();
@@ -20,7 +19,7 @@ void UpdatePosition::update(Engine& e) {
   }
 
   for (int id = begin; id < e.bullets().active(); id++) {
-    if (Utils::isOutOfBounds(collider[id].box)) {
+    if (e.isOutOfBounds(collider[id].box)) {
       e.bullets().deactivate(e, id);
     }
   }
