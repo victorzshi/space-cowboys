@@ -1,7 +1,9 @@
 #pragma once
 
+#include <SDL.h>
+
+#include "ecs/pools/bullets/bullets.h"
 #include "ecs_interface.h"
-#include "pools/bullets.h"
 
 class ECS : public ECSInterface {
  public:

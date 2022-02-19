@@ -2,9 +2,13 @@
 
 #include <assert.h>
 
-#include "systems/process_input.h"
-#include "systems/render_collider.h"
-#include "systems/update_position.h"
+#include "ecs/components/collider.h"
+#include "ecs/components/physics.h"
+#include "ecs/components/sprite.h"
+#include "ecs/components/transform.h"
+#include "ecs/systems/process_input.h"
+#include "ecs/systems/render_collider.h"
+#include "ecs/systems/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   collider_ = new Collider[MAX_ENTITIES];

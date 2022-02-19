@@ -1,15 +1,14 @@
 #pragma once
 
-// TODO(Victor): Change to forward declarations.
-#include <SDL.h>
-#include <vector2/vector2.h>
+struct SDL_Rect;
+struct SDL_Renderer;
 
-#include "components/collider.h"
-#include "components/physics.h"
-#include "components/sprite.h"
-#include "components/transform.h"
+struct Collider;
+struct Physics;
+struct Sprite;
+struct Transform;
 
-class Pool;
+class Bullets;
 
 class ECSInterface {
  public:
@@ -28,7 +27,7 @@ class ECSInterface {
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
 
-  virtual Pool& bullets() = 0;
+  virtual Bullets& bullets() = 0;
 
   virtual int createEntity() = 0;
 

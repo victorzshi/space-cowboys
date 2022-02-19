@@ -16,6 +16,7 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
+  "src/ecs/pools/bullets/bullets.cc"
   "src/game/game.cc"
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
