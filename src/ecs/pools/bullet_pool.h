@@ -4,27 +4,28 @@
 
 #include "ecs/components/physics.h"
 #include "ecs/components/transform.h"
+#include "utils/utils.h"
 
 class BulletPool {
  public:
   BulletPool()
-      : physics(nullptr), transform(nullptr), begin_(0), active_(0), end_(0) {}
+      : physics_(nullptr),
+        transform_(nullptr),
+        begin_(0),
+        active_(0),
+        end_(0) {}
+
+  void setPhysics(Physics* physics) { physics_ = physics; }
+  void setTransform(Transform* transform) { transform_ = transform; }
 
   void setBegin(int index) { begin_ = index; }
   void setActive(int index) { active_ = index; }
   void setEnd(int index) { end_ = index; }
 
-  int begin() { return begin_; }
-  int active() { return active_; }
-  int end() { return end_; }
-
-  Physics* physics;
-  Transform* transform;
-
   void activate(Vector2 position) {
     if (active_ > end_) return;
 
-    transform[active_].position = position;
+    transform_[active_].position = position;
 
     active_++;
   }
@@ -35,25 +36,25 @@ class BulletPool {
     active_--;
 
     // TODO(Victor): Could probably make this a generic function in ECS.
-    Physics tempPhysics = physics[active_];
-    physics[active_] = physics[id];
-    physics[id] = tempPhysics;
+    Physics tempPhysics = physics_[active_];
+    physics_[active_] = physics_[id];
+    physics_[id] = tempPhysics;
 
     // TODO(Victor): Could probably make this a generic function in ECS.
-    Transform tempTransform = transform[active_];
-    transform[active_] = transform[id];
-    transform[id] = tempTransform;
+    Transform tempTransform = transform_[active_];
+    transform_[active_] = transform_[id];
+    transform_[id] = tempTransform;
   }
 
   // TODO(Victor): This is a system.
   void update() {
     for (int id = begin_; id < active_; id++) {
-      transform[id].position += physics[id].velocity;
-      physics[id].updateCollider(transform[id].position);
+      transform_[id].position += physics_[id].velocity;
+      physics_[id].updateCollider(transform_[id].position);
     }
 
     for (int id = begin_; id < active_; id++) {
-      if (isOutOfBounds(physics[id].collider)) {
+      if (isOutOfBounds(physics_[id].collider)) {
         deactivate(id);
       }
     }
@@ -63,11 +64,14 @@ class BulletPool {
   void render(SDL_Renderer* renderer) {
     for (int id = begin_; id < active_; id++) {
       SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-      SDL_RenderDrawRect(renderer, &physics[id].collider);
+      SDL_RenderDrawRect(renderer, &physics_[id].collider);
     }
   }
 
  private:
+  Physics* physics_;
+  Transform* transform_;
+
   int begin_;
   int active_;
   int end_;

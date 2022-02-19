@@ -143,6 +143,7 @@ void ECS::initializeTank() {
   sprite[id].texture = texture;
 }
 
+// TODO(Victor): Create ECS interface and move pool initialization.
 void ECS::initializeBullets() {
   int totalBullets = 5;
   int bulletWidth = 18;
@@ -159,7 +160,7 @@ void ECS::initializeBullets() {
 
     active[id].state = false;
 
-    // TODO(Victor): Is deltaVelocity redundant?
+    // TODO(Victor): deltaVelocity is redundant.
     physics[id].deltaVelocity = bulletDeltaVelocity;
     physics[id].velocity.y = -physics[id].deltaVelocity;
     physics[id].collider.w = bulletWidth;
@@ -173,8 +174,8 @@ void ECS::initializeBullets() {
   bullets.setActive(index - (totalBullets - 1));
   bullets.setEnd(index);
 
-  bullets.physics = physics;
-  bullets.transform = transform;
+  bullets.setPhysics(physics);
+  bullets.setTransform(transform);
 }
 
 void ECS::initializeWalls() {
