@@ -17,13 +17,13 @@ class ECSInterface {
   virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) = 0;
   virtual void terminate() = 0;
 
-  virtual const SDL_Rect viewport() = 0;
-  virtual const SDL_Renderer* renderer() = 0;
+  virtual SDL_Rect& viewport() = 0;
+  virtual SDL_Renderer* renderer() = 0;
 
-  virtual const Collider* collider() = 0;
-  virtual const Physics* physics() = 0;
-  virtual const Sprite* sprite() = 0;
-  virtual const Transform* transform() = 0;
+  virtual Collider* collider() = 0;
+  virtual Physics* physics() = 0;
+  virtual Sprite* sprite() = 0;
+  virtual Transform* transform() = 0;
 
   virtual int createEntity() = 0;
 

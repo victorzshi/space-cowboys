@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ecs_interface.h"
+#include "pools/bullets.h"
 
 class ECS : public ECSInterface {
  public:
@@ -9,13 +10,13 @@ class ECS : public ECSInterface {
   virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) override;
   virtual void terminate() override;
 
-  virtual const SDL_Rect viewport() override;
-  virtual const SDL_Renderer* renderer() override;
+  virtual SDL_Rect& viewport() override;
+  virtual SDL_Renderer* renderer() override;
 
-  virtual const Collider* collider() override;
-  virtual const Physics* physics() override;
-  virtual const Sprite* sprite() override;
-  virtual const Transform* transform() override;
+  virtual Collider* collider() override;
+  virtual Physics* physics() override;
+  virtual Sprite* sprite() override;
+  virtual Transform* transform() override;
 
   virtual int createEntity() override;
 
@@ -34,5 +35,7 @@ class ECS : public ECSInterface {
   Sprite* sprite_;
   Transform* transform_;
 
-  int entity_;
+  int id_;
+
+  Bullets bullets;
 };
