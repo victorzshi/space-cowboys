@@ -9,7 +9,7 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
-#include "systems/bullet_system.h"
+#include "pools/bullet_pool.h"
 
 struct Grid {
   struct Size {
@@ -41,7 +41,7 @@ class ECS {
   Sprite* sprite;
   Transform* transform;
 
-  BulletSystem bulletSystem;
+  BulletPool bullets;
 
   void input(SDL_Event event);
   void update();

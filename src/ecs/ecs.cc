@@ -46,13 +46,13 @@ void ECS::update() {
   UpdateTankPosition::update(*this);
   ChooseAlienDirection::update(*this);
   UpdateAlienPosition::update(*this);
-  bulletSystem.update();
+  bullets.update();
 }
 
 void ECS::render(SDL_Renderer* renderer, float delay) {
   RenderSprite::render(*this, renderer, delay);
 
-  bulletSystem.render(renderer);
+  bullets.render(renderer);
 
 #ifdef DEBUG
   RenderCollider::render(*this, renderer);
@@ -144,13 +144,14 @@ void ECS::initializeTank() {
 }
 
 void ECS::initializeBullets() {
-  int totalBullets = 10;
+  int totalBullets = 5;
   int bulletWidth = 18;
   float bulletDeltaVelocity = 5.0f;
 
   SDL_Texture* texture =
       Utils::createTexture(renderer_, "../../data/images/tank-bullet.png");
 
+  int index = 0;
   for (int i = 0; i < totalBullets; i++) {
     int id = createEntity();
 
@@ -166,16 +167,14 @@ void ECS::initializeBullets() {
 
     sprite[id].texture = texture;
 
-    bulletSystem.start = id;
-    bulletSystem.active = id;
-    bulletSystem.end = id;
+    index = id;
   }
+  bullets.setBegin(index - (totalBullets - 1));
+  bullets.setActive(index - (totalBullets - 1));
+  bullets.setEnd(index);
 
-  bulletSystem.start -= totalBullets - 1;
-  bulletSystem.active -= totalBullets - 1;
-
-  bulletSystem.physics = physics;
-  bulletSystem.transform = transform;
+  bullets.physics = physics;
+  bullets.transform = transform;
 }
 
 void ECS::initializeWalls() {

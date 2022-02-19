@@ -44,6 +44,6 @@ class ProcessTankInput {
 
     int tank = ecs.tankIds[0];
 
-    ecs.bulletSystem.activateBullet(transform[tank].position);
+    ecs.bullets.activate(transform[tank].position);
   }
 };
