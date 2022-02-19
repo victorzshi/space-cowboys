@@ -9,6 +9,7 @@
 #include "ecs/components/transform.h"
 #include "ecs/systems/process_input/process_input.h"
 #include "ecs/systems/render_collider/render_collider.h"
+#include "ecs/systems/render_sprite/render_sprite.h"
 #include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
@@ -22,7 +23,7 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
   viewport_ = viewport;
   renderer_ = renderer;
 
-  bullets_.initialize(*this, 10);
+  bullets_.initialize(*this, 1000);
 }
 
 void ECS::terminate() {
@@ -77,7 +78,7 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  (void)delay;
+  RenderSprite::render(*this, delay);
 
 #ifdef DEBUG
   RenderCollider::render(*this);
