@@ -4,6 +4,8 @@
 
 #include <cmath>
 
+#include "utils/utils.h"
+
 Vector2::Vector2() : x(0.0f), y(0.0f) {}
 
 Vector2::Vector2(float newX, float newY) : x(newX), y(newY) {}
@@ -67,14 +69,9 @@ Vector2 Vector2::operator/(float n) const {
 }
 
 bool Vector2::operator==(const Vector2& v) const {
-  return isEqual(x, v.x) && isEqual(y, v.y);
+  return Utils::isEqual(x, v.x) && Utils::isEqual(y, v.y);
 }
 
 bool Vector2::operator!=(const Vector2& v) const {
-  return !isEqual(x, v.x) || !isEqual(y, v.y);
-}
-
-bool Vector2::isEqual(float a, float b) {
-  float epsilon = 1.0f / 1000;
-  return abs(a - b) <= epsilon * (abs(a) + abs(b) + 1.0f);
+  return !Utils::isEqual(x, v.x) || !Utils::isEqual(y, v.y);
 }

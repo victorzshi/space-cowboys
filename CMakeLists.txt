@@ -24,6 +24,7 @@ target_sources(main PRIVATE
   "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
+  "src/utils/utils.cc"
   "src/vector2/vector2.cc"
   "src/main.cc" 
 )
@@ -60,6 +61,7 @@ target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 # tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
+  "src/utils/utils.cc"
   "src/vector2/vector2.cc"
   "src/vector2/vector2.test.cc"
 )
