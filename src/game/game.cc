@@ -39,7 +39,8 @@ bool Game::initialize() {
   }
 
   // Initialize entities
-  ecs_.initialize(kScreenWidth_, kScreenHeight_, renderer_);
+  // ecs_.initialize(kScreenWidth_, kScreenHeight_, renderer_);
+  ecs_.initialize();
 
   return success;
 }
@@ -81,8 +82,8 @@ void Game::run(bool isSmokeTest) {
       if (event.type == SDL_QUIT) {
         isRunning_ = false;
       }
-      ecs_.input(event);
     }
+    ecs_.input();
 
     // Update state
     while (lag >= kTicksPerUpdate_) {
@@ -111,7 +112,7 @@ void Game::run(bool isSmokeTest) {
     SDL_RenderClear(renderer_);
 
     float delay = static_cast<float>(lag) / kTicksPerUpdate_;
-    ecs_.render(renderer_, delay);
+    ecs_.render(delay);
 
 #ifdef DEBUG
     SDL_RenderCopy(renderer_, texture, nullptr, &rect);
