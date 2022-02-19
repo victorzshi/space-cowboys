@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "engine.h"
 
@@ -15,11 +16,13 @@ class ECS : public Engine {
   virtual SDL_Rect& viewport() override;
   virtual SDL_Renderer* renderer() override;
 
+  virtual AI* ai() override;
   virtual Collider* collider() override;
   virtual Physics* physics() override;
   virtual Sprite* sprite() override;
   virtual Transform* transform() override;
 
+  virtual Aliens& aliens() override;
   virtual Bullets& bullets() override;
 
   virtual int createEntity() override;
@@ -31,17 +34,19 @@ class ECS : public Engine {
   virtual void render(float delay) override;
 
  private:
-  static const int MAX_ENTITIES = 1000;
+  static const int MAX_ENTITIES = 2000;
 
   int id_;
 
   SDL_Rect viewport_;
   SDL_Renderer* renderer_;
 
+  AI* ai_;
   Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;
   Transform* transform_;
 
+  Aliens aliens_;
   Bullets bullets_;
 };

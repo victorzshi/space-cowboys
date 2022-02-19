@@ -6,11 +6,13 @@ struct SDL_Rect;
 struct SDL_Renderer;
 struct SDL_Texture;
 
+struct AI;
 struct Collider;
 struct Physics;
 struct Sprite;
 struct Transform;
 
+class Aliens;
 class Bullets;
 
 class Engine {
@@ -25,11 +27,13 @@ class Engine {
   virtual SDL_Rect& viewport() = 0;
   virtual SDL_Renderer* renderer() = 0;
 
+  virtual AI* ai() = 0;
   virtual Collider* collider() = 0;
   virtual Physics* physics() = 0;
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
 
+  virtual Aliens& aliens() = 0;
   virtual Bullets& bullets() = 0;
 
   virtual int createEntity() = 0;

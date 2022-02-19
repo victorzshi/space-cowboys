@@ -3,6 +3,7 @@
 #include <SDL_image.h>
 #include <assert.h>
 
+#include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
@@ -13,6 +14,7 @@
 #include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
+  ai_ = new AI[MAX_ENTITIES];
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
   sprite_ = new Sprite[MAX_ENTITIES];
@@ -23,6 +25,7 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
   viewport_ = viewport;
   renderer_ = renderer;
 
+  aliens_.initialize(*this, 200);
   bullets_.initialize(*this, 1000);
 }
 
@@ -33,11 +36,13 @@ void ECS::terminate() {
 SDL_Rect& ECS::viewport() { return viewport_; }
 SDL_Renderer* ECS::renderer() { return renderer_; }
 
+AI* ECS::ai() { return ai_; }
 Collider* ECS::collider() { return collider_; }
 Physics* ECS::physics() { return physics_; }
 Sprite* ECS::sprite() { return sprite_; }
 Transform* ECS::transform() { return transform_; }
 
+Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
 
 int ECS::createEntity() {
