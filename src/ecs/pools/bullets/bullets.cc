@@ -6,6 +6,7 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "ecs/engine.h"
 #include "services/locator.h"
 
 Bullets::Bullets() : begin_(0), active_(0), end_(0) {}

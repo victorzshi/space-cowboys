@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "ecs/engine.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "services/locator.h"
 

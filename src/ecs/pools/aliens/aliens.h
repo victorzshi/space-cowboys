@@ -2,9 +2,9 @@
 
 #include <vector>
 
-#include "ecs/engine.h"
 #include "ecs/pools/pool.h"
 
+class Engine;
 struct Vector2;
 struct Grid;
 

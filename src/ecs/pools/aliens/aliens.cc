@@ -8,6 +8,7 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "ecs/engine.h"
 #include "services/locator.h"
 #include "vector2/vector2.h"
 
@@ -73,8 +74,8 @@ void Aliens::initialize(Engine& e, int total) {
     index = id;
   }
 
-  begin_ = index - (total - 1);
-  active_ = index;
+  begin_ = index - (rows * columns - 1);
+  active_ = index + 1;
   end_ = index;
 }
 

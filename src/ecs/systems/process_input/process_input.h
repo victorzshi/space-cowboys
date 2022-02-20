@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ecs/engine.h"
+class Engine;
 
 class ProcessInput {
  public:
