@@ -16,8 +16,6 @@ class Aliens : public Pool {
   const float DELTA_VELOCITY = 5.0f;
   const char* TEXTURE_FILE = "alien.png";
 
-  Aliens();
-
   virtual void initialize() override;
 
  private:

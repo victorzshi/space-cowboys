@@ -9,8 +9,6 @@
 #include "ecs/engine.h"
 #include "services/locator.h"
 
-Bullets::Bullets() {}
-
 void Bullets::initialize() {
   Locator::logger().print("Initializing bullets...");
 

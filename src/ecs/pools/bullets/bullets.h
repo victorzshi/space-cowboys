@@ -13,7 +13,5 @@ class Bullets : public Pool {
   const float DELTA_VELOCITY = 5.0f;
   const char* TEXTURE_FILE = "tank-bullet.png";
 
-  Bullets();
-
   virtual void initialize() override;
 };
