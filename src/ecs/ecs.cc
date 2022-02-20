@@ -31,7 +31,10 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
 }
 
 void ECS::terminate() {
-  // Do stuff
+  for (int i = 0; i < id_; i++) {
+    SDL_DestroyTexture(sprite_[i].texture);
+    sprite_[i].texture = nullptr;
+  }
 }
 
 SDL_Rect& ECS::viewport() { return viewport_; }
