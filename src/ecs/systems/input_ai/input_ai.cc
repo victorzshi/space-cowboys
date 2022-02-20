@@ -14,9 +14,9 @@ void InputAI::input(Engine& e) {
   Transform* transform = e.transform();
 
   int begin = e.aliens().begin();
-  int active = e.aliens().active();
+  int size = e.aliens().size();
 
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     if (ai[i].isPathEnd) {
       ai[i].isPathEnd = false;
 

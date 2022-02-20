@@ -18,10 +18,10 @@ void RenderCollider::renderActive(Engine& e, Pool& pool) {
   Collider* collider = e.collider();
 
   int begin = pool.begin();
-  int active = pool.active();
+  int size = pool.size();
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     SDL_RenderDrawRect(renderer, &collider[i].box);
   }
 }

@@ -25,9 +25,9 @@ void RenderSprite::renderActive(Engine& e, float delay, Pool& pool) {
   Transform* transform = e.transform();
 
   int begin = pool.begin();
-  int active = pool.active();
+  int size = pool.size();
 
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     SDL_Rect box = collider[i].box;
 
     if (delay > 0) {

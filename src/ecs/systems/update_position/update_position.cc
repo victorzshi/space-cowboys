@@ -21,9 +21,9 @@ void UpdatePosition::updateActive(Engine& e, Pool& pool) {
   Collider* collider = e.collider();
 
   int begin = pool.begin();
-  int active = pool.active();
+  int size = pool.size();
 
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     transform[i].position += physics[i].velocity;
     collider[i].update(transform[i].position);
   }
@@ -36,11 +36,11 @@ void UpdatePosition::updateAliensPath(Engine& e) {
   Collider* collider = e.collider();
 
   int begin = e.aliens().begin();
-  int active = e.aliens().active();
+  int size = e.aliens().size();
 
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     if (e.isOutOfBounds(collider[i].box)) {
-      for (int j = begin; j < active; j++) {
+      for (int j = begin; j < size; j++) {
         transform[j].position -= physics[j].velocity;
         collider[j].update(transform[j].position);
         ai[j].isPathEnd = true;
@@ -59,13 +59,13 @@ void UpdatePosition::resolveBulletHit(Engine& e) {
   int beginBullets = bullets.begin();
   int beginAliens = aliens.begin();
 
-  for (int i = beginBullets; i < bullets.active(); i++) {
+  for (int i = beginBullets; i < bullets.size(); i++) {
     if (e.isOutOfBounds(collider[i].box)) {
       bullets.deactivate(i);
       continue;
     }
 
-    for (int j = beginAliens; j < aliens.active(); j++) {
+    for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
         bullets.deactivate(i);
         aliens.deactivate(j);
