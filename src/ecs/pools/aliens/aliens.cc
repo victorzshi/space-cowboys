@@ -62,7 +62,7 @@ void Aliens::initialize() {
   }
 
   begin_ = index - (ROWS * COLUMNS - 1);
-  active_ = index + 1;
+  size_ = index + 1;
   end_ = index;
 }
 

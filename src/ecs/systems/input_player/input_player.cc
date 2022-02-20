@@ -23,7 +23,7 @@ void InputPlayer::input(Engine& e) {
 
     Transform* transform = e.transform();
 
-    int index = e.bullets().active();
+    int index = e.bullets().size();
 
     transform[index].position.x = static_cast<float>(e.viewport().w / 2);
     transform[index].position.y = static_cast<float>(e.viewport().h - 100);

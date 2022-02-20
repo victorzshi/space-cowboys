@@ -31,6 +31,6 @@ void Bullets::initialize() {
   }
 
   begin_ = index - (TOTAL - 1);
-  active_ = index - (TOTAL - 1);
+  size_ = index - (TOTAL - 1);
   end_ = index;
 }

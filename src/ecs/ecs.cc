@@ -21,6 +21,9 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   sprite_ = new Sprite[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
 
+  active_.indexes = new int[MAX_ENTITIES];
+  active_.size = 0;
+
   aliens_.setEngine(this);
   bullets_.setEngine(this);
 }
@@ -31,6 +34,8 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
 
   aliens_.initialize();
   bullets_.initialize();
+
+  updateActive();
 }
 
 void ECS::terminate() {
@@ -49,6 +54,7 @@ Physics* ECS::physics() { return physics_; }
 Sprite* ECS::sprite() { return sprite_; }
 Transform* ECS::transform() { return transform_; }
 
+Active& ECS::active() { return active_; }
 Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
 
@@ -79,14 +85,37 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
          bottomRightX > viewport_.w || bottomRightY > viewport_.h;
 }
 
+void ECS::updateActive() {
+  int index = 0;
+
+  int begin = aliens_.begin();
+  int size = aliens_.size();
+  for (int i = begin; i < size; i++) {
+    active_.indexes[index] = i;
+    index++;
+  }
+
+  begin = bullets_.begin();
+  size = bullets_.size();
+  for (int i = begin; i < size; i++) {
+    active_.indexes[index] = i;
+    index++;
+  }
+
+  active_.size = index;
+}
+
 void ECS::input() {
   InputPlayer::input(*this);
   InputAI::input(*this);
+
+  updateActive();
 }
 
 void ECS::update() {
-  //
   UpdatePosition::update(*this);
+
+  updateActive();
 }
 
 void ECS::render(float delay) {
