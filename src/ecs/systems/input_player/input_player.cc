@@ -10,6 +10,8 @@
 #include "services/locator.h"
 
 void InputPlayer::input(Engine& e) {
+  const Uint8* keyboard = e.keyboard();
+
   Transform* transform = e.transform();
   Physics* physics = e.physics();
 
@@ -18,15 +20,13 @@ void InputPlayer::input(Engine& e) {
   int begin = e.tanks().begin();
   int size = e.tanks().size();
 
-  const Uint8* state = SDL_GetKeyboardState(nullptr);
-
-  if (state[SDL_SCANCODE_LEFT]) {
+  if (keyboard[SDL_SCANCODE_LEFT]) {
     Locator::logger().print("Left key pressed");
 
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = -deltaVelocity;
     }
-  } else if (!state[SDL_SCANCODE_LEFT]) {
+  } else if (!keyboard[SDL_SCANCODE_LEFT]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.x < 0) {
         physics[i].velocity.x = 0.0f;
@@ -34,13 +34,13 @@ void InputPlayer::input(Engine& e) {
     }
   }
 
-  if (state[SDL_SCANCODE_RIGHT]) {
+  if (keyboard[SDL_SCANCODE_RIGHT]) {
     Locator::logger().print("Right key pressed");
 
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = deltaVelocity;
     }
-  } else if (!state[SDL_SCANCODE_RIGHT]) {
+  } else if (!keyboard[SDL_SCANCODE_RIGHT]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.x > 0) {
         physics[i].velocity.x = 0.0f;
@@ -48,7 +48,7 @@ void InputPlayer::input(Engine& e) {
     }
   }
 
-  if (state[SDL_SCANCODE_SPACE]) {
+  if (keyboard[SDL_SCANCODE_SPACE]) {
     Locator::logger().print("Space key pressed");
 
     for (int i = begin; i < size; i++) {

@@ -1,10 +1,8 @@
 #pragma once
 
-#include <string>
+#include <SDL.h>
 
-struct SDL_Rect;
-struct SDL_Renderer;
-struct SDL_Texture;
+#include <string>
 
 struct AI;
 struct Collider;
@@ -28,11 +26,13 @@ class Engine {
   virtual ~Engine() = default;
   Engine(const Engine& other) = default;
 
-  virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) = 0;
+  virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer,
+                          const Uint8* keyboard) = 0;
   virtual void terminate() = 0;
 
   virtual SDL_Rect& viewport() = 0;
   virtual SDL_Renderer* renderer() = 0;
+  virtual const Uint8* keyboard() = 0;
 
   virtual AI* ai() = 0;
   virtual Collider* collider() = 0;

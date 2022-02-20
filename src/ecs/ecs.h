@@ -11,11 +11,13 @@ class ECS : public Engine {
  public:
   ECS();
 
-  virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer) override;
+  virtual void initialize(SDL_Rect viewport, SDL_Renderer* renderer,
+                          const Uint8* keyboard) override;
   virtual void terminate() override;
 
   virtual SDL_Rect& viewport() override;
   virtual SDL_Renderer* renderer() override;
+  virtual const Uint8* keyboard() override;
 
   virtual AI* ai() override;
   virtual Collider* collider() override;
@@ -45,6 +47,7 @@ class ECS : public Engine {
 
   SDL_Rect viewport_;
   SDL_Renderer* renderer_;
+  const Uint8* keyboard_;
 
   AI* ai_;
   Collider* collider_;

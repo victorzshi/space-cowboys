@@ -31,9 +31,11 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   tanks_.setEngine(this);
 }
 
-void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
+void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer,
+                     const Uint8* keyboard) {
   viewport_ = viewport;
   renderer_ = renderer;
+  keyboard_ = keyboard;
 
   aliens_.initialize();
   bullets_.initialize();
@@ -51,6 +53,7 @@ void ECS::terminate() {
 
 SDL_Rect& ECS::viewport() { return viewport_; }
 SDL_Renderer* ECS::renderer() { return renderer_; }
+const Uint8* ECS::keyboard() { return keyboard_; }
 
 AI* ECS::ai() { return ai_; }
 Collider* ECS::collider() { return collider_; }
