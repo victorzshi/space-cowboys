@@ -9,55 +9,63 @@
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 
-Pool::Pool() {}
+Pool::Pool()
+    : e_(nullptr),
+      ai_(nullptr),
+      collider_(nullptr),
+      physics_(nullptr),
+      sprite_(nullptr),
+      transform_(nullptr) {}
+
+void Pool::setEngine(Engine* e) {
+  e_ = e;
+  ai_ = e->ai();
+  collider_ = e->collider();
+  physics_ = e->physics();
+  sprite_ = e->sprite();
+  transform_ = e->transform();
+}
 
 int Pool::begin() { return begin_; }
 int Pool::active() { return active_; }
 int Pool::end() { return end_; }
 
-void Pool::activate(Engine& e, int index) {
+void Pool::activate(int index) {
   assert(index >= active_);
 
-  // Do not blow memory up
-  if (active_ > end_) return;
+  if (active_ > end_) return;  // Do not blow memory up
 
-  swapMemory(e, active_, index);
+  memorySwap(index);
 
   active_++;
 }
 
-void Pool::deactivate(Engine& e, int index) {
+void Pool::deactivate(int index) {
   assert(index < active_);
 
   active_--;
 
-  swapMemory(e, active_, index);
+  memorySwap(index);
 }
 
-void Pool::swapMemory(Engine& e, int i, int j) {
-  AI* ai = e.ai();
-  Collider* collider = e.collider();
-  Physics* physics = e.physics();
-  Sprite* sprite = e.sprite();
-  Transform* transform = e.transform();
+void Pool::memorySwap(int index) {
+  AI aiSwap = ai_[active_];
+  ai_[active_] = ai_[index];
+  ai_[index] = aiSwap;
 
-  AI aiTemp = ai[i];
-  ai[i] = ai[j];
-  ai[j] = aiTemp;
+  Collider colliderSwap = collider_[active_];
+  collider_[active_] = collider_[index];
+  collider_[index] = colliderSwap;
 
-  Collider colliderTemp = collider[i];
-  collider[i] = collider[j];
-  collider[j] = colliderTemp;
+  Physics physicsSwap = physics_[active_];
+  physics_[active_] = physics_[index];
+  physics_[index] = physicsSwap;
 
-  Physics physicsTemp = physics[i];
-  physics[i] = physics[j];
-  physics[j] = physicsTemp;
+  Sprite spriteSwap = sprite_[active_];
+  sprite_[active_] = sprite_[index];
+  sprite_[index] = spriteSwap;
 
-  Sprite spriteTemp = sprite[i];
-  sprite[i] = sprite[j];
-  sprite[j] = spriteTemp;
-
-  Transform transformTemp = transform[i];
-  transform[i] = transform[j];
-  transform[j] = transformTemp;
+  Transform transformSwap = transform_[active_];
+  transform_[active_] = transform_[index];
+  transform_[index] = transformSwap;
 }

@@ -55,14 +55,14 @@ void UpdatePosition::updateBullets(Engine& e) {
 
   for (int i = begin; i < e.bullets().active(); i++) {
     if (e.isOutOfBounds(collider[i].box)) {
-      e.bullets().deactivate(e, i);
+      e.bullets().deactivate(i);
       continue;
     }
 
     for (int j = e.aliens().begin(); j < e.aliens().active(); j++) {
       if (collider[i].isHit(collider[j].box)) {
-        e.bullets().deactivate(e, i);
-        e.aliens().deactivate(e, j);
+        e.bullets().deactivate(i);
+        e.aliens().deactivate(j);
         break;
       }
     }

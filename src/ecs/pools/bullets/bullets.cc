@@ -11,27 +11,23 @@
 
 Bullets::Bullets() {}
 
-void Bullets::initialize(Engine& e) {
+void Bullets::initialize() {
   Locator::logger().print("Initializing bullets...");
   int total = 50;
   int width = 18;
   float deltaVelocity = 5.0f;
-  SDL_Texture* texture = e.createTexture("tank-bullet.png");
-
-  Physics* physics = e.physics();
-  Collider* collider = e.collider();
-  Sprite* sprite = e.sprite();
+  SDL_Texture* texture = e_->createTexture("tank-bullet.png");
 
   int index = 0;
   for (int i = 0; i < total; i++) {
-    int id = e.createEntity();
+    int id = e_->createEntity();
 
-    physics[id].velocity.y = -deltaVelocity;
+    physics_[id].velocity.y = -deltaVelocity;
 
-    collider[id].box.w = width;
-    collider[id].box.h = width;
+    collider_[id].box.w = width;
+    collider_[id].box.h = width;
 
-    sprite[id].texture = texture;
+    sprite_[id].texture = texture;
 
     index = id;
   }

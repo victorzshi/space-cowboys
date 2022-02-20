@@ -26,7 +26,7 @@ struct Grid {
 
 Aliens::Aliens() {}
 
-void Aliens::initialize(Engine& e) {
+void Aliens::initialize() {
   Locator::logger().print("Initializing aliens...");
 
   int rows = 4;
@@ -41,33 +41,27 @@ void Aliens::initialize(Engine& e) {
   grid.gutter.height = width / 4;
   grid.rows = rows;
   grid.columns = columns;
-  grid.center = {e.viewport().w / 2, rows * width};
+  grid.center = {e_->viewport().w / 2, rows * width};
 
-  SDL_Texture* texture = e.createTexture("alien.png");
-
-  AI* ai = e.ai();
-  Collider* collider = e.collider();
-  Physics* physics = e.physics();
-  Sprite* sprite = e.sprite();
-  Transform* transform = e.transform();
+  SDL_Texture* texture = e_->createTexture("alien.png");
 
   int index = 0;
   std::vector<Vector2> positions = createPositions(grid);
   for (size_t i = 0; i < positions.size(); i++) {
-    int id = e.createEntity();
+    int id = e_->createEntity();
 
-    transform[id].position = positions[i];
+    transform_[id].position = positions[i];
 
-    physics[id].velocity.x = -deltaVelocity;
+    physics_[id].velocity.x = -deltaVelocity;
 
-    collider[id].box.w = width;
-    collider[id].box.h = width;
+    collider_[id].box.w = width;
+    collider_[id].box.h = width;
 
-    ai[id].nextDirection = Direction::LEFT;
-    ai[id].goalHeight = transform[id].position.y;
-    ai[id].isPathEnd = false;
+    ai_[id].nextDirection = Direction::LEFT;
+    ai_[id].goalHeight = transform_[id].position.y;
+    ai_[id].isPathEnd = false;
 
-    sprite[id].texture = texture;
+    sprite_[id].texture = texture;
 
     index = id;
   }

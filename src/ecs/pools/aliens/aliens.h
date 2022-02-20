@@ -12,7 +12,7 @@ class Aliens : public Pool {
  public:
   Aliens();
 
-  virtual void initialize(Engine& e) override;
+  virtual void initialize() override;
 
  private:
   std::vector<Vector2> createPositions(Grid grid);

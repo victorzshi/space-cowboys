@@ -28,6 +28,6 @@ void InputPlayer::input(Engine& e) {
     transform[index].position.x = static_cast<float>(e.viewport().w / 2);
     transform[index].position.y = static_cast<float>(e.viewport().h - 100);
 
-    e.bullets().activate(e, index);
+    e.bullets().activate(index);
   }
 }

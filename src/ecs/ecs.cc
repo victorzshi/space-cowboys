@@ -20,14 +20,17 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   physics_ = new Physics[MAX_ENTITIES];
   sprite_ = new Sprite[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
+
+  aliens_.setEngine(this);
+  bullets_.setEngine(this);
 }
 
 void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
   viewport_ = viewport;
   renderer_ = renderer;
 
-  aliens_.initialize(*this);
-  bullets_.initialize(*this);
+  aliens_.initialize();
+  bullets_.initialize();
 }
 
 void ECS::terminate() {

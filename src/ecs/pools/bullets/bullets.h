@@ -8,5 +8,5 @@ class Bullets : public Pool {
  public:
   Bullets();
 
-  virtual void initialize(Engine& e) override;
+  virtual void initialize() override;
 };

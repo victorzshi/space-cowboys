@@ -1,6 +1,11 @@
 #pragma once
 
 class Engine;
+struct AI;
+struct Collider;
+struct Physics;
+struct Sprite;
+struct Transform;
 
 class Pool {
  public:
@@ -8,20 +13,29 @@ class Pool {
   virtual ~Pool() = default;
   Pool(const Pool& other) = default;
 
-  virtual void initialize(Engine& e) = 0;
+  void setEngine(Engine* e);
+
+  virtual void initialize() = 0;
 
   int begin();
   int active();
   int end();
 
-  void activate(Engine& e, int index);
-  void deactivate(Engine& e, int index);
+  void activate(int index);
+  void deactivate(int index);
 
  protected:
+  Engine* e_;
+
+  AI* ai_;
+  Collider* collider_;
+  Physics* physics_;
+  Sprite* sprite_;
+  Transform* transform_;
+
   int begin_;
   int active_;
   int end_;
 
- private:
-  static void swapMemory(Engine& e, int i, int j);
+  void memorySwap(int index);
 };
