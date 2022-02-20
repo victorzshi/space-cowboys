@@ -7,6 +7,11 @@
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
+
+
+
+
+
 #include "ecs/components/transform.h"
 #include "ecs/systems/input_ai/input_ai.h"
 #include "ecs/systems/input_player/input_player.h"
