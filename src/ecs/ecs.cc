@@ -34,6 +34,8 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
 
   aliens_.initialize();
   bullets_.initialize();
+
+  updateActive();
 }
 
 void ECS::terminate() {
@@ -83,24 +85,6 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
          bottomRightX > viewport_.w || bottomRightY > viewport_.h;
 }
 
-void ECS::input() {
-  InputPlayer::input(*this);
-  InputAI::input(*this);
-}
-
-void ECS::update() {
-  UpdatePosition::update(*this);
-  updateActive();
-}
-
-void ECS::render(float delay) {
-  RenderSprite::render(*this, delay);
-
-#ifdef DEBUG
-  RenderCollider::render(*this);
-#endif
-}
-
 void ECS::updateActive() {
   int index = 0;
 
@@ -119,4 +103,25 @@ void ECS::updateActive() {
   }
 
   active_.size = index;
+}
+
+void ECS::input() {
+  InputPlayer::input(*this);
+  InputAI::input(*this);
+
+  updateActive();
+}
+
+void ECS::update() {
+  UpdatePosition::update(*this);
+
+  updateActive();
+}
+
+void ECS::render(float delay) {
+  RenderSprite::render(*this, delay);
+
+#ifdef DEBUG
+  RenderCollider::render(*this);
+#endif
 }

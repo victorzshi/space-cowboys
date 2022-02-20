@@ -9,24 +9,21 @@
 #include "ecs/pools/bullets/bullets.h"
 
 void UpdatePosition::update(Engine& e) {
-  updateActive(e, e.aliens());
-  updateActive(e, e.bullets());
-  updateAliensPath(e);
-  resolveBulletHit(e);
-}
-
-void UpdatePosition::updateActive(Engine& e, Pool& pool) {
   Transform* transform = e.transform();
   Physics* physics = e.physics();
   Collider* collider = e.collider();
 
-  int begin = pool.begin();
-  int size = pool.size();
+  Active active = e.active();
 
-  for (int i = begin; i < size; i++) {
-    transform[i].position += physics[i].velocity;
-    collider[i].update(transform[i].position);
+  for (int i = 0; i < active.size; i++) {
+    int id = active.indexes[i];
+
+    transform[id].position += physics[id].velocity;
+    collider[id].update(transform[id].position);
   }
+
+  updateAliensPath(e);
+  resolveBulletHit(e);
 }
 
 // TODO(Victor): This should be its own system.

@@ -8,26 +8,6 @@
 #include "ecs/pools/bullets/bullets.h"
 
 void RenderCollider::render(Engine& e) {
-  //renderActive(e, e.aliens());
-  //renderActive(e, e.bullets());
-  renderAllActive(e);
-}
-
-void RenderCollider::renderActive(Engine& e, Pool& pool) {
-  SDL_Renderer* renderer = e.renderer();
-
-  Collider* collider = e.collider();
-
-  int begin = pool.begin();
-  int size = pool.size();
-
-  SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-  for (int i = begin; i < size; i++) {
-    SDL_RenderDrawRect(renderer, &collider[i].box);
-  }
-}
-
-void RenderCollider::renderAllActive(Engine& e) {
   SDL_Renderer* renderer = e.renderer();
 
   Collider* collider = e.collider();

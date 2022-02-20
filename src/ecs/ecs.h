@@ -29,6 +29,7 @@ class ECS : public Engine {
   virtual int createEntity() override;
   virtual SDL_Texture* createTexture(std::string file) override;
   virtual bool isOutOfBounds(SDL_Rect rect) override;
+  virtual void updateActive() override;
 
   virtual void input() override;
   virtual void update() override;
@@ -51,6 +52,4 @@ class ECS : public Engine {
   Active active_;
   Aliens aliens_;
   Bullets bullets_;
-
-  void updateActive();
 };

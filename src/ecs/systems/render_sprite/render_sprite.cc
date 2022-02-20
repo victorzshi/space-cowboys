@@ -12,11 +12,6 @@
 #include "vector2/vector2.h"
 
 void RenderSprite::render(Engine& e, float delay) {
-  renderActive(e, delay, e.bullets());
-  renderActive(e, delay, e.aliens());
-}
-
-void RenderSprite::renderActive(Engine& e, float delay, Pool& pool) {
   SDL_Renderer* renderer = e.renderer();
 
   Collider* collider = e.collider();
@@ -24,19 +19,20 @@ void RenderSprite::renderActive(Engine& e, float delay, Pool& pool) {
   Sprite* sprite = e.sprite();
   Transform* transform = e.transform();
 
-  int begin = pool.begin();
-  int size = pool.size();
+  Active active = e.active();
 
-  for (int i = begin; i < size; i++) {
-    SDL_Rect box = collider[i].box;
+  for (int i = 0; i < active.size; i++) {
+    int id = active.indexes[i];
+
+    SDL_Rect box = collider[id].box;
 
     if (delay > 0) {
-      Vector2 velocity = physics[i].velocity * delay;
-      Vector2 position = transform[i].position + velocity;
+      Vector2 velocity = physics[id].velocity * delay;
+      Vector2 position = transform[id].position + velocity;
 
-      box = collider[i].render(position);
+      box = collider[id].render(position);
     }
 
-    SDL_RenderCopy(renderer, sprite[i].texture, nullptr, &box);
+    SDL_RenderCopy(renderer, sprite[id].texture, nullptr, &box);
   }
 }
