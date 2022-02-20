@@ -24,11 +24,9 @@ struct Grid {
   SDL_Point center;
 };
 
-Aliens::Aliens() : begin_(0), active_(0), end_(0) {}
+Aliens::Aliens() {}
 
-void Aliens::initialize(Engine& e, int total) {
-  (void)total;
-
+void Aliens::initialize(Engine& e) {
   Locator::logger().print("Initializing aliens...");
 
   int rows = 4;
@@ -77,43 +75,6 @@ void Aliens::initialize(Engine& e, int total) {
   begin_ = index - (rows * columns - 1);
   active_ = index + 1;
   end_ = index;
-}
-
-int Aliens::begin() { return begin_; }
-int Aliens::active() { return active_; }
-int Aliens::end() { return end_; }
-
-void Aliens::activate(Engine& e, int id) {
-  Locator::logger().print("Activating alien...");
-  Locator::logger().print(std::to_string(id));
-
-  if (active_ > end_) return;
-
-  Transform* transform = e.transform();
-
-  // TODO(Victor): Activate alien
-
-  Transform temp = transform[active_];
-  transform[active_] = transform[id];
-  transform[id] = temp;
-
-  active_++;
-}
-
-void Aliens::deactivate(Engine& e, int id) {
-  Locator::logger().print("Deactivating alien...");
-  Locator::logger().print(std::to_string(id));
-
-  assert(id < active_);
-
-  Transform* transform = e.transform();
-
-  active_--;
-
-  // TODO(Victor): Could probably make this a generic function in ECS.
-  Transform temp = transform[active_];
-  transform[active_] = transform[id];
-  transform[id] = temp;
 }
 
 std::vector<Vector2> Aliens::createPositions(Grid grid) {

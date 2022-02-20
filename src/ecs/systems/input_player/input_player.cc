@@ -2,6 +2,7 @@
 
 #include <SDL.h>
 
+#include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "services/locator.h"
@@ -20,6 +21,13 @@ void InputPlayer::input(Engine& e) {
   if (currentKeyStates[SDL_SCANCODE_SPACE]) {
     Locator::logger().print("Space key pressed");
 
-    e.bullets().activate(e, e.bullets().active());
+    Transform* transform = e.transform();
+
+    int index = e.bullets().active();
+
+    transform[index].position.x = static_cast<float>(e.viewport().w / 2);
+    transform[index].position.y = static_cast<float>(e.viewport().h - 100);
+
+    e.bullets().activate(e, index);
   }
 }

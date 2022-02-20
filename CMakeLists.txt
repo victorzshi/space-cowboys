@@ -16,6 +16,7 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
+  "src/ecs/pools/pool.cc"
   "src/ecs/pools/aliens/aliens.cc"
   "src/ecs/pools/bullets/bullets.cc"
   "src/ecs/systems/input_ai/input_ai.cc"

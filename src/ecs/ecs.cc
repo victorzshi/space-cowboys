@@ -26,8 +26,8 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
   viewport_ = viewport;
   renderer_ = renderer;
 
-  aliens_.initialize(*this, 200);
-  bullets_.initialize(*this, 1000);
+  aliens_.initialize(*this);
+  bullets_.initialize(*this);
 }
 
 void ECS::terminate() {
