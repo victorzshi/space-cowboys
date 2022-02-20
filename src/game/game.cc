@@ -80,8 +80,17 @@ void Game::run(bool isSmokeTest) {
 
     // Process input
     while (SDL_PollEvent(&event) != 0) {
-      if (event.type == SDL_QUIT) {
-        isRunning_ = false;
+      switch (event.type) {
+        case SDL_QUIT:
+          isRunning_ = false;
+          break;
+        case SDL_KEYDOWN:
+          switch (event.key.keysym.sym) {
+            case SDLK_ESCAPE:
+              isRunning_ = false;
+              break;
+          }
+          break;
       }
     }
     ecs_.input();
