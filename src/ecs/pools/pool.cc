@@ -49,6 +49,8 @@ void Pool::deactivate(int index) {
 }
 
 void Pool::memorySwap(int index) {
+  if (active_ == index) return;
+
   AI aiSwap = ai_[active_];
   ai_[active_] = ai_[index];
   ai_[index] = aiSwap;

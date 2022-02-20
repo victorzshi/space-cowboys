@@ -37,5 +37,6 @@ class Pool {
   int active_;
   int end_;
 
+ private:
   void memorySwap(int index);
 };
