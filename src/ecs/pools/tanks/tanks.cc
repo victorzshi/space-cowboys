@@ -20,7 +20,8 @@ void Tanks::initialize() {
 
     float x = static_cast<float>(e_->viewport().w / 2);
     float y = static_cast<float>(e_->viewport().h - 100);
-
+    
+    // TODO(Victor): Fix hacky way to spawn more tanks.
     transform_[id].position.x = x + static_cast<float>(i) * 100.0f;
     transform_[id].position.y = y;
 

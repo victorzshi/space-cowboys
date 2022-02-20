@@ -13,30 +13,42 @@ void InputPlayer::input(Engine& e) {
   Transform* transform = e.transform();
   Physics* physics = e.physics();
 
-  float deltaAcceleration = e.tanks().DELTA_ACCELERATION;
+  float deltaVelocity = e.tanks().DELTA_VELOCITY;
 
   int begin = e.tanks().begin();
   int size = e.tanks().size();
 
-  const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
+  const Uint8* state = SDL_GetKeyboardState(nullptr);
 
-  if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+  if (state[SDL_SCANCODE_LEFT]) {
     Locator::logger().print("Left key pressed");
 
     for (int i = begin; i < size; i++) {
-      physics[i].acceleration.x = -deltaAcceleration;
+      physics[i].velocity.x = -deltaVelocity;
+    }
+  } else if (!state[SDL_SCANCODE_LEFT]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.x < 0) {
+        physics[i].velocity.x = 0.0f;
+      }
     }
   }
 
-  if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+  if (state[SDL_SCANCODE_RIGHT]) {
     Locator::logger().print("Right key pressed");
 
     for (int i = begin; i < size; i++) {
-      physics[i].acceleration.x = deltaAcceleration;
+      physics[i].velocity.x = deltaVelocity;
+    }
+  } else if (!state[SDL_SCANCODE_RIGHT]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.x > 0) {
+        physics[i].velocity.x = 0.0f;
+      }
     }
   }
 
-  if (currentKeyStates[SDL_SCANCODE_SPACE]) {
+  if (state[SDL_SCANCODE_SPACE]) {
     Locator::logger().print("Space key pressed");
 
     for (int i = begin; i < size; i++) {
