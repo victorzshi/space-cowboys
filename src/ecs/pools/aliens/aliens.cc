@@ -34,7 +34,8 @@ void Aliens::initialize() {
   grid.gutter.height = WIDTH / 4;
   grid.rows = ROWS;
   grid.columns = COLUMNS;
-  grid.center = {e_->viewport().w / 2, ROWS * WIDTH};
+  grid.center.x = e_->viewport().w / 2;
+  grid.center.y = -(ROWS * WIDTH / 2 + ROWS * WIDTH / 4 / 2);
 
   SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
 
