@@ -7,6 +7,10 @@ on:
   schedule:
     - cron: "0 0 * * SUN"
 
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     name: build-${{ matrix.os }}
@@ -20,6 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          token: ${{ secrets.PAT }}
           ref: ${{ github.head_ref }}  
           submodules: true
 
