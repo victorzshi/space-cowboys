@@ -18,6 +18,7 @@ void UpdatePosition::update(Engine& e) {
   for (int i = 0; i < active.size; i++) {
     int id = active.ids[i];
 
+    physics[id].velocity += physics[id].acceleration;
     transform[id].position += physics[id].velocity;
     collider[id].update(transform[id].position);
   }

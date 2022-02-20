@@ -47,8 +47,8 @@ class Pool {
   // Returns last valid index of the allocated array.
   int end();
 
-  void activate(int index);
-  void deactivate(int index);
+  bool activate(int index);
+  bool deactivate(int index);
 
  protected:
   Engine* e_;

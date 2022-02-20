@@ -30,22 +30,26 @@ int Pool::begin() { return begin_; }
 int Pool::size() { return size_; }
 int Pool::end() { return end_; }
 
-void Pool::activate(int index) {
+bool Pool::activate(int index) {
   assert(index >= size_);
 
-  if (size_ > end_) return;  // Do not blow memory up
+  if (size_ > end_) return false;  // Do not blow memory up
 
   memorySwap(index);
 
   size_++;
+
+  return true;
 }
 
-void Pool::deactivate(int index) {
+bool Pool::deactivate(int index) {
   assert(index < size_);
 
   size_--;
 
   memorySwap(index);
+
+  return true;
 }
 
 void Pool::memorySwap(int index) {

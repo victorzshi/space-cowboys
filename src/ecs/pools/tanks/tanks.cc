@@ -18,8 +18,11 @@ void Tanks::initialize() {
   for (int i = 0; i < TOTAL; i++) {
     int id = e_->createEntity();
 
-    transform_[id].position.x = static_cast<float>(e_->viewport().w / 2);
-    transform_[id].position.y = static_cast<float>(e_->viewport().h - 100);
+    float x = static_cast<float>(e_->viewport().w / 2);
+    float y = static_cast<float>(e_->viewport().h - 100);
+
+    transform_[id].position.x = x + static_cast<float>(i) * 100.0f;
+    transform_[id].position.y = y;
 
     collider_[id].box.w = WIDTH;
     collider_[id].box.h = WIDTH;
