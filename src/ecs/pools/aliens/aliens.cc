@@ -24,8 +24,6 @@ struct Grid {
   SDL_Point center;
 };
 
-Aliens::Aliens() {}
-
 void Aliens::initialize() {
   Locator::logger().print("Initializing aliens...");
 

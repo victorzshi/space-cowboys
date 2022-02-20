@@ -2,32 +2,71 @@
 
 #include <SDL.h>
 
+#include "ecs/components/physics.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "ecs/pools/bullets/bullets.h"
+#include "ecs/pools/tanks/tanks.h"
 #include "services/locator.h"
 
 void InputPlayer::input(Engine& e) {
-  const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
+  const Uint8* keyboard = e.keyboard();
 
-  if (currentKeyStates[SDL_SCANCODE_LEFT]) {
+  Physics* physics = e.physics();
+  Timer* timer = e.timer();
+  Transform* transform = e.transform();
+
+  float deltaVelocity = e.tanks().DELTA_VELOCITY;
+
+  int begin = e.tanks().begin();
+  int size = e.tanks().size();
+
+  if (keyboard[SDL_SCANCODE_LEFT]) {
     Locator::logger().print("Left key pressed");
+
+    for (int i = begin; i < size; i++) {
+      physics[i].velocity.x = -deltaVelocity;
+    }
+  } else if (!keyboard[SDL_SCANCODE_LEFT]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.x < 0) {
+        physics[i].velocity.x = 0.0f;
+      }
+    }
   }
 
-  if (currentKeyStates[SDL_SCANCODE_RIGHT]) {
+  if (keyboard[SDL_SCANCODE_RIGHT]) {
     Locator::logger().print("Right key pressed");
+
+    for (int i = begin; i < size; i++) {
+      physics[i].velocity.x = deltaVelocity;
+    }
+  } else if (!keyboard[SDL_SCANCODE_RIGHT]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.x > 0) {
+        physics[i].velocity.x = 0.0f;
+      }
+    }
   }
 
-  if (currentKeyStates[SDL_SCANCODE_SPACE]) {
+  if (keyboard[SDL_SCANCODE_SPACE]) {
     Locator::logger().print("Space key pressed");
 
-    Transform* transform = e.transform();
+    Uint64 cooldown = e.tanks().BULLET_COOLDOWN;
 
-    int index = e.bullets().size();
+    Uint64 current = SDL_GetTicks64();
 
-    transform[index].position.x = static_cast<float>(e.viewport().w / 2);
-    transform[index].position.y = static_cast<float>(e.viewport().h - 100);
+    for (int i = begin; i < size; i++) {
+      if (timer[i].elapsed(current) >= cooldown) {
+        int bullet = e.bullets().size();
 
-    e.bullets().activate(index);
+        if (e.bullets().activate(bullet)) {
+          transform[bullet].position = transform[i].position;
+
+          timer[i].previous = current;
+        }
+      }
+    }
   }
 }

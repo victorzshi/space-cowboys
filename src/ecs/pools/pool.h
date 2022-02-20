@@ -5,6 +5,7 @@ struct AI;
 struct Collider;
 struct Physics;
 struct Sprite;
+struct Timer;
 struct Transform;
 
 class Pool {
@@ -47,8 +48,8 @@ class Pool {
   // Returns last valid index of the allocated array.
   int end();
 
-  void activate(int index);
-  void deactivate(int index);
+  bool activate(int index);
+  bool deactivate(int index);
 
  protected:
   Engine* e_;
@@ -57,6 +58,7 @@ class Pool {
   Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;
+  Timer* timer_;
   Transform* transform_;
 
   int begin_;

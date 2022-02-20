@@ -22,7 +22,7 @@ void RenderSprite::render(Engine& e, float delay) {
   Active active = e.active();
 
   for (int i = 0; i < active.size; i++) {
-    int id = active.indexes[i];
+    int id = active.ids[i];
 
     SDL_Rect box = collider[id].box;
 

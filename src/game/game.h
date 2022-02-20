@@ -23,6 +23,8 @@ class Game {
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
+  SDL_Rect viewport_;
+  const Uint8* keyboard_;
 
   ECS ecs_;
 };
