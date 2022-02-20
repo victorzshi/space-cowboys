@@ -16,7 +16,7 @@ void RenderCollider::render(Engine& e) {
 
   SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
   for (int i = 0; i < active.size; i++) {
-    int id = active.indexes[i];
+    int id = active.ids[i];
 
     SDL_RenderDrawRect(renderer, &collider[id].box);
   }

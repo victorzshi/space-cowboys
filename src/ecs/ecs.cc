@@ -21,7 +21,7 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   sprite_ = new Sprite[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
 
-  active_.indexes = new int[MAX_ENTITIES];
+  active_.ids = new int[MAX_ENTITIES];
   active_.size = 0;
 
   aliens_.setEngine(this);
@@ -91,14 +91,14 @@ void ECS::updateActive() {
   int begin = aliens_.begin();
   int size = aliens_.size();
   for (int i = begin; i < size; i++) {
-    active_.indexes[index] = i;
+    active_.ids[index] = i;
     index++;
   }
 
   begin = bullets_.begin();
   size = bullets_.size();
   for (int i = begin; i < size; i++) {
-    active_.indexes[index] = i;
+    active_.ids[index] = i;
     index++;
   }
 

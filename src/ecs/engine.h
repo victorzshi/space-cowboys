@@ -16,7 +16,7 @@ class Aliens;
 class Bullets;
 
 struct Active {
-  int* indexes;
+  int* ids;
   int size;
 };
 
