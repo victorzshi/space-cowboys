@@ -31,7 +31,7 @@ ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
   tanks_.setEngine(this);
 }
 
-void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport, 
+void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
                      const Uint8* keyboard) {
   renderer_ = renderer;
   viewport_ = viewport;

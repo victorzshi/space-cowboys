@@ -30,7 +30,7 @@ class Engine {
   virtual ~Engine() = default;
   Engine(const Engine& other) = default;
 
-  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport, 
+  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
                           const Uint8* keyboard) = 0;
   virtual void terminate() = 0;
 

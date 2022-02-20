@@ -11,7 +11,7 @@ class ECS : public Engine {
  public:
   ECS();
 
-  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport, 
+  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
                           const Uint8* keyboard) override;
   virtual void terminate() override;
 
