@@ -1,4 +1,4 @@
-#include "process_input.h"
+#include "input_player.h"
 
 #include <SDL.h>
 
@@ -6,7 +6,7 @@
 #include "ecs/pools/bullets/bullets.h"
 #include "services/locator.h"
 
-void ProcessInput::input(Engine& e) {
+void InputPlayer::input(Engine& e) {
   const Uint8* currentKeyStates = SDL_GetKeyboardState(nullptr);
 
   if (currentKeyStates[SDL_SCANCODE_LEFT]) {
