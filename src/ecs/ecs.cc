@@ -21,6 +21,9 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   sprite_ = new Sprite[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
 
+  active_.indexes = new int[MAX_ENTITIES];
+  active_.size = 0;
+
   aliens_.setEngine(this);
   bullets_.setEngine(this);
 }
@@ -49,6 +52,7 @@ Physics* ECS::physics() { return physics_; }
 Sprite* ECS::sprite() { return sprite_; }
 Transform* ECS::transform() { return transform_; }
 
+Active& ECS::active() { return active_; }
 Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
 
@@ -85,8 +89,8 @@ void ECS::input() {
 }
 
 void ECS::update() {
-  //
   UpdatePosition::update(*this);
+  updateActive();
 }
 
 void ECS::render(float delay) {
@@ -95,4 +99,24 @@ void ECS::render(float delay) {
 #ifdef DEBUG
   RenderCollider::render(*this);
 #endif
+}
+
+void ECS::updateActive() {
+  int index = 0;
+
+  int begin = aliens_.begin();
+  int size = aliens_.size();
+  for (int i = begin; i < size; i++) {
+    active_.indexes[index] = i;
+    index++;
+  }
+
+  begin = bullets_.begin();
+  size = bullets_.size();
+  for (int i = begin; i < size; i++) {
+    active_.indexes[index] = i;
+    index++;
+  }
+
+  active_.size = index;
 }

@@ -29,6 +29,7 @@ void UpdatePosition::updateActive(Engine& e, Pool& pool) {
   }
 }
 
+// TODO(Victor): This should be its own system.
 void UpdatePosition::updateAliensPath(Engine& e) {
   AI* ai = e.ai();
   Transform* transform = e.transform();
@@ -50,6 +51,7 @@ void UpdatePosition::updateAliensPath(Engine& e) {
   }
 }
 
+// TODO(Victor): This should be its own system. Huge side effects.
 void UpdatePosition::resolveBulletHit(Engine& e) {
   Collider* collider = e.collider();
 

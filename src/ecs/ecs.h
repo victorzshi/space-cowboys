@@ -22,6 +22,7 @@ class ECS : public Engine {
   virtual Sprite* sprite() override;
   virtual Transform* transform() override;
 
+  virtual Active& active() override;
   virtual Aliens& aliens() override;
   virtual Bullets& bullets() override;
 
@@ -47,6 +48,9 @@ class ECS : public Engine {
   Sprite* sprite_;
   Transform* transform_;
 
+  Active active_;
   Aliens aliens_;
   Bullets bullets_;
+
+  void updateActive();
 };

@@ -9,4 +9,6 @@ class RenderCollider {
 
  private:
   static void renderActive(Engine& e, Pool& pool);
+
+  static void renderAllActive(Engine& e);
 };

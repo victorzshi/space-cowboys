@@ -15,6 +15,11 @@ struct Transform;
 class Aliens;
 class Bullets;
 
+struct Active {
+  int* indexes;
+  int size;
+};
+
 class Engine {
  public:
   Engine() {}
@@ -33,6 +38,7 @@ class Engine {
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
 
+  virtual Active& active() = 0;
   virtual Aliens& aliens() = 0;
   virtual Bullets& bullets() = 0;
 
