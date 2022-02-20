@@ -8,6 +8,7 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "ecs/systems/input_ai/input_ai.h"
 #include "ecs/systems/process_input/process_input.h"
 #include "ecs/systems/render_collider/render_collider.h"
 #include "ecs/systems/render_sprite/render_sprite.h"
@@ -73,8 +74,8 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
 }
 
 void ECS::input() {
-  //
   ProcessInput::input(*this);
+  InputAI::input(*this);
 }
 
 void ECS::update() {
