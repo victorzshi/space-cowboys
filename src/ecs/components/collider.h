@@ -11,6 +11,11 @@ struct Collider {
 
   SDL_Rect render(Vector2 position) { return createBox(position, box); }
 
+  bool isHit(SDL_Rect other) {
+    return box.x <= other.x + other.w && box.y <= other.y + other.h &&
+           box.x + box.w >= other.x && box.y + box.h >= other.y;
+  }
+
  private:
   SDL_Rect createBox(Vector2 position, SDL_Rect rect) {
     float offsetX = static_cast<float>(rect.w) * 0.5f;

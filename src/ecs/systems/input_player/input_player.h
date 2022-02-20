@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ecs/engine.h"
+class Engine;
 
-class ProcessInput {
+class InputPlayer {
  public:
   static void input(Engine& e);
 };

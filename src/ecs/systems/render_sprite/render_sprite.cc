@@ -6,10 +6,17 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
+#include "ecs/engine.h"
+#include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "vector2/vector2.h"
 
 void RenderSprite::render(Engine& e, float delay) {
+  renderActive(e, delay, e.bullets());
+  renderActive(e, delay, e.aliens());
+}
+
+void RenderSprite::renderActive(Engine& e, float delay, Pool& pool) {
   SDL_Renderer* renderer = e.renderer();
 
   Collider* collider = e.collider();
@@ -17,18 +24,19 @@ void RenderSprite::render(Engine& e, float delay) {
   Sprite* sprite = e.sprite();
   Transform* transform = e.transform();
 
-  int begin = e.bullets().begin();
-  int active = e.bullets().active();
-  for (int id = begin; id < active; id++) {
-    SDL_Rect box = collider[id].box;
+  int begin = pool.begin();
+  int active = pool.active();
+
+  for (int i = begin; i < active; i++) {
+    SDL_Rect box = collider[i].box;
 
     if (delay > 0) {
-      Vector2 velocity = physics[id].velocity * delay;
-      Vector2 position = transform[id].position + velocity;
+      Vector2 velocity = physics[i].velocity * delay;
+      Vector2 position = transform[i].position + velocity;
 
-      box = collider[id].render(position);
+      box = collider[i].render(position);
     }
 
-    SDL_RenderCopy(renderer, sprite[id].texture, nullptr, &box);
+    SDL_RenderCopy(renderer, sprite[i].texture, nullptr, &box);
   }
 }

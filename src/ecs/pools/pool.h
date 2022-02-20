@@ -1,19 +1,41 @@
 #pragma once
 
 class Engine;
+struct AI;
+struct Collider;
+struct Physics;
+struct Sprite;
+struct Transform;
 
 class Pool {
  public:
-  Pool() {}
+  Pool();
   virtual ~Pool() = default;
   Pool(const Pool& other) = default;
 
-  virtual void initialize(Engine& e, int total) = 0;
+  void setEngine(Engine* e);
 
-  virtual int begin() = 0;
-  virtual int active() = 0;
-  virtual int end() = 0;
+  virtual void initialize() = 0;
 
-  virtual void activate(Engine& e, int id) = 0;
-  virtual void deactivate(Engine& e, int id) = 0;
+  int begin();
+  int active();
+  int end();
+
+  void activate(int index);
+  void deactivate(int index);
+
+ protected:
+  Engine* e_;
+
+  AI* ai_;
+  Collider* collider_;
+  Physics* physics_;
+  Sprite* sprite_;
+  Transform* transform_;
+
+  int begin_;
+  int active_;
+  int end_;
+
+  void memorySwap(int index);
 };

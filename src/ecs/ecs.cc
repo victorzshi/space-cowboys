@@ -3,41 +3,53 @@
 #include <SDL_image.h>
 #include <assert.h>
 
+#include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
-#include "ecs/systems/process_input/process_input.h"
+#include "ecs/systems/input_ai/input_ai.h"
+#include "ecs/systems/input_player/input_player.h"
 #include "ecs/systems/render_collider/render_collider.h"
 #include "ecs/systems/render_sprite/render_sprite.h"
 #include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
+  ai_ = new AI[MAX_ENTITIES];
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
   sprite_ = new Sprite[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
+
+  aliens_.setEngine(this);
+  bullets_.setEngine(this);
 }
 
 void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
   viewport_ = viewport;
   renderer_ = renderer;
 
-  bullets_.initialize(*this, 1000);
+  aliens_.initialize();
+  bullets_.initialize();
 }
 
 void ECS::terminate() {
-  // Do stuff
+  for (int i = 0; i < id_; i++) {
+    SDL_DestroyTexture(sprite_[i].texture);
+    sprite_[i].texture = nullptr;
+  }
 }
 
 SDL_Rect& ECS::viewport() { return viewport_; }
 SDL_Renderer* ECS::renderer() { return renderer_; }
 
+AI* ECS::ai() { return ai_; }
 Collider* ECS::collider() { return collider_; }
 Physics* ECS::physics() { return physics_; }
 Sprite* ECS::sprite() { return sprite_; }
 Transform* ECS::transform() { return transform_; }
 
+Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
 
 int ECS::createEntity() {
@@ -68,8 +80,8 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
 }
 
 void ECS::input() {
-  //
-  ProcessInput::input(*this);
+  InputPlayer::input(*this);
+  InputAI::input(*this);
 }
 
 void ECS::update() {

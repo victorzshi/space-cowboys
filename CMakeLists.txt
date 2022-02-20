@@ -16,8 +16,11 @@ find_package(Catch2 CONFIG REQUIRED)
 add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/ecs.cc"
+  "src/ecs/pools/pool.cc"
+  "src/ecs/pools/aliens/aliens.cc"
   "src/ecs/pools/bullets/bullets.cc"
-  "src/ecs/systems/process_input/process_input.cc"
+  "src/ecs/systems/input_ai/input_ai.cc"
+  "src/ecs/systems/input_player/input_player.cc"
   "src/ecs/systems/render_collider/render_collider.cc"
   "src/ecs/systems/update_position/update_position.cc"
   "src/ecs/systems/render_sprite/render_sprite.cc"
