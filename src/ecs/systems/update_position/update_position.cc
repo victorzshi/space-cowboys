@@ -38,7 +38,7 @@ void UpdatePosition::updateAliensPath(Engine& e) {
   int size = e.aliens().size();
 
   for (int i = begin; i < size; i++) {
-    if (e.isOutOfBounds(collider[i].box)) {
+    if (e.isOutOfBoundsWidth(collider[i].box)) {
       for (int j = begin; j < size; j++) {
         transform[j].position -= physics[j].velocity;
         collider[j].update(transform[j].position);

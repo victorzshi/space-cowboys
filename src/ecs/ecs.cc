@@ -94,6 +94,13 @@ bool ECS::isOutOfBounds(SDL_Rect rect) {
          bottomRightX > viewport_.w || bottomRightY > viewport_.h;
 }
 
+bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
+  int topLeftX = rect.x;
+  int bottomRightX = rect.x + rect.w;
+
+  return topLeftX < viewport_.x || bottomRightX > viewport_.w;
+}
+
 void ECS::updateActive() {
   int index = 0;
 

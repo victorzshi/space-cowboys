@@ -53,6 +53,7 @@ class Engine {
   virtual int createEntity() = 0;
   virtual SDL_Texture* createTexture(std::string file) = 0;
   virtual bool isOutOfBounds(SDL_Rect rect) = 0;
+  virtual bool isOutOfBoundsWidth(SDL_Rect rect) = 0;
   virtual void updateActive() = 0;
 
   virtual void input() = 0;

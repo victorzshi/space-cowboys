@@ -23,7 +23,9 @@ void InputAI::input(Engine& e) {
       ai[i].prevDirection = ai[i].nextDirection;
       ai[i].nextDirection = Direction::DOWN;
 
-      ai[i].goalHeight += static_cast<float>(collider[i].box.h);
+      // TODO(Victor): Need a better way to account for the grid gutter.
+      ai[i].goalHeight +=
+          static_cast<float>(collider[i].box.h + collider[i].box.h / 4);
     }
 
     if (ai[i].nextDirection == Direction::DOWN &&
