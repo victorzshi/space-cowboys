@@ -9,11 +9,27 @@
 #include "ecs/pools/bullets/bullets.h"
 
 void UpdatePosition::update(Engine& e) {
-  updateAliens(e);
-  updateBullets(e);
+  updateActive(e, e.aliens());
+  updateActive(e, e.bullets());
+  updateAliensPath(e);
+  resolveBulletHit(e);
 }
 
-void UpdatePosition::updateAliens(Engine& e) {
+void UpdatePosition::updateActive(Engine& e, Pool& pool) {
+  Transform* transform = e.transform();
+  Physics* physics = e.physics();
+  Collider* collider = e.collider();
+
+  int begin = pool.begin();
+  int active = pool.active();
+
+  for (int i = begin; i < active; i++) {
+    transform[i].position += physics[i].velocity;
+    collider[i].update(transform[i].position);
+  }
+}
+
+void UpdatePosition::updateAliensPath(Engine& e) {
   AI* ai = e.ai();
   Transform* transform = e.transform();
   Physics* physics = e.physics();
@@ -21,12 +37,6 @@ void UpdatePosition::updateAliens(Engine& e) {
 
   int begin = e.aliens().begin();
   int active = e.aliens().active();
-
-  for (int i = begin; i < active; i++) {
-    physics[i].velocity = physics[i].velocity.limit(2.0f);
-    transform[i].position += physics[i].velocity;
-    collider[i].update(transform[i].position);
-  }
 
   for (int i = begin; i < active; i++) {
     if (e.isOutOfBounds(collider[i].box)) {
@@ -40,29 +50,25 @@ void UpdatePosition::updateAliens(Engine& e) {
   }
 }
 
-void UpdatePosition::updateBullets(Engine& e) {
+void UpdatePosition::resolveBulletHit(Engine& e) {
   Collider* collider = e.collider();
-  Transform* transform = e.transform();
-  Physics* physics = e.physics();
 
-  int begin = e.bullets().begin();
-  int active = e.bullets().active();
+  Bullets& bullets = e.bullets();
+  Aliens& aliens = e.aliens();
 
-  for (int i = begin; i < active; i++) {
-    transform[i].position += physics[i].velocity;
-    collider[i].update(transform[i].position);
-  }
+  int beginBullets = bullets.begin();
+  int beginAliens = aliens.begin();
 
-  for (int i = begin; i < e.bullets().active(); i++) {
+  for (int i = beginBullets; i < bullets.active(); i++) {
     if (e.isOutOfBounds(collider[i].box)) {
-      e.bullets().deactivate(i);
+      bullets.deactivate(i);
       continue;
     }
 
-    for (int j = e.aliens().begin(); j < e.aliens().active(); j++) {
+    for (int j = beginAliens; j < aliens.active(); j++) {
       if (collider[i].isHit(collider[j].box)) {
-        e.bullets().deactivate(i);
-        e.aliens().deactivate(j);
+        bullets.deactivate(i);
+        aliens.deactivate(j);
         break;
       }
     }
