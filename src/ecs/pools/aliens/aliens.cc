@@ -29,21 +29,16 @@ Aliens::Aliens() {}
 void Aliens::initialize() {
   Locator::logger().print("Initializing aliens...");
 
-  int rows = 4;
-  int columns = 11;
-  int width = 36;
-  float deltaVelocity = 1.0f;
-
   Grid grid;
-  grid.cell.width = width;
-  grid.cell.height = width;
-  grid.gutter.width = width / 4;
-  grid.gutter.height = width / 4;
-  grid.rows = rows;
-  grid.columns = columns;
-  grid.center = {e_->viewport().w / 2, rows * width};
+  grid.cell.width = WIDTH;
+  grid.cell.height = WIDTH;
+  grid.gutter.width = WIDTH / 4;
+  grid.gutter.height = WIDTH / 4;
+  grid.rows = ROWS;
+  grid.columns = COLUMNS;
+  grid.center = {e_->viewport().w / 2, ROWS * WIDTH};
 
-  SDL_Texture* texture = e_->createTexture("alien.png");
+  SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
 
   int index = 0;
   std::vector<Vector2> positions = createPositions(grid);
@@ -52,10 +47,10 @@ void Aliens::initialize() {
 
     transform_[id].position = positions[i];
 
-    physics_[id].velocity.x = -deltaVelocity;
+    physics_[id].velocity.x = -DELTA_VELOCITY;
 
-    collider_[id].box.w = width;
-    collider_[id].box.h = width;
+    collider_[id].box.w = WIDTH;
+    collider_[id].box.h = WIDTH;
 
     ai_[id].nextDirection = Direction::LEFT;
     ai_[id].goalHeight = transform_[id].position.y;
@@ -66,7 +61,7 @@ void Aliens::initialize() {
     index = id;
   }
 
-  begin_ = index - (rows * columns - 1);
+  begin_ = index - (ROWS * COLUMNS - 1);
   active_ = index + 1;
   end_ = index;
 }

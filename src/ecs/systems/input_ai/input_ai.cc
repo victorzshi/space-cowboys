@@ -34,19 +34,19 @@ void InputAI::input(Engine& e) {
       ai[i].prevDirection = Direction::DOWN;
     }
 
-    // TODO(Victor): Remove hardcoded velocity changes.
+    float deltaVelocity = e.aliens().DELTA_VELOCITY;
     switch (ai[i].nextDirection) {
       case Direction::LEFT:
-        physics[i].velocity.x = -1.0f;
+        physics[i].velocity.x = -deltaVelocity;
         physics[i].velocity.y = 0.0f;
         break;
       case Direction::RIGHT:
-        physics[i].velocity.x = 1.0f;
+        physics[i].velocity.x = deltaVelocity;
         physics[i].velocity.y = 0.0f;
         break;
       case Direction::DOWN:
         physics[i].velocity.x = 0.0f;
-        physics[i].velocity.y = 1.0f;
+        physics[i].velocity.y = deltaVelocity;
         break;
     }
   }
