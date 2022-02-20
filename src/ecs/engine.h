@@ -15,6 +15,11 @@ struct Transform;
 class Aliens;
 class Bullets;
 
+struct Active {
+  int* indexes;
+  int size;
+};
+
 class Engine {
  public:
   Engine() {}
@@ -33,12 +38,14 @@ class Engine {
   virtual Sprite* sprite() = 0;
   virtual Transform* transform() = 0;
 
+  virtual Active& active() = 0;
   virtual Aliens& aliens() = 0;
   virtual Bullets& bullets() = 0;
 
   virtual int createEntity() = 0;
   virtual SDL_Texture* createTexture(std::string file) = 0;
   virtual bool isOutOfBounds(SDL_Rect rect) = 0;
+  virtual void updateActive() = 0;
 
   virtual void input() = 0;
   virtual void update() = 0;

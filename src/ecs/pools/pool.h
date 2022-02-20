@@ -17,8 +17,34 @@ class Pool {
 
   virtual void initialize() = 0;
 
+  /*
+      BEGIN    SIZE    END       pointers
+        v       v       v
+   ...  4   5   6   7   8  ...   array indexes
+  | - | X | X | - | - | - | - |  contiguous array
+
+  X = active data
+  - = inactive data
+
+  In this case, there are two active indexes at 4 and 5.
+  Therefore the size of the pool is 2.
+  However, to get the correct array index:
+
+  SIZE = total active + array's first index
+  SIZE = 2 + BEGIN
+  SIZE = 2 + 4
+  SIZE = 6
+  */
+
+  // Returns first valid index of the allocated array.
   int begin();
-  int active();
+  // Returns current size plus offset.
+  // Equivalent to first inactive index of the allocated array.
+  // Since Pool keeps the array sorted:
+  // 1. index < size are active
+  // 2. index >= size are inactive
+  int size();
+  // Returns last valid index of the allocated array.
   int end();
 
   void activate(int index);
@@ -34,7 +60,7 @@ class Pool {
   Transform* transform_;
 
   int begin_;
-  int active_;
+  int size_;
   int end_;
 
  private:

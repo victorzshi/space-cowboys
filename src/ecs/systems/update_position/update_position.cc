@@ -9,26 +9,24 @@
 #include "ecs/pools/bullets/bullets.h"
 
 void UpdatePosition::update(Engine& e) {
-  updateActive(e, e.aliens());
-  updateActive(e, e.bullets());
-  updateAliensPath(e);
-  resolveBulletHit(e);
-}
-
-void UpdatePosition::updateActive(Engine& e, Pool& pool) {
   Transform* transform = e.transform();
   Physics* physics = e.physics();
   Collider* collider = e.collider();
 
-  int begin = pool.begin();
-  int active = pool.active();
+  Active active = e.active();
 
-  for (int i = begin; i < active; i++) {
-    transform[i].position += physics[i].velocity;
-    collider[i].update(transform[i].position);
+  for (int i = 0; i < active.size; i++) {
+    int id = active.indexes[i];
+
+    transform[id].position += physics[id].velocity;
+    collider[id].update(transform[id].position);
   }
+
+  updateAliensPath(e);
+  resolveBulletHit(e);
 }
 
+// TODO(Victor): This should be its own system.
 void UpdatePosition::updateAliensPath(Engine& e) {
   AI* ai = e.ai();
   Transform* transform = e.transform();
@@ -36,11 +34,11 @@ void UpdatePosition::updateAliensPath(Engine& e) {
   Collider* collider = e.collider();
 
   int begin = e.aliens().begin();
-  int active = e.aliens().active();
+  int size = e.aliens().size();
 
-  for (int i = begin; i < active; i++) {
+  for (int i = begin; i < size; i++) {
     if (e.isOutOfBounds(collider[i].box)) {
-      for (int j = begin; j < active; j++) {
+      for (int j = begin; j < size; j++) {
         transform[j].position -= physics[j].velocity;
         collider[j].update(transform[j].position);
         ai[j].isPathEnd = true;
@@ -50,6 +48,7 @@ void UpdatePosition::updateAliensPath(Engine& e) {
   }
 }
 
+// TODO(Victor): This should be its own system. Huge side effects.
 void UpdatePosition::resolveBulletHit(Engine& e) {
   Collider* collider = e.collider();
 
@@ -59,13 +58,13 @@ void UpdatePosition::resolveBulletHit(Engine& e) {
   int beginBullets = bullets.begin();
   int beginAliens = aliens.begin();
 
-  for (int i = beginBullets; i < bullets.active(); i++) {
+  for (int i = beginBullets; i < bullets.size(); i++) {
     if (e.isOutOfBounds(collider[i].box)) {
       bullets.deactivate(i);
       continue;
     }
 
-    for (int j = beginAliens; j < aliens.active(); j++) {
+    for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
         bullets.deactivate(i);
         aliens.deactivate(j);

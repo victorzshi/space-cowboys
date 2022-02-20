@@ -27,47 +27,47 @@ void Pool::setEngine(Engine* e) {
 }
 
 int Pool::begin() { return begin_; }
-int Pool::active() { return active_; }
+int Pool::size() { return size_; }
 int Pool::end() { return end_; }
 
 void Pool::activate(int index) {
-  assert(index >= active_);
+  assert(index >= size_);
 
-  if (active_ > end_) return;  // Do not blow memory up
+  if (size_ > end_) return;  // Do not blow memory up
 
   memorySwap(index);
 
-  active_++;
+  size_++;
 }
 
 void Pool::deactivate(int index) {
-  assert(index < active_);
+  assert(index < size_);
 
-  active_--;
+  size_--;
 
   memorySwap(index);
 }
 
 void Pool::memorySwap(int index) {
-  if (active_ == index) return;
+  if (size_ == index) return;
 
-  AI aiSwap = ai_[active_];
-  ai_[active_] = ai_[index];
+  AI aiSwap = ai_[size_];
+  ai_[size_] = ai_[index];
   ai_[index] = aiSwap;
 
-  Collider colliderSwap = collider_[active_];
-  collider_[active_] = collider_[index];
+  Collider colliderSwap = collider_[size_];
+  collider_[size_] = collider_[index];
   collider_[index] = colliderSwap;
 
-  Physics physicsSwap = physics_[active_];
-  physics_[active_] = physics_[index];
+  Physics physicsSwap = physics_[size_];
+  physics_[size_] = physics_[index];
   physics_[index] = physicsSwap;
 
-  Sprite spriteSwap = sprite_[active_];
-  sprite_[active_] = sprite_[index];
+  Sprite spriteSwap = sprite_[size_];
+  sprite_[size_] = sprite_[index];
   sprite_[index] = spriteSwap;
 
-  Transform transformSwap = transform_[active_];
-  transform_[active_] = transform_[index];
+  Transform transformSwap = transform_[size_];
+  transform_[size_] = transform_[index];
   transform_[index] = transformSwap;
 }
