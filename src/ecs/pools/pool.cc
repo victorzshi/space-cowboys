@@ -6,6 +6,7 @@
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 
@@ -23,6 +24,7 @@ void Pool::setEngine(Engine* e) {
   collider_ = e->collider();
   physics_ = e->physics();
   sprite_ = e->sprite();
+  timer_ = e->timer();
   transform_ = e->transform();
 }
 
@@ -70,6 +72,10 @@ void Pool::memorySwap(int index) {
   Sprite spriteSwap = sprite_[size_];
   sprite_[size_] = sprite_[index];
   sprite_[index] = spriteSwap;
+
+  Timer timerSwap = timer_[size_];
+  timer_[size_] = timer_[index];
+  timer_[index] = timerSwap;
 
   Transform transformSwap = transform_[size_];
   transform_[size_] = transform_[index];

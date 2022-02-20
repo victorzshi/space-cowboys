@@ -15,7 +15,7 @@
 #include "ecs/systems/render_sprite/render_sprite.h"
 #include "ecs/systems/update_position/update_position.h"
 
-ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
+ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
   ai_ = new AI[MAX_ENTITIES];
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
@@ -31,10 +31,10 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   tanks_.setEngine(this);
 }
 
-void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer,
+void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport, 
                      const Uint8* keyboard) {
-  viewport_ = viewport;
   renderer_ = renderer;
+  viewport_ = viewport;
   keyboard_ = keyboard;
 
   aliens_.initialize();
@@ -51,8 +51,8 @@ void ECS::terminate() {
   }
 }
 
-SDL_Rect& ECS::viewport() { return viewport_; }
 SDL_Renderer* ECS::renderer() { return renderer_; }
+SDL_Rect& ECS::viewport() { return viewport_; }
 const Uint8* ECS::keyboard() { return keyboard_; }
 
 AI* ECS::ai() { return ai_; }

@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "ecs/components/physics.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "ecs/pools/bullets/bullets.h"
@@ -12,8 +13,9 @@
 void InputPlayer::input(Engine& e) {
   const Uint8* keyboard = e.keyboard();
 
-  Transform* transform = e.transform();
   Physics* physics = e.physics();
+  Timer* timer = e.timer();
+  Transform* transform = e.transform();
 
   float deltaVelocity = e.tanks().DELTA_VELOCITY;
 
@@ -51,11 +53,19 @@ void InputPlayer::input(Engine& e) {
   if (keyboard[SDL_SCANCODE_SPACE]) {
     Locator::logger().print("Space key pressed");
 
-    for (int i = begin; i < size; i++) {
-      int bullet = e.bullets().size();
+    Uint64 cooldown = e.tanks().BULLET_COOLDOWN;
 
-      if (e.bullets().activate(bullet)) {
-        transform[bullet].position = transform[i].position;
+    Uint64 current = SDL_GetTicks64();
+
+    for (int i = begin; i < size; i++) {
+      if (timer[i].elapsed(current) >= cooldown) {
+        int bullet = e.bullets().size();
+
+        if (e.bullets().activate(bullet)) {
+          transform[bullet].position = transform[i].position;
+
+          timer[i].previous = current;
+        }
       }
     }
   }

@@ -16,6 +16,8 @@ Game::Game() : isRunning_(true) {
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
+  viewport_ = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+
   keyboard_ = SDL_GetKeyboardState(nullptr);
 }
 
@@ -42,8 +44,7 @@ bool Game::initialize() {
   }
 
   // Initialize entities
-  SDL_Rect viewport = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-  ecs_.initialize(viewport, renderer_, keyboard_);
+  ecs_.initialize(renderer_, viewport_, keyboard_);
 
   return success;
 }

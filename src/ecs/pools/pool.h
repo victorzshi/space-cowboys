@@ -5,6 +5,7 @@ struct AI;
 struct Collider;
 struct Physics;
 struct Sprite;
+struct Timer;
 struct Transform;
 
 class Pool {
@@ -57,6 +58,7 @@ class Pool {
   Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;
+  Timer* timer_;
   Transform* transform_;
 
   int begin_;
