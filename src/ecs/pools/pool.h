@@ -20,9 +20,9 @@ class Pool {
   /*
       BEGIN    SIZE    END       pointers
         v       v       v
-   ...  4   5   6   7   8  ...   array indexes   
-  | - | X | X | - | - | - | - |  contiguous array 
-  
+   ...  4   5   6   7   8  ...   array indexes
+  | - | X | X | - | - | - | - |  contiguous array
+
   X = active data
   - = inactive data
 
