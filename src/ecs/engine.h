@@ -6,6 +6,12 @@ struct SDL_Rect;
 struct SDL_Renderer;
 struct SDL_Texture;
 
+
+
+
+
+
+
 struct AI;
 struct Collider;
 struct Physics;
