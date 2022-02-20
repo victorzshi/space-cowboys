@@ -19,6 +19,7 @@ target_sources(main PRIVATE
   "src/ecs/pools/pool.cc"
   "src/ecs/pools/aliens/aliens.cc"
   "src/ecs/pools/bullets/bullets.cc"
+  "src/ecs/pools/tanks/tanks.cc"
   "src/ecs/systems/input_ai/input_ai.cc"
   "src/ecs/systems/input_player/input_player.cc"
   "src/ecs/systems/render_collider/render_collider.cc"

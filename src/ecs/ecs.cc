@@ -7,6 +7,7 @@
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/systems/input_ai/input_ai.h"
 #include "ecs/systems/input_player/input_player.h"
@@ -19,6 +20,7 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
   sprite_ = new Sprite[MAX_ENTITIES];
+  timer_ = new Timer[MAX_ENTITIES];
   transform_ = new Transform[MAX_ENTITIES];
 
   active_.ids = new int[MAX_ENTITIES];
@@ -26,6 +28,7 @@ ECS::ECS() : id_(0), viewport_({0, 0, 0, 0}), renderer_(nullptr) {
 
   aliens_.setEngine(this);
   bullets_.setEngine(this);
+  tanks_.setEngine(this);
 }
 
 void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
@@ -34,6 +37,7 @@ void ECS::initialize(SDL_Rect viewport, SDL_Renderer* renderer) {
 
   aliens_.initialize();
   bullets_.initialize();
+  tanks_.initialize();
 
   updateActive();
 }
@@ -52,11 +56,13 @@ AI* ECS::ai() { return ai_; }
 Collider* ECS::collider() { return collider_; }
 Physics* ECS::physics() { return physics_; }
 Sprite* ECS::sprite() { return sprite_; }
+Timer* ECS::timer() { return timer_; }
 Transform* ECS::transform() { return transform_; }
 
 Active& ECS::active() { return active_; }
 Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
+Tanks& ECS::tanks() { return tanks_; }
 
 int ECS::createEntity() {
   assert(id_ < MAX_ENTITIES);
@@ -97,6 +103,13 @@ void ECS::updateActive() {
 
   begin = bullets_.begin();
   size = bullets_.size();
+  for (int i = begin; i < size; i++) {
+    active_.ids[index] = i;
+    index++;
+  }
+
+  begin = tanks_.begin();
+  size = tanks_.size();
   for (int i = begin; i < size; i++) {
     active_.ids[index] = i;
     index++;

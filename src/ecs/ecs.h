@@ -4,6 +4,7 @@
 
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
+#include "ecs/pools/tanks/tanks.h"
 #include "engine.h"
 
 class ECS : public Engine {
@@ -20,11 +21,13 @@ class ECS : public Engine {
   virtual Collider* collider() override;
   virtual Physics* physics() override;
   virtual Sprite* sprite() override;
+  virtual Timer* timer() override;
   virtual Transform* transform() override;
 
   virtual Active& active() override;
   virtual Aliens& aliens() override;
   virtual Bullets& bullets() override;
+  virtual Tanks& tanks() override;
 
   virtual int createEntity() override;
   virtual SDL_Texture* createTexture(std::string file) override;
@@ -47,9 +50,11 @@ class ECS : public Engine {
   Collider* collider_;
   Physics* physics_;
   Sprite* sprite_;
+  Timer* timer_;
   Transform* transform_;
 
   Active active_;
   Aliens aliens_;
   Bullets bullets_;
+  Tanks tanks_;
 };

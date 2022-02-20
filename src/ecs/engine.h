@@ -10,10 +10,12 @@ struct AI;
 struct Collider;
 struct Physics;
 struct Sprite;
+struct Timer;
 struct Transform;
 
 class Aliens;
 class Bullets;
+class Tanks;
 
 struct Active {
   int* ids;
@@ -36,11 +38,13 @@ class Engine {
   virtual Collider* collider() = 0;
   virtual Physics* physics() = 0;
   virtual Sprite* sprite() = 0;
+  virtual Timer* timer() = 0;
   virtual Transform* transform() = 0;
 
   virtual Active& active() = 0;
   virtual Aliens& aliens() = 0;
   virtual Bullets& bullets() = 0;
+  virtual Tanks& tanks() = 0;
 
   virtual int createEntity() = 0;
   virtual SDL_Texture* createTexture(std::string file) = 0;
