@@ -18,7 +18,7 @@ void UpdateHit::update(Engine& e) {
   Bullets& bullets = e.bullets();
   Particles& particles = e.particles();
 
-  Uint64 previous = SDL_GetTicks64();
+  Uint64 current = SDL_GetTicks64();
 
   int beginBullets = bullets.begin();
   int beginAliens = aliens.begin();
@@ -33,9 +33,11 @@ void UpdateHit::update(Engine& e) {
     for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
         int particle = particles.size();
+
         if (particles.activate(particle)) {
           transform[particle].position = transform[j].position;
-          timer[particle].previous = previous;
+          collider[particle].box = collider[j].box;
+          timer[particle].previous = current;
         }
 
         bullets.deactivate(i);

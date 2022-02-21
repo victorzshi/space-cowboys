@@ -45,8 +45,6 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   bullets_.initialize();
   particles_.initialize();
   tanks_.initialize();
-
-  updateActive();
 }
 
 void ECS::terminate() {

@@ -7,8 +7,6 @@
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "ecs/pools/aliens/aliens.h"
-#include "ecs/pools/bullets/bullets.h"
 #include "vector2/vector2.h"
 
 void RenderSprite::render(Engine& e, float delay) {

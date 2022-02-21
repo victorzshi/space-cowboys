@@ -3,7 +3,6 @@
 #include <SDL.h>
 
 #include "ecs/components/collider.h"
-#include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/engine.h"
 #include "services/locator.h"
