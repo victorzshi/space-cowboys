@@ -13,6 +13,9 @@
 #include "ecs/systems/input_player/input_player.h"
 #include "ecs/systems/render_collider/render_collider.h"
 #include "ecs/systems/render_sprite/render_sprite.h"
+#include "ecs/systems/update_ai/update_ai.h"
+#include "ecs/systems/update_hit/update_hit.h"
+#include "ecs/systems/update_particle/update_particle.h"
 #include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
@@ -28,6 +31,7 @@ ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
 
   aliens_.setEngine(this);
   bullets_.setEngine(this);
+  particles_.setEngine(this);
   tanks_.setEngine(this);
 }
 
@@ -39,9 +43,8 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
 
   aliens_.initialize();
   bullets_.initialize();
+  particles_.initialize();
   tanks_.initialize();
-
-  updateActive();
 }
 
 void ECS::terminate() {
@@ -65,6 +68,7 @@ Transform* ECS::transform() { return transform_; }
 Active& ECS::active() { return active_; }
 Aliens& ECS::aliens() { return aliens_; }
 Bullets& ECS::bullets() { return bullets_; }
+Particles& ECS::particles() { return particles_; }
 Tanks& ECS::tanks() { return tanks_; }
 
 int ECS::createEntity() {
@@ -118,6 +122,13 @@ void ECS::updateActive() {
     index++;
   }
 
+  begin = particles_.begin();
+  size = particles_.size();
+  for (int i = begin; i < size; i++) {
+    active_.ids[index] = i;
+    index++;
+  }
+
   begin = tanks_.begin();
   size = tanks_.size();
   for (int i = begin; i < size; i++) {
@@ -137,6 +148,9 @@ void ECS::input() {
 
 void ECS::update() {
   UpdatePosition::update(*this);
+  UpdateAI::update(*this);
+  UpdateHit::update(*this);
+  UpdateParticle::update(*this);
 
   updateActive();
 }

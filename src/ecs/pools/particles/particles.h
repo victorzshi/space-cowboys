@@ -7,13 +7,12 @@
 
 class Engine;
 
-class Tanks : public Pool {
+class Particles : public Pool {
  public:
-  const int TOTAL = 3;
+  const int TOTAL = 100;
   const int WIDTH = 72;
-  const Uint64 BULLET_COOLDOWN = 100;
-  const float DELTA_VELOCITY = 10.0f;
-  const char* TEXTURE_FILE = "tank.png";
+  const Uint64 DURATION = 150;
+  const char* TEXTURE_FILE = "explosion.png";
 
   virtual void initialize() override;
 };

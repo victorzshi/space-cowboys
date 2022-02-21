@@ -10,7 +10,7 @@ struct Grid;
 
 class Aliens : public Pool {
  public:
-  const int ROWS = 40;
+  const int ROWS = 20;
   const int COLUMNS = 20;
   const int WIDTH = 72;
   const float DELTA_VELOCITY = 5.0f;

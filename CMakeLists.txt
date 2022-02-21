@@ -15,20 +15,24 @@ find_package(Catch2 CONFIG REQUIRED)
 # main target
 add_executable(main)
 target_sources(main PRIVATE 
-  "src/ecs/ecs.cc"
-  "src/ecs/pools/pool.cc"
   "src/ecs/pools/aliens/aliens.cc"
   "src/ecs/pools/bullets/bullets.cc"
+  "src/ecs/pools/particles/particles.cc"
   "src/ecs/pools/tanks/tanks.cc"
+  "src/ecs/pools/pool.cc"
   "src/ecs/systems/input_ai/input_ai.cc"
   "src/ecs/systems/input_player/input_player.cc"
   "src/ecs/systems/render_collider/render_collider.cc"
-  "src/ecs/systems/update_position/update_position.cc"
   "src/ecs/systems/render_sprite/render_sprite.cc"
+  "src/ecs/systems/update_ai/update_ai.cc"
+  "src/ecs/systems/update_hit/update_hit.cc"
+  "src/ecs/systems/update_particle/update_particle.cc"
+  "src/ecs/systems/update_position/update_position.cc"
+  "src/ecs/ecs.cc"
   "src/game/game.cc"
-  "src/services/locator.cc"
   "src/services/logger/debug_logger/debug_logger.cc"
   "src/services/logger/release_logger/release_logger.cc"
+  "src/services/locator.cc"
   "src/vector2/vector2.cc"
   "src/main.cc" 
 )

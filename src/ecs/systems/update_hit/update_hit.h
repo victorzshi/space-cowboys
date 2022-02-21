@@ -2,7 +2,7 @@
 
 class Engine;
 
-class UpdatePosition {
+class UpdateHit {
  public:
   static void update(Engine& e);
 };

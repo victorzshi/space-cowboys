@@ -2,7 +2,7 @@
 
 class Engine;
 
-class UpdatePosition {
+class UpdateParticle {
  public:
   static void update(Engine& e);
 };

@@ -60,7 +60,6 @@ void InputPlayer::input(Engine& e) {
     for (int i = begin; i < size; i++) {
       if (timer[i].elapsed(current) >= cooldown) {
         int bullet = e.bullets().size();
-
         if (e.bullets().activate(bullet)) {
           transform[bullet].position = transform[i].position;
 

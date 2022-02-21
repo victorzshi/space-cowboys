@@ -4,8 +4,6 @@
 
 #include "ecs/components/collider.h"
 #include "ecs/engine.h"
-#include "ecs/pools/aliens/aliens.h"
-#include "ecs/pools/bullets/bullets.h"
 
 void RenderCollider::render(Engine& e) {
   SDL_Renderer* renderer = e.renderer();
