@@ -13,7 +13,7 @@ class Tanks : public Pool {
   const int WIDTH = 72;
   const Uint64 BULLET_COOLDOWN = 100;
   const float DELTA_VELOCITY = 20.0f;
-  const char* TEXTURE_FILE = "tank.png";
+  const char* TEXTURE_FILE = "cowboy.png";
 
   virtual void initialize() override;
 };

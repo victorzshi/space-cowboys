@@ -14,7 +14,7 @@ class Aliens : public Pool {
   const int COLUMNS = 20;
   const int WIDTH = 72;
   const float DELTA_VELOCITY = 5.0f;
-  const char* TEXTURE_FILE = "alien.png";
+  const char* TEXTURE_FILE = "space-invader.png";
 
   virtual void initialize() override;
 

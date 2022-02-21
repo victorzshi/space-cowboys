@@ -11,7 +11,7 @@ class Explosions : public Pool {
  public:
   const int TOTAL = 100;
   const Uint64 DURATION = 300;
-  const char* TEXTURE_FILE = "explosion.png";
+  const char* TEXTURE_FILE = "boom.png";
 
   virtual void initialize() override;
 };
