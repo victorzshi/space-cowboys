@@ -63,7 +63,7 @@ void InputAI::input(Engine& e) {
     // Shoot zapper
     if (timer[i].elapsed(current) >= cooldown) {
       float random = e.random(0.0f, 1.0f);
-      if (random > 0.9997f) {
+      if (random > 0.9999f) {
         int id = e.zappers().size();
         if (e.zappers().activate(id)) {
           transform[id].position = transform[i].position;

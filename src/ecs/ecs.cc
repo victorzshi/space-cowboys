@@ -95,6 +95,11 @@ SDL_Texture* ECS::createTexture(std::string file) {
   return texture;
 }
 
+bool ECS::isOutOfBounds(SDL_Rect rect) {
+  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w ||
+         rect.y < viewport_.y || rect.y + rect.h > viewport_.h;
+}
+
 bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
   return rect.x < viewport_.x || rect.x + rect.w > viewport_.w;
 }

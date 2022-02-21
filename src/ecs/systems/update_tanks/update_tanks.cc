@@ -16,7 +16,7 @@ void UpdateTanks::update(Engine& e) {
   int begin = tanks.begin();
   int size = tanks.size();
   for (int i = begin; i < size; i++) {
-    if (e.isOutOfBoundsWidth(collider[i].box)) {
+    if (e.isOutOfBounds(collider[i].box)) {
       for (int j = begin; j < size; j++) {
         transform[j].position -= physics[j].velocity;
         collider[j].update(transform[j].position);

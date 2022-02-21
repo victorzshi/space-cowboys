@@ -8,7 +8,7 @@ class Engine;
 
 class Bullets : public Pool {
  public:
-  const int TOTAL = 100;
+  const int TOTAL = 300;
   const int WIDTH = 18;
   const float DELTA_VELOCITY = 5.0f;
   const char* TEXTURE_FILE = "circle.png";

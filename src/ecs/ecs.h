@@ -41,6 +41,7 @@ class ECS : public Engine {
 
   virtual int createEntity() override;
   virtual SDL_Texture* createTexture(std::string file) override;
+  virtual bool isOutOfBounds(SDL_Rect rect) override;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) override;
   virtual bool isOutOfBoundsTop(SDL_Rect rect) override;
   virtual bool isOutOfBoundsBottom(SDL_Rect rect) override;
