@@ -17,6 +17,7 @@ struct Transform;
 
 class Aliens;
 class Bullets;
+class Particles;
 class Tanks;
 
 struct Active {
@@ -48,6 +49,7 @@ class Engine {
   virtual Active& active() = 0;
   virtual Aliens& aliens() = 0;
   virtual Bullets& bullets() = 0;
+  virtual Particles& particles() = 0;
   virtual Tanks& tanks() = 0;
 
   virtual int createEntity() = 0;

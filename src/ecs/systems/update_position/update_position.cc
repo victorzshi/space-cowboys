@@ -24,7 +24,6 @@ void UpdatePosition::update(Engine& e) {
   }
 
   updateAliensPath(e);
-  resolveBulletHit(e);
 }
 
 // TODO(Victor): This should be its own system.
@@ -45,32 +44,6 @@ void UpdatePosition::updateAliensPath(Engine& e) {
         ai[j].isPathEnd = true;
       }
       break;
-    }
-  }
-}
-
-// TODO(Victor): This should be its own system. Huge side effects.
-void UpdatePosition::resolveBulletHit(Engine& e) {
-  Collider* collider = e.collider();
-
-  Bullets& bullets = e.bullets();
-  Aliens& aliens = e.aliens();
-
-  int beginBullets = bullets.begin();
-  int beginAliens = aliens.begin();
-
-  for (int i = beginBullets; i < bullets.size(); i++) {
-    if (e.isOutOfBounds(collider[i].box)) {
-      bullets.deactivate(i);
-      continue;
-    }
-
-    for (int j = beginAliens; j < aliens.size(); j++) {
-      if (collider[i].isHit(collider[j].box)) {
-        bullets.deactivate(i);
-        aliens.deactivate(j);
-        break;
-      }
     }
   }
 }

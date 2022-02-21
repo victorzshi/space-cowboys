@@ -1,7 +1,6 @@
 #pragma once
 
 class Engine;
-class Pool;
 
 class UpdatePosition {
  public:
@@ -9,5 +8,4 @@ class UpdatePosition {
 
  private:
   static void updateAliensPath(Engine& e);
-  static void resolveBulletHit(Engine& e);
 };
