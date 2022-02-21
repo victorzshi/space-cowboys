@@ -7,5 +7,8 @@ class UpdateHit {
   static void update(Engine& e);
 
  private:
-  static void createExplosion(Engine& e, int index);
+  static void updateBullets(Engine& e);
+  static void updateZappers(Engine& e);
+  static void explodeAlien(Engine& e, int index);
+  static void explodeTank(Engine& e, int index);
 };

@@ -1,31 +1,39 @@
 #include "input_ai.h"
 
+#include <SDL.h>
+
 #include "ecs/components/ai.h"
-#include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "ecs/pools/aliens/aliens.h"
+#include "ecs/pools/zappers/zappers.h"
+#include "services/locator.h"
 
 void InputAI::input(Engine& e) {
   AI* ai = e.ai();
-  Collider* collider = e.collider();
   Physics* physics = e.physics();
+  Timer* timer = e.timer();
   Transform* transform = e.transform();
 
-  int begin = e.aliens().begin();
-  int size = e.aliens().size();
+  Aliens& aliens = e.aliens();
 
+  Uint64 cooldown = aliens.ZAPPER_COOLDOWN;
+
+  Uint64 current = SDL_GetTicks64();
+
+  int begin = aliens.begin();
+  int size = aliens.size();
   for (int i = begin; i < size; i++) {
+    // Update direction
     if (ai[i].isPathEnd) {
       ai[i].isPathEnd = false;
 
       ai[i].prevDirection = ai[i].nextDirection;
       ai[i].nextDirection = Direction::DOWN;
 
-      // TODO(Victor): Need a better way to account for the grid gutter.
-      ai[i].goalHeight +=
-          static_cast<float>(collider[i].box.h + collider[i].box.h / 4);
+      ai[i].goalHeight += static_cast<float>(aliens.WIDTH + aliens.GUTTER);
     }
 
     if (ai[i].nextDirection == Direction::DOWN &&
@@ -50,6 +58,19 @@ void InputAI::input(Engine& e) {
         physics[i].velocity.x = 0.0f;
         physics[i].velocity.y = deltaVelocity;
         break;
+    }
+
+    // Shoot zapper
+    if (timer[i].elapsed(current) >= cooldown) {
+      float random = e.random(0.0f, 1.0f);
+      if (random > 0.9999f) {
+        int id = e.zappers().size();
+        if (e.zappers().activate(id)) {
+          transform[id].position = transform[i].position;
+
+          timer[i].previous = current;
+        }
+      }
     }
   }
 }

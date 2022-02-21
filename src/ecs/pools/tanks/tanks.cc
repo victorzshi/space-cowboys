@@ -21,11 +21,11 @@ void Tanks::initialize() {
   for (int i = 0; i < TOTAL; i++) {
     int id = e_->createEntity();
 
-    float x = static_cast<float>(e_->viewport().w / 2);
+    int offsetX = -(TOTAL * WIDTH / 2) + (WIDTH / 2);
+    float x = static_cast<float>(e_->viewport().w / 2 + offsetX);
     float y = static_cast<float>(e_->viewport().h - WIDTH / 2);
 
-    // TODO(Victor): Fix hacky way to spawn more tanks.
-    transform_[id].position.x = x + static_cast<float>(i) * 100.0f;
+    transform_[id].position.x = x + static_cast<float>(i * WIDTH);
     transform_[id].position.y = y;
 
     collider_[id].box.w = WIDTH;

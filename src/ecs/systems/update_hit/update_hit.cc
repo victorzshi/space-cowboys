@@ -9,9 +9,16 @@
 #include "ecs/pools/bullets/bullets.h"
 #include "ecs/pools/explosions/explosions.h"
 #include "ecs/pools/particles/particles.h"
+#include "ecs/pools/tanks/tanks.h"
+#include "ecs/pools/zappers/zappers.h"
 #include "services/locator.h"
 
 void UpdateHit::update(Engine& e) {
+  updateBullets(e);
+  updateZappers(e);
+}
+
+void UpdateHit::updateBullets(Engine& e) {
   Collider* collider = e.collider();
 
   Aliens& aliens = e.aliens();
@@ -29,7 +36,7 @@ void UpdateHit::update(Engine& e) {
 
     for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
-        createExplosion(e, j);
+        explodeAlien(e, j);
 
         bullets.deactivate(i);
         aliens.deactivate(j);
@@ -40,7 +47,36 @@ void UpdateHit::update(Engine& e) {
   }
 }
 
-void UpdateHit::createExplosion(Engine& e, int index) {
+void UpdateHit::updateZappers(Engine& e) {
+  Collider* collider = e.collider();
+
+  Tanks& tanks = e.tanks();
+  Zappers& zappers = e.zappers();
+
+  int beginTanks = tanks.begin();
+  int beginZappers = zappers.begin();
+
+  for (int i = beginZappers; i < zappers.size(); i++) {
+    if (e.isOutOfBoundsBottom(collider[i].box)) {
+      zappers.deactivate(i);
+
+      continue;
+    }
+
+    for (int j = beginTanks; j < tanks.size(); j++) {
+      if (collider[i].isHit(collider[j].box)) {
+        explodeTank(e, j);
+
+        zappers.deactivate(i);
+        tanks.deactivate(j);
+
+        break;
+      }
+    }
+  }
+}
+
+void UpdateHit::explodeAlien(Engine& e, int index) {
   Collider* collider = e.collider();
   Physics* physics = e.physics();
   Timer* timer = e.timer();
@@ -69,5 +105,26 @@ void UpdateHit::createExplosion(Engine& e, int index) {
       collider[id].update(transform[id].position);
       timer[id].previous = current;
     }
+  }
+}
+
+void UpdateHit::explodeTank(Engine& e, int index) {
+  Collider* collider = e.collider();
+  Timer* timer = e.timer();
+  Transform* transform = e.transform();
+
+  Explosions& explosions = e.explosions();
+
+  Uint64 current = SDL_GetTicks64();
+
+  int id = explosions.size();
+  if (explosions.activate(id)) {
+    transform[id].position = transform[index].position;
+
+    collider[id].box.w = 144;
+    collider[id].box.h = 144;
+    collider[id].update(transform[id].position);
+
+    timer[id].previous = current;
   }
 }

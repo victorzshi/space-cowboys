@@ -21,6 +21,30 @@ void InputPlayer::input(Engine& e) {
   int begin = e.tanks().begin();
   int size = e.tanks().size();
 
+  if (keyboard[SDL_SCANCODE_UP]) {
+    for (int i = begin; i < size; i++) {
+      physics[i].velocity.y = -deltaVelocity;
+    }
+  } else if (!keyboard[SDL_SCANCODE_UP]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.y < 0) {
+        physics[i].velocity.y = 0.0f;
+      }
+    }
+  }
+
+  if (keyboard[SDL_SCANCODE_DOWN]) {
+    for (int i = begin; i < size; i++) {
+      physics[i].velocity.y = deltaVelocity;
+    }
+  } else if (!keyboard[SDL_SCANCODE_DOWN]) {
+    for (int i = begin; i < size; i++) {
+      if (physics[i].velocity.y > 0) {
+        physics[i].velocity.y = 0.0f;
+      }
+    }
+  }
+
   if (keyboard[SDL_SCANCODE_LEFT]) {
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = -deltaVelocity;
@@ -52,9 +76,9 @@ void InputPlayer::input(Engine& e) {
 
     for (int i = begin; i < size; i++) {
       if (timer[i].elapsed(current) >= cooldown) {
-        int bullet = e.bullets().size();
-        if (e.bullets().activate(bullet)) {
-          transform[bullet].position = transform[i].position;
+        int id = e.bullets().size();
+        if (e.bullets().activate(id)) {
+          transform[id].position = transform[i].position;
 
           timer[i].previous = current;
         }

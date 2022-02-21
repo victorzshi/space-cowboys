@@ -12,7 +12,7 @@ class Particles : public Pool {
   const int TOTAL = 300;
   const int WIDTH = 36;
   const Uint64 DURATION = 1000;
-  const char* TEXTURE_FILE = "alien-particle.png";
+  const char* TEXTURE_FILE = "alien.png";
 
   virtual void initialize() override;
 };
