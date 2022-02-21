@@ -9,9 +9,9 @@ class Engine;
 class Bullets : public Pool {
  public:
   const int TOTAL = 100;
-  const int WIDTH = 72;
+  const int WIDTH = 18;
   const float DELTA_VELOCITY = 5.0f;
-  const char* TEXTURE_FILE = "shaka.png";
+  const char* TEXTURE_FILE = "circle.png";
 
   virtual void initialize() override;
 };
