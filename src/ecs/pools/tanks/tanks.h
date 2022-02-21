@@ -9,9 +9,9 @@ class Engine;
 
 class Tanks : public Pool {
  public:
-  const int TOTAL = 3;
+  const int TOTAL = 1;
   const int WIDTH = 72;
-  const Uint64 BULLET_COOLDOWN = 100;
+  const Uint64 BULLET_COOLDOWN = 500;
   const float DELTA_VELOCITY = 10.0f;
   const char* TEXTURE_FILE = "tank.png";
 

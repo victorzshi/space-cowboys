@@ -4,8 +4,6 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "ecs/pools/aliens/aliens.h"
-#include "ecs/pools/bullets/bullets.h"
 
 void UpdatePosition::update(Engine& e) {
   Collider* collider = e.collider();
@@ -20,5 +18,6 @@ void UpdatePosition::update(Engine& e) {
     physics[id].velocity += physics[id].acceleration;
     transform[id].position += physics[id].velocity;
     collider[id].update(transform[id].position);
+    physics[id].acceleration = Vector2();
   }
 }

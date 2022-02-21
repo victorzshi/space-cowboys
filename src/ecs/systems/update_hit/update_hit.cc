@@ -1,6 +1,7 @@
 #include "update_hit.h"
 
 #include "ecs/components/collider.h"
+#include "ecs/components/physics.h"
 #include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
@@ -11,6 +12,7 @@
 
 void UpdateHit::update(Engine& e) {
   Collider* collider = e.collider();
+  Physics* physics = e.physics();
   Timer* timer = e.timer();
   Transform* transform = e.transform();
 
@@ -34,8 +36,28 @@ void UpdateHit::update(Engine& e) {
       if (collider[i].isHit(collider[j].box)) {
         int particle = particles.size();
         if (particles.activate(particle)) {
+          physics[particle].acceleration = Vector2(-3.0f, 0.0f);
+          physics[particle].velocity = Vector2(-3.0f, 0.0f);
           transform[particle].position = transform[j].position;
-          collider[particle].box = collider[j].box;
+          collider[particle].update(transform[particle].position);
+          timer[particle].previous = current;
+        }
+
+        particle += 1;
+        if (particles.activate(particle)) {
+          physics[particle].acceleration = Vector2(0.0f, -3.0f);
+          physics[particle].velocity = Vector2(0.0f, -3.0f);
+          transform[particle].position = transform[j].position;
+          collider[particle].update(transform[particle].position);
+          timer[particle].previous = current;
+        }
+
+        particle += 1;
+        if (particles.activate(particle)) {
+          physics[particle].acceleration = Vector2(3.0f, 0.0f);
+          physics[particle].velocity = Vector2(3.0f, 0.0f);
+          transform[particle].position = transform[j].position;
+          collider[particle].update(transform[particle].position);
           timer[particle].previous = current;
         }
 
