@@ -1,4 +1,4 @@
-#include "update_ai.h"
+#include "update_aliens.h"
 
 #include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
@@ -7,14 +7,16 @@
 #include "ecs/engine.h"
 #include "ecs/pools/aliens/aliens.h"
 
-void UpdateAI::update(Engine& e) {
+void UpdateAliens::update(Engine& e) {
   AI* ai = e.ai();
   Collider* collider = e.collider();
   Physics* physics = e.physics();
   Transform* transform = e.transform();
 
-  int begin = e.aliens().begin();
-  int size = e.aliens().size();
+  Aliens& aliens = e.aliens();
+
+  int begin = aliens.begin();
+  int size = aliens.size();
 
   for (int i = begin; i < size; i++) {
     if (e.isOutOfBoundsWidth(collider[i].box)) {

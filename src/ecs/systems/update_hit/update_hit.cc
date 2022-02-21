@@ -7,6 +7,7 @@
 #include "ecs/engine.h"
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
+#include "ecs/pools/explosions/explosions.h"
 #include "ecs/pools/particles/particles.h"
 #include "services/locator.h"
 
@@ -20,7 +21,7 @@ void UpdateHit::update(Engine& e) {
   int beginAliens = aliens.begin();
 
   for (int i = beginBullets; i < bullets.size(); i++) {
-    if (e.isOutOfBounds(collider[i].box)) {
+    if (e.isOutOfBoundsTop(collider[i].box)) {
       bullets.deactivate(i);
 
       continue;
@@ -45,12 +46,20 @@ void UpdateHit::createExplosion(Engine& e, int index) {
   Timer* timer = e.timer();
   Transform* transform = e.transform();
 
+  Explosions& explosions = e.explosions();
   Particles& particles = e.particles();
 
   Uint64 current = SDL_GetTicks64();
 
+  int id = explosions.size();
+  if (explosions.activate(id)) {
+    transform[id].position = transform[index].position;
+    collider[id].box = collider[index].box;
+    timer[id].previous = current;
+  }
+
   for (int i = 0; i < 3; i++) {
-    int id = particles.size();
+    id = particles.size();
     if (particles.activate(id)) {
       float x = e.random(-5.0f, 5.0f);
       float y = e.random(-5.0f, 5.0f);

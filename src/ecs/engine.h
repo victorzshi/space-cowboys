@@ -17,6 +17,7 @@ struct Transform;
 
 class Aliens;
 class Bullets;
+class Explosions;
 class Particles;
 class Tanks;
 
@@ -48,14 +49,15 @@ class Engine {
 
   virtual Active& active() = 0;
   virtual Aliens& aliens() = 0;
+  virtual Explosions& explosions() = 0;
   virtual Bullets& bullets() = 0;
   virtual Particles& particles() = 0;
   virtual Tanks& tanks() = 0;
 
   virtual int createEntity() = 0;
   virtual SDL_Texture* createTexture(std::string file) = 0;
-  virtual bool isOutOfBounds(SDL_Rect rect) = 0;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) = 0;
+  virtual bool isOutOfBoundsTop(SDL_Rect rect) = 0;
   virtual bool isOutOfBoundsBottom(SDL_Rect rect) = 0;
   virtual void updateActive() = 0;
   virtual float random(float min, float max) = 0;

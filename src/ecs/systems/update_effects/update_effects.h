@@ -2,7 +2,7 @@
 
 class Engine;
 
-class UpdateAI {
+class UpdateEffects {
  public:
   static void update(Engine& e);
 };

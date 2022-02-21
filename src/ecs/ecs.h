@@ -6,6 +6,7 @@
 
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
+#include "ecs/pools/explosions/explosions.h"
 #include "ecs/pools/particles/particles.h"
 #include "ecs/pools/tanks/tanks.h"
 #include "engine.h"
@@ -32,13 +33,14 @@ class ECS : public Engine {
   virtual Active& active() override;
   virtual Aliens& aliens() override;
   virtual Bullets& bullets() override;
+  virtual Explosions& explosions() override;
   virtual Particles& particles() override;
   virtual Tanks& tanks() override;
 
   virtual int createEntity() override;
   virtual SDL_Texture* createTexture(std::string file) override;
-  virtual bool isOutOfBounds(SDL_Rect rect) override;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) override;
+  virtual bool isOutOfBoundsTop(SDL_Rect rect) override;
   virtual bool isOutOfBoundsBottom(SDL_Rect rect) override;
   virtual void updateActive() override;
   virtual float random(float min, float max) override;
@@ -66,6 +68,7 @@ class ECS : public Engine {
   Active active_;
   Aliens aliens_;
   Bullets bullets_;
+  Explosions explosions_;
   Particles particles_;
   Tanks tanks_;
 };

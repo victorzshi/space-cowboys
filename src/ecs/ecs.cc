@@ -13,10 +13,11 @@
 #include "ecs/systems/input_player/input_player.h"
 #include "ecs/systems/render_collider/render_collider.h"
 #include "ecs/systems/render_sprite/render_sprite.h"
-#include "ecs/systems/update_ai/update_ai.h"
+#include "ecs/systems/update_aliens/update_aliens.h"
+#include "ecs/systems/update_effects/update_effects.h"
 #include "ecs/systems/update_hit/update_hit.h"
-#include "ecs/systems/update_particle/update_particle.h"
 #include "ecs/systems/update_position/update_position.h"
+#include "ecs/systems/update_tanks/update_tanks.h"
 
 ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
   ai_ = new AI[MAX_ENTITIES];
@@ -31,6 +32,7 @@ ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
 
   aliens_.setEngine(this);
   bullets_.setEngine(this);
+  explosions_.setEngine(this);
   particles_.setEngine(this);
   tanks_.setEngine(this);
 }
@@ -43,6 +45,7 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
 
   aliens_.initialize();
   bullets_.initialize();
+  explosions_.initialize();
   particles_.initialize();
   tanks_.initialize();
 }
@@ -67,6 +70,7 @@ Transform* ECS::transform() { return transform_; }
 
 Active& ECS::active() { return active_; }
 Aliens& ECS::aliens() { return aliens_; }
+Explosions& ECS::explosions() { return explosions_; }
 Bullets& ECS::bullets() { return bullets_; }
 Particles& ECS::particles() { return particles_; }
 Tanks& ECS::tanks() { return tanks_; }
@@ -88,14 +92,11 @@ SDL_Texture* ECS::createTexture(std::string file) {
   return texture;
 }
 
-bool ECS::isOutOfBounds(SDL_Rect rect) {
-  return rect.x < viewport_.x || rect.y < viewport_.y ||
-         rect.x + rect.w > viewport_.w || rect.y + rect.h > viewport_.h;
-}
-
 bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
   return rect.x < viewport_.x || rect.x + rect.w > viewport_.w;
 }
+
+bool ECS::isOutOfBoundsTop(SDL_Rect rect) { return rect.y < viewport_.y; }
 
 bool ECS::isOutOfBoundsBottom(SDL_Rect rect) {
   return rect.y + rect.h > viewport_.h;
@@ -113,6 +114,13 @@ void ECS::updateActive() {
 
   begin = bullets_.begin();
   size = bullets_.size();
+  for (int i = begin; i < size; i++) {
+    active_.ids[index] = i;
+    index++;
+  }
+
+  begin = explosions_.begin();
+  size = explosions_.size();
   for (int i = begin; i < size; i++) {
     active_.ids[index] = i;
     index++;
@@ -151,9 +159,10 @@ void ECS::input() {
 
 void ECS::update() {
   UpdatePosition::update(*this);
-  UpdateAI::update(*this);
+  UpdateTanks::update(*this);
+  UpdateAliens::update(*this);
   UpdateHit::update(*this);
-  UpdateParticle::update(*this);
+  UpdateEffects::update(*this);
 
   updateActive();
 }
