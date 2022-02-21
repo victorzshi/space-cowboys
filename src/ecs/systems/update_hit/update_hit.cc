@@ -33,7 +33,6 @@ void UpdateHit::update(Engine& e) {
     for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
         int particle = particles.size();
-
         if (particles.activate(particle)) {
           transform[particle].position = transform[j].position;
           collider[particle].box = collider[j].box;
