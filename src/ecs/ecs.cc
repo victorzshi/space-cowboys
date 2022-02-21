@@ -89,20 +89,16 @@ SDL_Texture* ECS::createTexture(std::string file) {
 }
 
 bool ECS::isOutOfBounds(SDL_Rect rect) {
-  int topLeftX = rect.x;
-  int topLeftY = rect.y;
-  int bottomRightX = rect.x + rect.w;
-  int bottomRightY = rect.y + rect.h;
-
-  return topLeftX < viewport_.x || topLeftY < viewport_.y ||
-         bottomRightX > viewport_.w || bottomRightY > viewport_.h;
+  return rect.x < viewport_.x || rect.y < viewport_.y ||
+         rect.x + rect.w > viewport_.w || rect.y + rect.h > viewport_.h;
 }
 
 bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
-  int topLeftX = rect.x;
-  int bottomRightX = rect.x + rect.w;
+  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w;
+}
 
-  return topLeftX < viewport_.x || bottomRightX > viewport_.w;
+bool ECS::isOutOfBoundsBottom(SDL_Rect rect) {
+  return rect.y + rect.h > viewport_.h;
 }
 
 void ECS::updateActive() {
@@ -137,6 +133,13 @@ void ECS::updateActive() {
   }
 
   active_.size = index;
+}
+
+float ECS::random(float min, float max) {
+  std::random_device rd;
+  std::mt19937 gen(rd());
+  std::uniform_real_distribution<float> dis(min, max);
+  return dis(gen);
 }
 
 void ECS::input() {

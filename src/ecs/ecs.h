@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 
+#include <random>
+
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "ecs/pools/particles/particles.h"
@@ -37,7 +39,9 @@ class ECS : public Engine {
   virtual SDL_Texture* createTexture(std::string file) override;
   virtual bool isOutOfBounds(SDL_Rect rect) override;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) override;
+  virtual bool isOutOfBoundsBottom(SDL_Rect rect) override;
   virtual void updateActive() override;
+  virtual float random(float min, float max) override;
 
   virtual void input() override;
   virtual void update() override;
