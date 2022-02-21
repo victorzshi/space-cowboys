@@ -8,7 +8,6 @@
 #include "ecs/engine.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "ecs/pools/tanks/tanks.h"
-#include "services/locator.h"
 
 void InputPlayer::input(Engine& e) {
   const Uint8* keyboard = e.keyboard();
@@ -23,8 +22,6 @@ void InputPlayer::input(Engine& e) {
   int size = e.tanks().size();
 
   if (keyboard[SDL_SCANCODE_LEFT]) {
-    Locator::logger().print("Left key pressed");
-
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = -deltaVelocity;
     }
@@ -37,8 +34,6 @@ void InputPlayer::input(Engine& e) {
   }
 
   if (keyboard[SDL_SCANCODE_RIGHT]) {
-    Locator::logger().print("Right key pressed");
-
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = deltaVelocity;
     }
@@ -51,8 +46,6 @@ void InputPlayer::input(Engine& e) {
   }
 
   if (keyboard[SDL_SCANCODE_SPACE]) {
-    Locator::logger().print("Space key pressed");
-
     Uint64 cooldown = e.tanks().BULLET_COOLDOWN;
 
     Uint64 current = SDL_GetTicks64();

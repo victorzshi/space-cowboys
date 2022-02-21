@@ -12,15 +12,9 @@
 
 void UpdateHit::update(Engine& e) {
   Collider* collider = e.collider();
-  Physics* physics = e.physics();
-  Timer* timer = e.timer();
-  Transform* transform = e.transform();
 
   Aliens& aliens = e.aliens();
   Bullets& bullets = e.bullets();
-  Particles& particles = e.particles();
-
-  Uint64 current = SDL_GetTicks64();
 
   int beginBullets = bullets.begin();
   int beginAliens = aliens.begin();
@@ -34,38 +28,37 @@ void UpdateHit::update(Engine& e) {
 
     for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
-        int particle = particles.size();
-        if (particles.activate(particle)) {
-          physics[particle].acceleration = Vector2(-3.0f, 0.0f);
-          physics[particle].velocity = Vector2(-3.0f, 0.0f);
-          transform[particle].position = transform[j].position;
-          collider[particle].update(transform[particle].position);
-          timer[particle].previous = current;
-        }
-
-        particle += 1;
-        if (particles.activate(particle)) {
-          physics[particle].acceleration = Vector2(0.0f, -3.0f);
-          physics[particle].velocity = Vector2(0.0f, -3.0f);
-          transform[particle].position = transform[j].position;
-          collider[particle].update(transform[particle].position);
-          timer[particle].previous = current;
-        }
-
-        particle += 1;
-        if (particles.activate(particle)) {
-          physics[particle].acceleration = Vector2(3.0f, 0.0f);
-          physics[particle].velocity = Vector2(3.0f, 0.0f);
-          transform[particle].position = transform[j].position;
-          collider[particle].update(transform[particle].position);
-          timer[particle].previous = current;
-        }
+        createExplosion(e, j);
 
         bullets.deactivate(i);
         aliens.deactivate(j);
 
         break;
       }
+    }
+  }
+}
+
+void UpdateHit::createExplosion(Engine& e, int index) {
+  Collider* collider = e.collider();
+  Physics* physics = e.physics();
+  Timer* timer = e.timer();
+  Transform* transform = e.transform();
+
+  Particles& particles = e.particles();
+
+  Uint64 current = SDL_GetTicks64();
+
+  for (int i = 0; i < 3; i++) {
+    int id = particles.size();
+    if (particles.activate(id)) {
+      float x = e.random(-5.0f, 5.0f);
+      float y = e.random(-5.0f, 5.0f);
+      physics[id].acceleration = Vector2(x, y);
+      physics[id].velocity = Vector2(x, y);
+      transform[id].position = transform[index].position;
+      collider[id].update(transform[id].position);
+      timer[id].previous = current;
     }
   }
 }

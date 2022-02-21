@@ -18,6 +18,7 @@ void UpdatePosition::update(Engine& e) {
     physics[id].velocity += physics[id].acceleration;
     transform[id].position += physics[id].velocity;
     collider[id].update(transform[id].position);
+
     physics[id].acceleration = Vector2();
   }
 }

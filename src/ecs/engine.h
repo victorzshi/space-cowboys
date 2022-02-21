@@ -56,7 +56,9 @@ class Engine {
   virtual SDL_Texture* createTexture(std::string file) = 0;
   virtual bool isOutOfBounds(SDL_Rect rect) = 0;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) = 0;
+  virtual bool isOutOfBoundsBottom(SDL_Rect rect) = 0;
   virtual void updateActive() = 0;
+  virtual float random(float min, float max) = 0;
 
   virtual void input() = 0;
   virtual void update() = 0;
