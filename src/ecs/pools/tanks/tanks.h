@@ -9,7 +9,7 @@ class Engine;
 
 class Tanks : public Pool {
  public:
-  const int TOTAL = 3;
+  const int TOTAL = 5;
   const int WIDTH = 72;
   const Uint64 BULLET_COOLDOWN = 100;
   const float DELTA_VELOCITY = 20.0f;

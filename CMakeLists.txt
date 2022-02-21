@@ -20,6 +20,7 @@ target_sources(main PRIVATE
   "src/ecs/pools/explosions/explosions.cc"
   "src/ecs/pools/particles/particles.cc"
   "src/ecs/pools/tanks/tanks.cc"
+  "src/ecs/pools/zappers/zappers.cc"
   "src/ecs/pools/pool.cc"
   "src/ecs/systems/input_ai/input_ai.cc"
   "src/ecs/systems/input_player/input_player.cc"

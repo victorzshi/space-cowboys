@@ -20,6 +20,7 @@ class Bullets;
 class Explosions;
 class Particles;
 class Tanks;
+class Zappers;
 
 struct Active {
   int* ids;
@@ -53,6 +54,7 @@ class Engine {
   virtual Bullets& bullets() = 0;
   virtual Particles& particles() = 0;
   virtual Tanks& tanks() = 0;
+  virtual Zappers& zappers() = 0;
 
   virtual int createEntity() = 0;
   virtual SDL_Texture* createTexture(std::string file) = 0;

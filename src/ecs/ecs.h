@@ -9,6 +9,7 @@
 #include "ecs/pools/explosions/explosions.h"
 #include "ecs/pools/particles/particles.h"
 #include "ecs/pools/tanks/tanks.h"
+#include "ecs/pools/zappers/zappers.h"
 #include "engine.h"
 
 class ECS : public Engine {
@@ -36,6 +37,7 @@ class ECS : public Engine {
   virtual Explosions& explosions() override;
   virtual Particles& particles() override;
   virtual Tanks& tanks() override;
+  virtual Zappers& zappers() override;
 
   virtual int createEntity() override;
   virtual SDL_Texture* createTexture(std::string file) override;
@@ -50,7 +52,7 @@ class ECS : public Engine {
   virtual void render(float delay) override;
 
  private:
-  static const int MAX_ENTITIES = 2000;
+  static const int MAX_ENTITIES = 3000;
 
   int id_;
 
@@ -71,4 +73,5 @@ class ECS : public Engine {
   Explosions explosions_;
   Particles particles_;
   Tanks tanks_;
+  Zappers zappers_;
 };

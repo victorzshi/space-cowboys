@@ -35,6 +35,7 @@ ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
   explosions_.setEngine(this);
   particles_.setEngine(this);
   tanks_.setEngine(this);
+  zappers_.setEngine(this);
 }
 
 void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
@@ -48,6 +49,7 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   explosions_.initialize();
   particles_.initialize();
   tanks_.initialize();
+  zappers_.initialize();
 }
 
 void ECS::terminate() {
@@ -74,6 +76,7 @@ Explosions& ECS::explosions() { return explosions_; }
 Bullets& ECS::bullets() { return bullets_; }
 Particles& ECS::particles() { return particles_; }
 Tanks& ECS::tanks() { return tanks_; }
+Zappers& ECS::zappers() { return zappers_; }
 
 int ECS::createEntity() {
   assert(id_ < MAX_ENTITIES);
@@ -135,6 +138,13 @@ void ECS::updateActive() {
 
   begin = tanks_.begin();
   size = tanks_.size();
+  for (int i = begin; i < size; i++) {
+    active_.ids[index] = i;
+    index++;
+  }
+
+  begin = zappers_.begin();
+  size = zappers_.size();
   for (int i = begin; i < size; i++) {
     active_.ids[index] = i;
     index++;

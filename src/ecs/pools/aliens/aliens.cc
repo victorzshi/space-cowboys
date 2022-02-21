@@ -7,6 +7,7 @@
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "services/locator.h"
@@ -30,14 +31,16 @@ void Aliens::initialize() {
   Grid grid;
   grid.cell.width = WIDTH;
   grid.cell.height = WIDTH;
-  grid.gutter.width = WIDTH / 4;
-  grid.gutter.height = WIDTH / 4;
+  grid.gutter.width = GUTTER;
+  grid.gutter.height = GUTTER;
   grid.rows = ROWS;
   grid.columns = COLUMNS;
   grid.center.x = e_->viewport().w / 2;
-  grid.center.y = -(ROWS * WIDTH / 2 + ROWS * WIDTH / 4 / 2);
+  grid.center.y = -(ROWS * WIDTH / 2 + ROWS * GUTTER / 2);
 
   SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
+
+  Uint64 previous = SDL_GetTicks64();
 
   int index = 0;
   std::vector<Vector2> positions = createPositions(grid);
@@ -56,6 +59,8 @@ void Aliens::initialize() {
     ai_[id].isPathEnd = false;
 
     sprite_[id].texture = texture;
+
+    timer_[id].previous = previous;
 
     index = id;
   }
