@@ -2,7 +2,7 @@
 
 class Engine;
 
-class UpdateParticle {
+class UpdateTanks {
  public:
   static void update(Engine& e);
 };
