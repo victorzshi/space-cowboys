@@ -28,13 +28,13 @@ void UpdateHit::update(Engine& e) {
 
     for (int j = beginAliens; j < aliens.size(); j++) {
       if (collider[i].isHit(collider[j].box)) {
-        bullets.deactivate(i);
-        aliens.deactivate(j);
-
         int particle = particles.size();
         if (particles.activate(particle)) {
           transform[particle].position = transform[i].position;
         }
+
+        bullets.deactivate(i);
+        aliens.deactivate(j);
 
         break;
       }

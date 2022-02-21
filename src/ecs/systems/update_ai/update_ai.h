@@ -2,7 +2,7 @@
 
 class Engine;
 
-class UpdatePosition {
+class UpdateAI {
  public:
   static void update(Engine& e);
 };

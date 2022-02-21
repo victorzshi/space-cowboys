@@ -13,6 +13,7 @@
 #include "ecs/systems/input_player/input_player.h"
 #include "ecs/systems/render_collider/render_collider.h"
 #include "ecs/systems/render_sprite/render_sprite.h"
+#include "ecs/systems/update_ai/update_ai.h"
 #include "ecs/systems/update_hit/update_hit.h"
 #include "ecs/systems/update_position/update_position.h"
 
@@ -148,6 +149,7 @@ void ECS::input() {
 
 void ECS::update() {
   UpdatePosition::update(*this);
+  UpdateAI::update(*this);
   UpdateHit::update(*this);
 
   updateActive();
