@@ -15,6 +15,7 @@
 #include "ecs/systems/render_sprite/render_sprite.h"
 #include "ecs/systems/update_ai/update_ai.h"
 #include "ecs/systems/update_hit/update_hit.h"
+#include "ecs/systems/update_particle/update_particle.h"
 #include "ecs/systems/update_position/update_position.h"
 
 ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
@@ -151,6 +152,7 @@ void ECS::update() {
   UpdatePosition::update(*this);
   UpdateAI::update(*this);
   UpdateHit::update(*this);
+  UpdateParticle::update(*this);
 
   updateActive();
 }

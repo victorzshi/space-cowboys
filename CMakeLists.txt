@@ -26,6 +26,7 @@ target_sources(main PRIVATE
   "src/ecs/systems/render_sprite/render_sprite.cc"
   "src/ecs/systems/update_ai/update_ai.cc"
   "src/ecs/systems/update_hit/update_hit.cc"
+  "src/ecs/systems/update_particle/update_particle.cc"
   "src/ecs/systems/update_position/update_position.cc"
   "src/ecs/ecs.cc"
   "src/game/game.cc"

@@ -1,6 +1,7 @@
 #include "update_hit.h"
 
 #include "ecs/components/collider.h"
+#include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
 #include "ecs/pools/aliens/aliens.h"
@@ -10,11 +11,14 @@
 
 void UpdateHit::update(Engine& e) {
   Collider* collider = e.collider();
+  Timer* timer = e.timer();
   Transform* transform = e.transform();
 
   Aliens& aliens = e.aliens();
   Bullets& bullets = e.bullets();
   Particles& particles = e.particles();
+
+  Uint64 previous = SDL_GetTicks64();
 
   int beginBullets = bullets.begin();
   int beginAliens = aliens.begin();
@@ -30,7 +34,8 @@ void UpdateHit::update(Engine& e) {
       if (collider[i].isHit(collider[j].box)) {
         int particle = particles.size();
         if (particles.activate(particle)) {
-          transform[particle].position = transform[i].position;
+          transform[particle].position = transform[j].position;
+          timer[particle].previous = previous;
         }
 
         bullets.deactivate(i);

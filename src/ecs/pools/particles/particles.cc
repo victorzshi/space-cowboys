@@ -1,7 +1,6 @@
 #include "particles.h"
 
 #include <SDL.h>
-#include <time.h>
 
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
@@ -14,15 +13,9 @@ void Particles::initialize() {
 
   SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
 
-  unsigned int seed = static_cast<unsigned int>(time(nullptr));
-  srand(seed);
-
   int index = 0;
   for (int i = 0; i < TOTAL; i++) {
     int id = e_->createEntity();
-
-    physics_[id].velocity.x = -DELTA_VELOCITY;
-    physics_[id].velocity.y = -DELTA_VELOCITY;
 
     collider_[id].box.w = WIDTH;
     collider_[id].box.h = WIDTH;
