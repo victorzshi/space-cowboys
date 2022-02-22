@@ -108,7 +108,7 @@ bool ECS::isOutOfBoundsTop(SDL_Rect rect) { return rect.y < viewport_.y; }
 
 bool ECS::isOutOfBoundsBottom(SDL_Rect rect) {
   // TODO(Victor): Screen is a bit lower than expected.
-  return rect.y + rect.h > viewport_.h + 200; 
+  return rect.y + rect.h > viewport_.h + 200;
 }
 
 void ECS::updateActive() {
