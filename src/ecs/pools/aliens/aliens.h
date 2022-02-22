@@ -11,12 +11,12 @@ struct Grid;
 
 class Aliens : public Pool {
  public:
-  const int ROWS = 40;
-  const int COLUMNS = 15;
-  const int WIDTH = 72;
-  const int GUTTER = 36;
+  const int ROWS = 100;
+  const int COLUMNS = 20;
+  const int WIDTH = 36;
+  const int GUTTER = 18;
   const Uint64 ZAPPER_COOLDOWN = 3000;
-  const float DELTA_VELOCITY = 5.0f;
+  const float DELTA_VELOCITY = 10.0f;
   const char* TEXTURE_FILE = "space-invader.png";
 
   virtual void initialize() override;

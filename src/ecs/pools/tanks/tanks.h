@@ -10,8 +10,8 @@ class Engine;
 class Tanks : public Pool {
  public:
   const int TOTAL = 5;
-  const int WIDTH = 72;
-  const Uint64 BULLET_COOLDOWN = 100;
+  const int WIDTH = 36;
+  const Uint64 BULLET_COOLDOWN = 50;
   const float DELTA_VELOCITY = 10.0f;
   const char* TEXTURE_FILE = "cowboy.png";
 
