@@ -30,7 +30,9 @@ cmake --build build
 
 ## About
 
-Graphics provided by Twemoji ([CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)).
+Graphics provided by [Twemoji](https://twemoji.twitter.com/).
+
+ASCII art provided by [Text to ASCII Art Generator](https://patorjk.com/software/taag/).
 
 ## License
 
