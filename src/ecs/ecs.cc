@@ -1,6 +1,7 @@
 #include "ecs.h"
 
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <assert.h>
 
 #include "ecs/components/ai.h"
@@ -19,7 +20,11 @@
 #include "ecs/systems/update_position/update_position.h"
 #include "ecs/systems/update_tanks/update_tanks.h"
 
-ECS::ECS() : id_(0), renderer_(nullptr), viewport_({0, 0, 0, 0}) {
+ECS::ECS()
+    : id_(0),
+      isStartScreen_(true),
+      renderer_(nullptr),
+      viewport_({0, 0, 0, 0}) {
   ai_ = new AI[MAX_ENTITIES];
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
@@ -50,6 +55,8 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   particles_.initialize();
   tanks_.initialize();
   zappers_.initialize();
+
+  initializeStartScreen();
 }
 
 void ECS::terminate() {
@@ -167,26 +174,63 @@ float ECS::random(float min, float max) {
 }
 
 void ECS::input() {
-  InputPlayer::input(*this);
-  InputAI::input(*this);
+  if (isStartScreen_) {
+    if (keyboard_[SDL_SCANCODE_SPACE]) {
+      isStartScreen_ = false;
+    }
+  } else {
+    InputPlayer::input(*this);
+    InputAI::input(*this);
 
-  updateActive();
+    updateActive();
+  }
 }
 
 void ECS::update() {
-  UpdatePosition::update(*this);
-  UpdateTanks::update(*this);
-  UpdateAliens::update(*this);
-  UpdateHit::update(*this);
-  UpdateEffects::update(*this);
+  if (!isStartScreen_) {
+    UpdatePosition::update(*this);
+    UpdateTanks::update(*this);
+    UpdateAliens::update(*this);
+    UpdateHit::update(*this);
+    UpdateEffects::update(*this);
 
-  updateActive();
+    updateActive();
+  }
 }
 
 void ECS::render(float delay) {
-  RenderSprite::render(*this, delay);
-
+  if (isStartScreen_) {
+    SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.rect);
+    SDL_RenderCopy(renderer_, start_.texture, nullptr, &start_.rect);
+  } else {
+    RenderSprite::render(*this, delay);
 #ifdef DEBUG
-  RenderCollider::render(*this);
+    RenderCollider::render(*this);
 #endif
+  }
+}
+
+void ECS::initializeStartScreen() {
+  TTF_Font* font =
+      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 72);
+  SDL_Color color = {255, 255, 255, 255};
+
+  const char* title = "Space Cowboys";
+  const char* start = "Press SPACE to start";
+
+  SDL_Surface* titleSurface = TTF_RenderText_Solid(font, title, color);
+  SDL_Surface* startSurface = TTF_RenderText_Solid(font, start, color);
+
+  title_.texture = SDL_CreateTextureFromSurface(renderer_, titleSurface);
+  start_.texture = SDL_CreateTextureFromSurface(renderer_, startSurface);
+
+  int x = viewport_.w / 2 - titleSurface->w / 2;
+  int y = viewport_.h / 2 - titleSurface->h / 2;
+  title_.rect = {x, y, titleSurface->w, titleSurface->h};
+  x = viewport_.w / 2 - startSurface->w / 2;
+  y = viewport_.h / 2 - startSurface->h / 2 + titleSurface->h * 2;
+  start_.rect = {x, y, startSurface->w, startSurface->h};
+
+  SDL_FreeSurface(titleSurface);
+  SDL_FreeSurface(startSurface);
 }

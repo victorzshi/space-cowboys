@@ -12,6 +12,11 @@
 #include "ecs/pools/zappers/zappers.h"
 #include "engine.h"
 
+struct Texture {
+  SDL_Texture* texture;
+  SDL_Rect rect;
+};
+
 class ECS : public Engine {
  public:
   ECS();
@@ -56,6 +61,7 @@ class ECS : public Engine {
   static const int MAX_ENTITIES = 5000;
 
   int id_;
+  bool isStartScreen_;
 
   SDL_Renderer* renderer_;
   SDL_Rect viewport_;
@@ -75,4 +81,9 @@ class ECS : public Engine {
   Particles particles_;
   Tanks tanks_;
   Zappers zappers_;
+
+  Texture title_;
+  Texture start_;
+
+  void initializeStartScreen();
 };
