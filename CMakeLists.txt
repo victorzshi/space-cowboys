@@ -12,7 +12,7 @@ find_package(SDL2-image CONFIG REQUIRED)
 find_package(SDL2-ttf CONFIG REQUIRED)
 find_package(Catch2 CONFIG REQUIRED)
 
-# main target
+# Main target
 add_executable(main)
 target_sources(main PRIVATE 
   "src/ecs/pools/aliens/aliens.cc"
@@ -69,7 +69,7 @@ endif()
 # Define DEBUG macro
 target_compile_definitions(main PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 
-# tests target
+# Tests target
 add_executable(tests)
 target_sources(tests PRIVATE 
   "src/vector2/vector2.cc"
@@ -86,3 +86,24 @@ catch_discover_tests(tests)
 # Smoke test
 enable_testing()
 add_test(NAME "Smoke test" COMMAND main "--smoke-test")
+
+# Configure installer
+install(TARGETS main DESTINATION bin)
+install(DIRECTORY "data" DESTINATION bin)
+install(FILES 
+  "${PROJECT_BINARY_DIR}/SDL2.dll" 
+  "${PROJECT_BINARY_DIR}/SDL2_image.dll" 
+  "${PROJECT_BINARY_DIR}/SDL2_ttf.dll" 
+  "${PROJECT_BINARY_DIR}/freetype.dll" 
+  "${PROJECT_BINARY_DIR}/libpng16.dll" 
+  "${PROJECT_BINARY_DIR}/zlib1.dll" 
+  "${PROJECT_BINARY_DIR}/bz2.dll" 
+  "${PROJECT_BINARY_DIR}/brotlidec.dll" 
+  "${PROJECT_BINARY_DIR}/brotlicommon.dll" 
+  DESTINATION bin
+)
+
+include(InstallRequiredSystemLibraries)
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_PACKAGE_NAME "space-cowboys")
+include(CPack)

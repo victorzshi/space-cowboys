@@ -57,7 +57,7 @@ void UpdateHit::updateZappers(Engine& e) {
   int beginZappers = zappers.begin();
 
   for (int i = beginZappers; i < zappers.size(); i++) {
-    if (e.isOutOfBoundsBottom(collider[i].box, e.viewport().h / 4)) {
+    if (e.isOutOfBoundsBottom(collider[i].box, collider[i].box.h)) {
       zappers.deactivate(i);
 
       continue;

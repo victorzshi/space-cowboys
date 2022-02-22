@@ -14,8 +14,8 @@ class Game {
   void run(bool isSmokeTest = false);
 
  private:
-  static const int SCREEN_WIDTH = 1920;
-  static const int SCREEN_HEIGHT = 1080;
+  static const int SCREEN_WIDTH = 1366;
+  static const int SCREEN_HEIGHT = 768;
   static const int TICKS_PER_UPDATE = 16;
   static const int SMOKE_TEST_DURATION = 1000;
 

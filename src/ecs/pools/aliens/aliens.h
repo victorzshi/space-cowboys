@@ -16,7 +16,7 @@ class Aliens : public Pool {
   const int WIDTH = 36;
   const int GUTTER = 18;
   const Uint64 ZAPPER_COOLDOWN = 3000;
-  const float DELTA_VELOCITY = 10.0f;
+  const float DELTA_VELOCITY = 5.0f;
   const char* TEXTURE_FILE = "space-invader.png";
 
   virtual void initialize() override;

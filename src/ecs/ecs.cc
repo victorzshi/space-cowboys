@@ -137,12 +137,24 @@ void ECS::updateActive() {
 }
 
 Sprite ECS::createSpriteFromFile(std::string file) {
-  std::string relativePath = "../../data/images/" + file;
-
-  SDL_Surface* surface = IMG_Load(relativePath.c_str());
+#ifdef DEBUG
+  std::string path = "../../data/images/" + file;
+#else
+  std::string path = "data/images/" + file;
+#endif
+  SDL_Surface* surface = IMG_Load(path.c_str());
+  if (surface == nullptr) {
+    printf("Unable to load image %s! SDL_image Error: %s\n", file.c_str(),
+           IMG_GetError());
+  }
 
   Sprite sprite;
   sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  if (sprite.texture == nullptr) {
+    printf("Unable to create texture from %s! SDL Error: %s\n", file.c_str(),
+           SDL_GetError());
+  }
+
   sprite.target.x = viewport_.w / 2 - surface->w / 2;
   sprite.target.y = viewport_.h / 2 - surface->h / 2;
   sprite.target.w = surface->w;
@@ -154,14 +166,32 @@ Sprite ECS::createSpriteFromFile(std::string file) {
 }
 
 Sprite ECS::createSpriteFromText(std::string text, int fontSize) {
+#ifdef DEBUG
   TTF_Font* font =
       TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", fontSize);
+#else
+  TTF_Font* font =
+      TTF_OpenFont("data/fonts/PressStart2P-Regular.ttf", fontSize);
+#endif
+  if (font == nullptr) {
+    printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+  }
+
   SDL_Color color = {255, 255, 255, 255};
 
   SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+  if (surface == nullptr) {
+    printf("Unable to load image %s! SDL_image Error: %s\n", text.c_str(),
+           IMG_GetError());
+  }
 
   Sprite sprite;
   sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  if (sprite.texture == nullptr) {
+    printf("Unable to create texture from %s! SDL Error: %s\n", text.c_str(),
+           SDL_GetError());
+  }
+
   sprite.target.x = viewport_.w / 2 - surface->w / 2;
   sprite.target.y = viewport_.h / 2 - surface->h / 2;
   sprite.target.w = surface->w;
@@ -219,10 +249,12 @@ void ECS::input() {
         subtitle_.target.y += title_.target.h * 2;
 
         text_ = createSpriteFromText("Press F to restart", 36);
-        text_.target.y += title_.target.h * 4;
+        text_.target.y += title_.target.h * 3;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
         initializePools();
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       break;
@@ -240,10 +272,12 @@ void ECS::input() {
         subtitle_.target.y += title_.target.h * 2;
 
         text_ = createSpriteFromText("Press F to restart", 36);
-        text_.target.y += title_.target.h * 4;
+        text_.target.y += title_.target.h * 3;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
         initializePools();
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       break;
@@ -295,5 +329,5 @@ void ECS::initializeText() {
   text_ = createSpriteFromText("Move with arrow keys", 36);
 
   subtitle_.target.y += title_.target.h * 2;
-  text_.target.y += title_.target.h * 4;
+  text_.target.y += title_.target.h * 3;
 }
