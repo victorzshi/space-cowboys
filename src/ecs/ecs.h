@@ -85,10 +85,9 @@ class ECS : public Engine {
 
   // Menu textures
   Sprite title_;
-  Sprite start_;
-  Sprite win_;
-  Sprite lose_;
+  Sprite subtitle_;
+  Sprite text_;
 
-  void initializeScreenText();
-  void restart();
+  void initializePools();
+  void initializeText();
 };

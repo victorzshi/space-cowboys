@@ -19,7 +19,6 @@
 #include "ecs/systems/update_hit/update_hit.h"
 #include "ecs/systems/update_position/update_position.h"
 #include "ecs/systems/update_tanks/update_tanks.h"
-#include "services/locator.h"
 
 ECS::ECS()
     : id_(0),
@@ -50,14 +49,8 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   viewport_ = viewport;
   keyboard_ = keyboard;
 
-  aliens_.initialize();
-  bullets_.initialize();
-  explosions_.initialize();
-  particles_.initialize();
-  tanks_.initialize();
-  zappers_.initialize();
-
-  initializeScreenText();
+  initializePools();
+  initializeText();
 }
 
 void ECS::terminate() {
@@ -207,11 +200,13 @@ void ECS::input() {
   switch (screen_) {
     case Screen::START:
       if (keyboard_[SDL_SCANCODE_SPACE]) {
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       return;
     case Screen::WIN:
-      if (win_.texture == nullptr) {
+      if (subtitle_.texture == nullptr) {
         int score = tanks_.size() - tanks_.begin();
         std::string text = "You win!!! ";
         if (score == 1) {
@@ -219,15 +214,20 @@ void ECS::input() {
         } else {
           text += std::to_string(score) + " cowboys left.";
         }
-        win_ = createSpriteFromText(text, 36);
-        win_.target.y += title_.target.h * 2;
+
+        subtitle_ = createSpriteFromText(text, 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press F to restart", 36);
+        text_.target.y += title_.target.h * 4;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
-        restart();
+        initializePools();
+        screen_ = Screen::NONE;
       }
       break;
     case Screen::LOSE:
-      if (lose_.texture == nullptr) {
+      if (subtitle_.texture == nullptr) {
         int score = aliens_.size() - aliens_.begin();
         std::string text = "You lose... ";
         if (score == 1) {
@@ -235,14 +235,22 @@ void ECS::input() {
         } else {
           text += std::to_string(score) + " aliens left.";
         }
-        lose_ = createSpriteFromText(text, 36);
-        lose_.target.y += title_.target.h * 2;
+
+        subtitle_ = createSpriteFromText(text, 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press F to restart", 36);
+        text_.target.y += title_.target.h * 4;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
-        restart();
+        initializePools();
+        screen_ = Screen::NONE;
       }
       break;
     case Screen::NONE:
+      if (keyboard_[SDL_SCANCODE_F]) {
+        initializePools();
+      }
       break;
   }
   InputPlayer::input(*this);
@@ -260,21 +268,10 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  switch (screen_) {
-    case Screen::START:
-      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
-      SDL_RenderCopy(renderer_, start_.texture, nullptr, &start_.target);
-      return;
-    case Screen::WIN:
-      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
-      SDL_RenderCopy(renderer_, win_.texture, nullptr, &win_.target);
-      break;
-    case Screen::LOSE:
-      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
-      SDL_RenderCopy(renderer_, lose_.texture, nullptr, &lose_.target);
-      break;
-    case Screen::NONE:
-      break;
+  if (screen_ != Screen::NONE) {
+    SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
+    SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
+    SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
   }
   RenderSprite::render(*this, delay);
 #ifdef DEBUG
@@ -282,25 +279,21 @@ void ECS::render(float delay) {
 #endif
 }
 
-void ECS::initializeScreenText() {
-  title_ = createSpriteFromText("Space Cowboys", 72);
-  start_ = createSpriteFromText("Press SPACE", 36);
-  win_.texture = nullptr;
-  lose_.texture = nullptr;
-
-  start_.target.y += title_.target.h * 2;
-}
-
-void ECS::restart() {
-  Locator::logger().print("F");
+void ECS::initializePools() {
   id_ = 0;
-
   aliens_.initialize();
   bullets_.initialize();
   explosions_.initialize();
   particles_.initialize();
   tanks_.initialize();
   zappers_.initialize();
+}
 
-  screen_ = Screen::NONE;
+void ECS::initializeText() {
+  title_ = createSpriteFromText("Space Cowboys", 72);
+  subtitle_ = createSpriteFromText("Press SPACE", 36);
+  text_ = createSpriteFromText("Move with arrow keys", 36);
+
+  subtitle_.target.y += title_.target.h * 2;
+  text_.target.y += title_.target.h * 4;
 }
