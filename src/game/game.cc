@@ -68,7 +68,7 @@ bool Game::initialize() {
   fps_.color = {0, 255, 0, 255};
   fps_.texture = nullptr;
   fps_.rect = {0, 0, 0, 0};
-  fps_.start = SDL_GetTicks64();
+  fps_.ticks = SDL_GetTicks64();
   fps_.frames = 0;
   fps_.text.str("");
 
@@ -123,9 +123,8 @@ void Game::run(bool isSmokeTest) {
       ecs_.update();
       lag -= TICKS_PER_UPDATE;
 
-      Uint64 ticks = SDL_GetTicks64() - fps_.start;
+      Uint64 ticks = current - fps_.ticks;
       float seconds = static_cast<float>(ticks) / 1000;
-
       float fps = static_cast<float>(fps_.frames) / seconds;
 
       fps_.text.str("");
@@ -150,6 +149,12 @@ void Game::run(bool isSmokeTest) {
 
     SDL_RenderPresent(renderer_);
     fps_.frames++;
+
+    // Reset FPS counter every second
+    if (current - fps_.ticks > 1000) {
+      fps_.ticks = current;
+      fps_.frames = 0;
+    }
 
     // Handle testing
     if (isSmokeTest && current > SMOKE_TEST_DURATION) {

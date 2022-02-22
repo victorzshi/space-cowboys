@@ -12,7 +12,7 @@ struct FPS {
   SDL_Color color;
   SDL_Texture* texture;
   SDL_Rect rect;
-  Uint64 start;
+  Uint64 ticks;
   Uint64 frames;
   std::stringstream text;
 };
