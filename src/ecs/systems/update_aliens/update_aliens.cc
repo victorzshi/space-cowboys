@@ -41,7 +41,7 @@ void UpdateAliens::update(Engine& e) {
   }
 
   for (int i = begin; i < aliens.size(); i++) {
-    if (e.isOutOfBoundsBottom(collider[i].box, e.viewport().h / 4)) {
+    if (e.isOutOfBoundsBottom(collider[i].box, collider[i].box.h)) {
       aliens.deactivate(i);
     }
   }
