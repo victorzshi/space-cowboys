@@ -2,8 +2,6 @@
 
 #include <SDL.h>
 
-#include <random>
-
 #include "ecs/components/sprite.h"
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
@@ -17,13 +15,13 @@ class ECS : public Engine {
  public:
   ECS();
 
-  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
-                          const Uint8* keyboard) override;
+  virtual void initialize(SDL_Renderer* renderer, const Uint8* keyboard,
+                          SDL_Rect& viewport) override;
   virtual void terminate() override;
 
   virtual SDL_Renderer* renderer() override;
-  virtual SDL_Rect& viewport() override;
   virtual const Uint8* keyboard() override;
+  virtual SDL_Rect& viewport() override;
   virtual Screen screen() override;
 
   virtual AI* ai() override;
@@ -62,11 +60,11 @@ class ECS : public Engine {
   static const int MAX_ENTITIES = 5000;
 
   int id_;
-  Screen screen_;
 
   SDL_Renderer* renderer_;
-  SDL_Rect viewport_;
   const Uint8* keyboard_;
+  SDL_Rect viewport_;
+  Screen screen_;
 
   AI* ai_;
   Collider* collider_;
@@ -83,11 +81,11 @@ class ECS : public Engine {
   Tanks tanks_;
   Zappers zappers_;
 
-  // Menu textures
   Sprite title_;
   Sprite subtitle_;
   Sprite text_;
 
   void initializePools();
   void initializeText();
+  void restart();
 };

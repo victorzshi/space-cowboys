@@ -2,10 +2,9 @@
 
 #include "ecs/components/sprite.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Explosions::initialize() {
-  Locator::logger().print("Initializing explosions...");
+  printf("Initializing explosions...\n");
 
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 

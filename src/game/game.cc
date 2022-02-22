@@ -5,61 +5,65 @@
 
 #include <sstream>
 
-#include "services/locator.h"
-
 Game::Game() : isRunning_(true) {
-  window_ = SDL_CreateWindow("Space Invaders", SDL_WINDOWPOS_UNDEFINED,
+  window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                              SCREEN_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
   if (window_ == nullptr) {
-    printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+    fprintf(stderr, "Window could not be created! SDL Error: %s\n",
+            SDL_GetError());
   }
 
   renderer_ = SDL_CreateRenderer(
       window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer_ == nullptr) {
-    printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+    fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
+            SDL_GetError());
   }
 
-  int result = SDL_RenderSetLogicalSize(renderer_, SCREEN_WIDTH, SCREEN_HEIGHT);
-  if (result != 0) {
-    printf("Renderer logical size not set! SDL Error: %s\n", SDL_GetError());
+  keyboard_ = SDL_GetKeyboardState(nullptr);
+  if (keyboard_ == nullptr) {
+    fprintf(stderr, "Keyboard could not be found! SDL Error: %s\n",
+            SDL_GetError());
   }
 
   viewport_ = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-
-  keyboard_ = SDL_GetKeyboardState(nullptr);
 }
 
 bool Game::initialize() {
+  printf("Initializing game...\n");
+
   bool success = true;
 
   // Initialize SDL
   if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    Locator::logger().print("SDL could not initialize!");
+    fprintf(stderr, "SDL could not initialize! SDL Error: %s\n",
+            SDL_GetError());
     success = false;
   }
 
-  if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
-    printf("Warning: Linear texture filtering not enabled!");
+  // Set texture filtering to linear
+  if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
+    fprintf(stderr, "Warning: Linear texture filtering not enabled!\n");
   }
 
   // Initialize PNG loading
   int imgFlags = IMG_INIT_PNG;
   if (!(IMG_Init(imgFlags) & imgFlags)) {
-    printf("SDL_image could not initialize! SDL_image Error: %s\n",
-           IMG_GetError());
+    fprintf(stderr, "SDL_image could not initialize! SDL_image Error: %s\n",
+            IMG_GetError());
     success = false;
   }
 
   // Initialize SDL_ttf
   if (TTF_Init() == -1) {
-    printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+    fprintf(stderr, "SDL_ttf could not initialize! SDL_ttf Error: %s\n",
+            TTF_GetError());
     success = false;
   }
 
   // Initialize entities
-  ecs_.initialize(renderer_, viewport_, keyboard_);
+  ecs_.initialize(renderer_, keyboard_, viewport_);
 
   return success;
 }
@@ -73,20 +77,20 @@ void Game::terminate() {
 }
 
 void Game::run(bool isSmokeTest) {
-#ifdef DEBUG
+  // FPS COUNTER START
   Uint64 startTime = SDL_GetTicks64();
   Uint64 totalFrames = 0;
   TTF_Font* font =
       TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 12);
   if (font == nullptr) {
-    printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+    fprintf(stderr, "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
   }
   SDL_Color color = {0, 255, 0, 255};
   std::stringstream text;
   SDL_Surface* surface = nullptr;
   SDL_Texture* texture = nullptr;
   SDL_Rect rect = {0, 0, 0, 0};
-#endif
+  // FPS COUNTER END
 
   Uint64 previous = SDL_GetTicks64();
   Uint64 lag = 0;
@@ -121,7 +125,7 @@ void Game::run(bool isSmokeTest) {
       ecs_.update();
       lag -= TICKS_PER_UPDATE;
 
-#ifdef DEBUG
+       // FPS COUNTER START
       Uint64 currentTime = SDL_GetTicks64();
       float totalSeconds = static_cast<float>(currentTime - startTime) / 1000;
 
@@ -133,12 +137,9 @@ void Game::run(bool isSmokeTest) {
       SDL_DestroyTexture(texture);
       surface = TTF_RenderText_Solid(font, text.str().c_str(), color);
       texture = SDL_CreateTextureFromSurface(renderer_, surface);
-      if (texture == nullptr) {
-        printf("Failed to render text texture!\n");
-      }
       rect = {0, 0, surface->w, surface->h};
       SDL_FreeSurface(surface);
-#endif
+      // FPS COUNTER END
     }
 
     // Render graphics
@@ -148,10 +149,10 @@ void Game::run(bool isSmokeTest) {
     float delay = static_cast<float>(lag) / TICKS_PER_UPDATE;
     ecs_.render(delay);
 
-#ifdef DEBUG
+    // FPS COUNTER START
     SDL_RenderCopy(renderer_, texture, nullptr, &rect);
     ++totalFrames;
-#endif
+    // FPS COUNTER END
 
     SDL_RenderPresent(renderer_);
 

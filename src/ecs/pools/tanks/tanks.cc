@@ -8,10 +8,9 @@
 #include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Tanks::initialize() {
-  Locator::logger().print("Initializing tanks...");
+  printf("Initializing tanks...\n");
 
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 

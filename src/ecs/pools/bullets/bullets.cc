@@ -7,10 +7,9 @@
 #include "ecs/components/sprite.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Bullets::initialize() {
-  Locator::logger().print("Initializing bullets...");
+  printf("Initializing bullets...\n");
 
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 

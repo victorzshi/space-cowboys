@@ -10,7 +10,6 @@
 #include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 #include "vector2/vector2.h"
 
 struct Grid {
@@ -26,7 +25,7 @@ struct Grid {
 };
 
 void Aliens::initialize() {
-  Locator::logger().print("Initializing aliens...");
+  printf("Initializing aliens...\n");
 
   Grid grid;
   grid.cell.width = WIDTH;

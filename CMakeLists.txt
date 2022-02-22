@@ -1,6 +1,6 @@
 # CMakeLists.txt
 cmake_minimum_required(VERSION 3.21)
-project(main)
+project(main VERSION 0.1.1)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
@@ -33,9 +33,6 @@ target_sources(main PRIVATE
   "src/ecs/systems/update_tanks/update_tanks.cc"
   "src/ecs/ecs.cc"
   "src/game/game.cc"
-  "src/services/logger/debug_logger/debug_logger.cc"
-  "src/services/logger/release_logger/release_logger.cc"
-  "src/services/locator.cc"
   "src/vector2/vector2.cc"
   "src/main.cc" 
 )
@@ -88,8 +85,7 @@ enable_testing()
 add_test(NAME "Smoke test" COMMAND main "--smoke-test")
 
 # Configure installer
-install(TARGETS main DESTINATION bin)
-install(DIRECTORY "data" DESTINATION bin)
+install(TARGETS main DESTINATION bin/src)
 install(FILES 
   "${PROJECT_BINARY_DIR}/SDL2.dll" 
   "${PROJECT_BINARY_DIR}/SDL2_image.dll" 
@@ -100,8 +96,9 @@ install(FILES
   "${PROJECT_BINARY_DIR}/bz2.dll" 
   "${PROJECT_BINARY_DIR}/brotlidec.dll" 
   "${PROJECT_BINARY_DIR}/brotlicommon.dll" 
-  DESTINATION bin
+  DESTINATION bin/src
 )
+install(DIRECTORY data DESTINATION .)
 
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")

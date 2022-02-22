@@ -4,6 +4,8 @@
 #include <SDL_ttf.h>
 #include <assert.h>
 
+#include <random>
+
 #include "ecs/components/ai.h"
 #include "ecs/components/collider.h"
 #include "ecs/components/physics.h"
@@ -22,9 +24,10 @@
 
 ECS::ECS()
     : id_(0),
-      screen_(Screen::START),
       renderer_(nullptr),
-      viewport_({0, 0, 0, 0}) {
+      keyboard_(nullptr),
+      viewport_({0, 0, 0, 0}),
+      screen_(Screen::START) {
   ai_ = new AI[MAX_ENTITIES];
   collider_ = new Collider[MAX_ENTITIES];
   physics_ = new Physics[MAX_ENTITIES];
@@ -43,14 +46,16 @@ ECS::ECS()
   zappers_.setEngine(this);
 }
 
-void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
-                     const Uint8* keyboard) {
-  renderer_ = renderer;
-  viewport_ = viewport;
-  keyboard_ = keyboard;
+void ECS::initialize(SDL_Renderer* renderer, const Uint8* keyboard,
+                     SDL_Rect& viewport) {
+  printf("Initializing ECS...\n");
 
-  initializePools();
+  renderer_ = renderer;
+  keyboard_ = keyboard;
+  viewport_ = viewport;
+
   initializeText();
+  initializePools();
 }
 
 void ECS::terminate() {
@@ -61,8 +66,8 @@ void ECS::terminate() {
 }
 
 SDL_Renderer* ECS::renderer() { return renderer_; }
-SDL_Rect& ECS::viewport() { return viewport_; }
 const Uint8* ECS::keyboard() { return keyboard_; }
+SDL_Rect& ECS::viewport() { return viewport_; }
 Screen ECS::screen() { return screen_; }
 
 AI* ECS::ai() { return ai_; }
@@ -137,22 +142,18 @@ void ECS::updateActive() {
 }
 
 Sprite ECS::createSpriteFromFile(std::string file) {
-#ifdef DEBUG
   std::string path = "../../data/images/" + file;
-#else
-  std::string path = "data/images/" + file;
-#endif
   SDL_Surface* surface = IMG_Load(path.c_str());
   if (surface == nullptr) {
-    printf("Unable to load image %s! SDL_image Error: %s\n", file.c_str(),
-           IMG_GetError());
+    fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n",
+            file.c_str(), IMG_GetError());
   }
 
   Sprite sprite;
   sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
   if (sprite.texture == nullptr) {
-    printf("Unable to create texture from %s! SDL Error: %s\n", file.c_str(),
-           SDL_GetError());
+    fprintf(stderr, "Unable to create texture from %s! SDL Error: %s\n",
+            file.c_str(), SDL_GetError());
   }
 
   sprite.target.x = viewport_.w / 2 - surface->w / 2;
@@ -166,30 +167,25 @@ Sprite ECS::createSpriteFromFile(std::string file) {
 }
 
 Sprite ECS::createSpriteFromText(std::string text, int fontSize) {
-#ifdef DEBUG
   TTF_Font* font =
       TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", fontSize);
-#else
-  TTF_Font* font =
-      TTF_OpenFont("data/fonts/PressStart2P-Regular.ttf", fontSize);
-#endif
   if (font == nullptr) {
-    printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+    fprintf(stderr, "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
   }
 
   SDL_Color color = {255, 255, 255, 255};
 
   SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
   if (surface == nullptr) {
-    printf("Unable to load image %s! SDL_image Error: %s\n", text.c_str(),
-           IMG_GetError());
+    fprintf(stderr, "Unable to load image %s! SDL_image Error: %s\n",
+            text.c_str(), IMG_GetError());
   }
 
   Sprite sprite;
   sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
   if (sprite.texture == nullptr) {
-    printf("Unable to create texture from %s! SDL Error: %s\n", text.c_str(),
-           SDL_GetError());
+    fprintf(stderr, "Unable to create texture from %s! SDL Error: %s\n",
+            text.c_str(), SDL_GetError());
   }
 
   sprite.target.x = viewport_.w / 2 - surface->w / 2;
@@ -238,11 +234,11 @@ void ECS::input() {
     case Screen::WIN:
       if (subtitle_.texture == nullptr) {
         int score = tanks_.size() - tanks_.begin();
-        std::string text = "You win!!! ";
+        std::string text;
         if (score == 1) {
-          text += std::to_string(score) + " cowboy left.";
+          text = "You win!!! " + std::to_string(score) + " cowboy left.";
         } else {
-          text += std::to_string(score) + " cowboys left.";
+          text = "You win!!! " + std::to_string(score) + " cowboys left.";
         }
 
         subtitle_ = createSpriteFromText(text, 36);
@@ -252,20 +248,17 @@ void ECS::input() {
         text_.target.y += title_.target.h * 3;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
-        initializePools();
-        SDL_DestroyTexture(subtitle_.texture);
-        subtitle_.texture = nullptr;
-        screen_ = Screen::NONE;
+        restart();
       }
       break;
     case Screen::LOSE:
       if (subtitle_.texture == nullptr) {
         int score = aliens_.size() - aliens_.begin();
-        std::string text = "You lose... ";
+        std::string text;
         if (score == 1) {
-          text += std::to_string(score) + " alien left.";
+          text = "You lose... " + std::to_string(score) + " alien left.";
         } else {
-          text += std::to_string(score) + " aliens left.";
+          text = "You lose... " + std::to_string(score) + " aliens left.";
         }
 
         subtitle_ = createSpriteFromText(text, 36);
@@ -275,15 +268,12 @@ void ECS::input() {
         text_.target.y += title_.target.h * 3;
       }
       if (keyboard_[SDL_SCANCODE_F]) {
-        initializePools();
-        SDL_DestroyTexture(subtitle_.texture);
-        subtitle_.texture = nullptr;
-        screen_ = Screen::NONE;
+        restart();
       }
       break;
     case Screen::NONE:
       if (keyboard_[SDL_SCANCODE_F]) {
-        initializePools();
+        restart();
       }
       break;
   }
@@ -315,6 +305,7 @@ void ECS::render(float delay) {
 
 void ECS::initializePools() {
   id_ = 0;
+
   aliens_.initialize();
   bullets_.initialize();
   explosions_.initialize();
@@ -330,4 +321,14 @@ void ECS::initializeText() {
 
   subtitle_.target.y += title_.target.h * 2;
   text_.target.y += title_.target.h * 3;
+}
+
+void ECS::restart() {
+  terminate();
+  SDL_DestroyTexture(subtitle_.texture);
+  subtitle_.texture = nullptr;
+  SDL_DestroyTexture(text_.texture);
+  text_.texture = nullptr;
+  screen_ = Screen::NONE;
+  initializePools();
 }
