@@ -53,7 +53,7 @@ class ECS : public Engine {
   virtual void render(float delay) override;
 
  private:
-  static const int MAX_ENTITIES = 3000;
+  static const int MAX_ENTITIES = 5000;
 
   int id_;
 

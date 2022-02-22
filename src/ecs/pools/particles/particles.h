@@ -9,10 +9,10 @@ class Engine;
 
 class Particles : public Pool {
  public:
-  const int TOTAL = 300;
-  const int WIDTH = 36;
+  const int TOTAL = 500;
+  const int WIDTH = 5;
   const Uint64 DURATION = 1000;
-  const char* TEXTURE_FILE = "alien.png";
+  const char* TEXTURE_FILE = "purple-square.png";
 
   virtual void initialize() override;
 };

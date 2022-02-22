@@ -90,11 +90,13 @@ void UpdateHit::explodeAlien(Engine& e, int index) {
   int id = explosions.size();
   if (explosions.activate(id)) {
     transform[id].position = transform[index].position;
-    collider[id].box = collider[index].box;
+    collider[id].box.w = collider[index].box.w * 2;
+    collider[id].box.h = collider[index].box.h * 2;
+    collider[id].update(transform[id].position);
     timer[id].previous = current;
   }
 
-  for (int i = 0; i < 3; i++) {
+  for (int i = 0; i < 5; i++) {
     id = particles.size();
     if (particles.activate(id)) {
       float x = e.random(-5.0f, 5.0f);
@@ -121,8 +123,8 @@ void UpdateHit::explodeTank(Engine& e, int index) {
   if (explosions.activate(id)) {
     transform[id].position = transform[index].position;
 
-    collider[id].box.w = 144;
-    collider[id].box.h = 144;
+    collider[id].box.w = collider[index].box.w * 3;
+    collider[id].box.h = collider[index].box.h * 3;
     collider[id].update(transform[id].position);
 
     timer[id].previous = current;
