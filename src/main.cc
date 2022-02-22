@@ -3,19 +3,6 @@
 int main(int argc, char *argv[]) {
   printf("Pro tip: You can touch the aliens without dying.\n\n");
 
-  bool isSmokeTest = false;
-  if (argc == 2 && std::string(argv[1]) == "--smoke-test") {
-    isSmokeTest = true;
-  }
-
-  Game game = Game();
-
-  if (game.initialize()) {
-    game.run(isSmokeTest);
-  }
-
-  game.terminate();
-
   const char *text =
       "  ()     __   __    _    , __  _    __                        \n"
       "  /\\    /  ` /  `  ' )  / / ')' )  /                         \n"
@@ -31,5 +18,19 @@ int main(int argc, char *argv[]) {
       "                                                      (/      \n";
 
   printf("%s", text);
+
+  bool isSmokeTest = false;
+  if (argc == 2 && std::string(argv[1]) == "--smoke-test") {
+    isSmokeTest = true;
+  }
+
+  Game game = Game();
+
+  if (game.initialize()) {
+    game.run(isSmokeTest);
+  }
+
+  game.terminate();
+
   return 0;
 }

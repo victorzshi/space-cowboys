@@ -85,7 +85,7 @@ enable_testing()
 add_test(NAME "Smoke test" COMMAND main "--smoke-test")
 
 # Configure installer
-install(TARGETS main DESTINATION bin/src)
+install(TARGETS main DESTINATION "bin/src")
 install(FILES 
   "${PROJECT_BINARY_DIR}/SDL2.dll" 
   "${PROJECT_BINARY_DIR}/SDL2_image.dll" 
@@ -96,10 +96,11 @@ install(FILES
   "${PROJECT_BINARY_DIR}/bz2.dll" 
   "${PROJECT_BINARY_DIR}/brotlidec.dll" 
   "${PROJECT_BINARY_DIR}/brotlicommon.dll" 
-  DESTINATION bin/src
+  DESTINATION "bin/src"
 )
-install(DIRECTORY data DESTINATION .)
+install(DIRECTORY data DESTINATION ".")
 
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION "bin/src")
 include(InstallRequiredSystemLibraries)
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_PACKAGE_NAME "space-cowboys")

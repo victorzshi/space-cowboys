@@ -5,7 +5,7 @@
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                             SCREEN_HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
+                             SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
   if (window_ == nullptr) {
     fprintf(stderr, "Window could not be created! SDL Error: %s\n",
             SDL_GetError());
