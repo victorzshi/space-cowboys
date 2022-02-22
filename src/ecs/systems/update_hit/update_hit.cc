@@ -28,7 +28,7 @@ void UpdateHit::updateBullets(Engine& e) {
   int beginAliens = aliens.begin();
 
   for (int i = beginBullets; i < bullets.size(); i++) {
-    if (e.isOutOfBoundsTop(collider[i].box)) {
+    if (e.isOutOfBoundsTop(collider[i].box, 0)) {
       bullets.deactivate(i);
 
       continue;
@@ -57,7 +57,7 @@ void UpdateHit::updateZappers(Engine& e) {
   int beginZappers = zappers.begin();
 
   for (int i = beginZappers; i < zappers.size(); i++) {
-    if (e.isOutOfBoundsBottom(collider[i].box)) {
+    if (e.isOutOfBoundsBottom(collider[i].box, e.viewport().h / 4)) {
       zappers.deactivate(i);
 
       continue;

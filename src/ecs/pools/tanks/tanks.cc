@@ -13,7 +13,7 @@
 void Tanks::initialize() {
   Locator::logger().print("Initializing tanks...");
 
-  SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
+  Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   Uint64 previous = SDL_GetTicks64();
 
@@ -31,7 +31,7 @@ void Tanks::initialize() {
     collider_[id].box.w = WIDTH;
     collider_[id].box.h = WIDTH;
 
-    sprite_[id].texture = texture;
+    sprite_[id] = sprite;
 
     timer_[id].previous = previous;
 

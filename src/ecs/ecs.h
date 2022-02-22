@@ -4,6 +4,7 @@
 
 #include <random>
 
+#include "ecs/components/sprite.h"
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/bullets/bullets.h"
 #include "ecs/pools/explosions/explosions.h"
@@ -23,6 +24,7 @@ class ECS : public Engine {
   virtual SDL_Renderer* renderer() override;
   virtual SDL_Rect& viewport() override;
   virtual const Uint8* keyboard() override;
+  virtual Screen screen() override;
 
   virtual AI* ai() override;
   virtual Collider* collider() override;
@@ -39,13 +41,17 @@ class ECS : public Engine {
   virtual Tanks& tanks() override;
   virtual Zappers& zappers() override;
 
+  virtual void setScreen(Screen screen) override;
+
   virtual int createEntity() override;
-  virtual SDL_Texture* createTexture(std::string file) override;
+  virtual void updateActive() override;
+
+  virtual Sprite createSpriteFromFile(std::string file) override;
+  virtual Sprite createSpriteFromText(std::string text, int fontSize) override;
   virtual bool isOutOfBounds(SDL_Rect rect) override;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) override;
-  virtual bool isOutOfBoundsTop(SDL_Rect rect) override;
-  virtual bool isOutOfBoundsBottom(SDL_Rect rect) override;
-  virtual void updateActive() override;
+  virtual bool isOutOfBoundsTop(SDL_Rect rect, int offset) override;
+  virtual bool isOutOfBoundsBottom(SDL_Rect rect, int offset) override;
   virtual float random(float min, float max) override;
 
   virtual void input() override;
@@ -56,6 +62,7 @@ class ECS : public Engine {
   static const int MAX_ENTITIES = 5000;
 
   int id_;
+  Screen screen_;
 
   SDL_Renderer* renderer_;
   SDL_Rect viewport_;
@@ -75,4 +82,12 @@ class ECS : public Engine {
   Particles particles_;
   Tanks tanks_;
   Zappers zappers_;
+
+  // Menu textures
+  Sprite title_;
+  Sprite subtitle_;
+  Sprite text_;
+
+  void initializePools();
+  void initializeText();
 };

@@ -7,13 +7,13 @@
 void Explosions::initialize() {
   Locator::logger().print("Initializing explosions...");
 
-  SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
+  Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;
   for (int i = 0; i < TOTAL; i++) {
     int id = e_->createEntity();
 
-    sprite_[id].texture = texture;
+    sprite_[id] = sprite;
 
     index = id;
   }
