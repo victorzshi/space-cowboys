@@ -8,11 +8,8 @@
 #include "ecs/components/timer.h"
 #include "ecs/components/transform.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Tanks::initialize() {
-  Locator::logger().print("Initializing tanks...");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   Uint64 previous = SDL_GetTicks64();

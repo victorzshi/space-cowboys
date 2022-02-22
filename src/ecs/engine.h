@@ -36,14 +36,14 @@ class Engine {
   Engine(const Engine& other) = default;
 
   // Manage memory
-  virtual void initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
-                          const Uint8* keyboard) = 0;
+  virtual void initialize(SDL_Renderer* renderer, const Uint8* keyboard,
+                          SDL_Rect& viewport) = 0;
   virtual void terminate() = 0;
 
   // Get globals
   virtual SDL_Renderer* renderer() = 0;
-  virtual SDL_Rect& viewport() = 0;
   virtual const Uint8* keyboard() = 0;
+  virtual SDL_Rect& viewport() = 0;
   virtual Screen screen() = 0;
 
   // Get component arrays

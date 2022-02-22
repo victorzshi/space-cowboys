@@ -5,11 +5,8 @@
 #include "ecs/components/collider.h"
 #include "ecs/components/sprite.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Particles::initialize() {
-  Locator::logger().print("Initializing particles...");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;

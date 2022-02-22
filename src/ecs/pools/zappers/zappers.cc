@@ -4,11 +4,8 @@
 #include "ecs/components/physics.h"
 #include "ecs/components/sprite.h"
 #include "ecs/engine.h"
-#include "services/locator.h"
 
 void Zappers::initialize() {
-  Locator::logger().print("Initializing zappers...");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;

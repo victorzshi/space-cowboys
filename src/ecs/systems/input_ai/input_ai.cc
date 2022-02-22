@@ -9,7 +9,6 @@
 #include "ecs/engine.h"
 #include "ecs/pools/aliens/aliens.h"
 #include "ecs/pools/zappers/zappers.h"
-#include "services/locator.h"
 
 void InputAI::input(Engine& e) {
   AI* ai = e.ai();

@@ -11,7 +11,6 @@
 #include "ecs/pools/particles/particles.h"
 #include "ecs/pools/tanks/tanks.h"
 #include "ecs/pools/zappers/zappers.h"
-#include "services/locator.h"
 
 void UpdateHit::update(Engine& e) {
   updateBullets(e);
