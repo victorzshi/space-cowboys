@@ -19,10 +19,11 @@
 #include "ecs/systems/update_hit/update_hit.h"
 #include "ecs/systems/update_position/update_position.h"
 #include "ecs/systems/update_tanks/update_tanks.h"
+#include "services/locator.h"
 
 ECS::ECS()
     : id_(0),
-      isStartScreen_(true),
+      screen_(Screen::START),
       renderer_(nullptr),
       viewport_({0, 0, 0, 0}) {
   ai_ = new AI[MAX_ENTITIES];
@@ -56,7 +57,7 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   tanks_.initialize();
   zappers_.initialize();
 
-  initializeStartScreen();
+  initializeScreens();
 }
 
 void ECS::terminate() {
@@ -69,6 +70,7 @@ void ECS::terminate() {
 SDL_Renderer* ECS::renderer() { return renderer_; }
 SDL_Rect& ECS::viewport() { return viewport_; }
 const Uint8* ECS::keyboard() { return keyboard_; }
+Screen ECS::screen() { return screen_; }
 
 AI* ECS::ai() { return ai_; }
 Collider* ECS::collider() { return collider_; }
@@ -85,37 +87,12 @@ Particles& ECS::particles() { return particles_; }
 Tanks& ECS::tanks() { return tanks_; }
 Zappers& ECS::zappers() { return zappers_; }
 
+void ECS::setScreen(Screen screen) { screen_ = screen; }
+
 int ECS::createEntity() {
   assert(id_ < MAX_ENTITIES);
   id_++;
   return id_ - 1;  // Array index starts at 0
-}
-
-SDL_Texture* ECS::createTexture(std::string file) {
-  std::string relativePath = "../../data/images/" + file;
-
-  SDL_Texture* texture = nullptr;
-  SDL_Surface* surface = IMG_Load(relativePath.c_str());
-  texture = SDL_CreateTextureFromSurface(renderer_, surface);
-  SDL_FreeSurface(surface);
-
-  return texture;
-}
-
-bool ECS::isOutOfBounds(SDL_Rect rect) {
-  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w ||
-         rect.y < viewport_.y || rect.y + rect.h > viewport_.h;
-}
-
-bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
-  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w;
-}
-
-bool ECS::isOutOfBoundsTop(SDL_Rect rect) { return rect.y < viewport_.y; }
-
-bool ECS::isOutOfBoundsBottom(SDL_Rect rect) {
-  // TODO(Victor): Screen is a bit lower than expected.
-  return rect.y + rect.h > viewport_.h + 200;
 }
 
 void ECS::updateActive() {
@@ -166,6 +143,59 @@ void ECS::updateActive() {
   active_.size = index;
 }
 
+Sprite ECS::createSpriteFromFile(std::string file) {
+  std::string relativePath = "../../data/images/" + file;
+
+  SDL_Surface* surface = IMG_Load(relativePath.c_str());
+
+  Sprite sprite;
+  sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  sprite.target.x = viewport_.w / 2 - surface->w / 2;
+  sprite.target.y = viewport_.h / 2 - surface->h / 2;
+  sprite.target.w = surface->w;
+  sprite.target.h = surface->h;
+
+  SDL_FreeSurface(surface);
+
+  return sprite;
+}
+
+Sprite ECS::createSpriteFromText(std::string text) {
+  TTF_Font* font =
+      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 72);
+  SDL_Color color = {255, 255, 255, 255};
+
+  SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+
+  Sprite sprite;
+  sprite.texture = SDL_CreateTextureFromSurface(renderer_, surface);
+  sprite.target.x = viewport_.w / 2 - surface->w / 2;
+  sprite.target.y = viewport_.h / 2 - surface->h / 2;
+  sprite.target.w = surface->w;
+  sprite.target.h = surface->h;
+
+  SDL_FreeSurface(surface);
+
+  return sprite;
+}
+
+bool ECS::isOutOfBounds(SDL_Rect rect) {
+  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w ||
+         rect.y < viewport_.y || rect.y + rect.h > viewport_.h;
+}
+
+bool ECS::isOutOfBoundsWidth(SDL_Rect rect) {
+  return rect.x < viewport_.x || rect.x + rect.w > viewport_.w;
+}
+
+bool ECS::isOutOfBoundsTop(SDL_Rect rect, int offset) {
+  return rect.y < viewport_.y + offset;
+}
+
+bool ECS::isOutOfBoundsBottom(SDL_Rect rect, int offset) {
+  return rect.y + rect.h > viewport_.h + offset;
+}
+
 float ECS::random(float min, float max) {
   std::random_device rd;
   std::mt19937 gen(rd());
@@ -174,63 +204,61 @@ float ECS::random(float min, float max) {
 }
 
 void ECS::input() {
-  if (isStartScreen_) {
+  if (screen_ == Screen::START) {
     if (keyboard_[SDL_SCANCODE_SPACE]) {
-      isStartScreen_ = false;
+      screen_ = Screen::NONE;
     }
-  } else {
-    InputPlayer::input(*this);
-    InputAI::input(*this);
-
-    updateActive();
+    return;
+  } else if (screen_ == Screen::WIN || screen_ == Screen::LOSE) {
+    // TODO(Victor): Press space to restart the game.
+    // Reset id
+    // Reinitialize object pools
+    // Reset screen
   }
+  InputPlayer::input(*this);
+  InputAI::input(*this);
+  updateActive();
 }
 
 void ECS::update() {
-  if (!isStartScreen_) {
-    UpdatePosition::update(*this);
-    UpdateTanks::update(*this);
-    UpdateAliens::update(*this);
-    UpdateHit::update(*this);
-    UpdateEffects::update(*this);
-
-    updateActive();
-  }
+  UpdatePosition::update(*this);
+  UpdateTanks::update(*this);
+  UpdateAliens::update(*this);
+  UpdateHit::update(*this);
+  UpdateEffects::update(*this);
+  updateActive();
 }
 
 void ECS::render(float delay) {
-  if (isStartScreen_) {
-    SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.rect);
-    SDL_RenderCopy(renderer_, start_.texture, nullptr, &start_.rect);
-  } else {
-    RenderSprite::render(*this, delay);
-#ifdef DEBUG
-    RenderCollider::render(*this);
-#endif
+  switch (screen_) {
+    case Screen::START:
+      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
+      SDL_RenderCopy(renderer_, start_.texture, nullptr, &start_.target);
+      return;
+    case Screen::WIN:
+      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
+      SDL_RenderCopy(renderer_, win_.texture, nullptr, &win_.target);
+      break;
+    case Screen::LOSE:
+      SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
+      SDL_RenderCopy(renderer_, lose_.texture, nullptr, &lose_.target);
+      break;
+    case Screen::NONE:
+      break;
   }
+  RenderSprite::render(*this, delay);
+#ifdef DEBUG
+  RenderCollider::render(*this);
+#endif
 }
 
-void ECS::initializeStartScreen() {
-  TTF_Font* font =
-      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 72);
-  SDL_Color color = {255, 255, 255, 255};
+void ECS::initializeScreens() {
+  title_ = createSpriteFromText("Space Invaders");
+  start_ = createSpriteFromText("Press SPACE");
+  win_ = createSpriteFromText("You win!");
+  lose_ = createSpriteFromText("You lose...");
 
-  const char* title = "Space Cowboys";
-  const char* start = "Press SPACE to start";
-
-  SDL_Surface* titleSurface = TTF_RenderText_Solid(font, title, color);
-  SDL_Surface* startSurface = TTF_RenderText_Solid(font, start, color);
-
-  title_.texture = SDL_CreateTextureFromSurface(renderer_, titleSurface);
-  start_.texture = SDL_CreateTextureFromSurface(renderer_, startSurface);
-
-  int x = viewport_.w / 2 - titleSurface->w / 2;
-  int y = viewport_.h / 2 - titleSurface->h / 2;
-  title_.rect = {x, y, titleSurface->w, titleSurface->h};
-  x = viewport_.w / 2 - startSurface->w / 2;
-  y = viewport_.h / 2 - startSurface->h / 2 + titleSurface->h * 2;
-  start_.rect = {x, y, startSurface->w, startSurface->h};
-
-  SDL_FreeSurface(titleSurface);
-  SDL_FreeSurface(startSurface);
+  start_.target.y += title_.target.h * 2;
+  win_.target.y += title_.target.h * 2;
+  lose_.target.y += title_.target.h * 2;
 }

@@ -9,7 +9,7 @@
 void Zappers::initialize() {
   Locator::logger().print("Initializing zappers...");
 
-  SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
+  Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;
   for (int i = 0; i < TOTAL; i++) {
@@ -20,7 +20,7 @@ void Zappers::initialize() {
     collider_[id].box.w = WIDTH;
     collider_[id].box.h = WIDTH;
 
-    sprite_[id].texture = texture;
+    sprite_[id] = sprite;
 
     index = id;
   }

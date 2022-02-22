@@ -15,6 +15,12 @@ void UpdateTanks::update(Engine& e) {
 
   int begin = tanks.begin();
   int size = tanks.size();
+
+  if (size - begin == 0 && e.screen() == Screen::NONE) {
+    e.setScreen(Screen::LOSE);
+    return;
+  }
+
   for (int i = begin; i < size; i++) {
     if (e.isOutOfBounds(collider[i].box)) {
       for (int j = begin; j < size; j++) {

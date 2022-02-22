@@ -18,6 +18,11 @@ void UpdateAliens::update(Engine& e) {
   int begin = aliens.begin();
   int size = aliens.size();
 
+  if (size - begin == 0 && e.screen() == Screen::NONE) {
+    e.setScreen(Screen::WIN);
+    return;
+  }
+
   for (int i = begin; i < size; i++) {
     if (e.isOutOfBoundsWidth(collider[i].box)) {
       for (int j = begin; j < size; j++) {
@@ -26,6 +31,18 @@ void UpdateAliens::update(Engine& e) {
         ai[j].isPathEnd = true;
       }
       break;
+    }
+
+    if (e.isOutOfBoundsBottom(collider[i].box, 0) &&
+        e.screen() == Screen::NONE) {
+      e.setScreen(Screen::LOSE);
+      break;
+    }
+  }
+
+  for (int i = begin; i < aliens.size(); i++) {
+    if (e.isOutOfBoundsBottom(collider[i].box, e.viewport().h / 4)) {
+      aliens.deactivate(i);
     }
   }
 }

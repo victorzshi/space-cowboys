@@ -38,7 +38,7 @@ void Aliens::initialize() {
   grid.center.x = e_->viewport().w / 2;
   grid.center.y = -(ROWS * WIDTH / 2 + ROWS * GUTTER / 2);
 
-  SDL_Texture* texture = e_->createTexture(TEXTURE_FILE);
+  Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   Uint64 previous = SDL_GetTicks64();
 
@@ -58,7 +58,7 @@ void Aliens::initialize() {
     ai_[id].goalHeight = transform_[id].position.y;
     ai_[id].isPathEnd = false;
 
-    sprite_[id].texture = texture;
+    sprite_[id] = sprite;
 
     timer_[id].previous = previous;
 
