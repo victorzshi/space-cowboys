@@ -9,8 +9,6 @@
 #include "ecs/engine.h"
 
 void Bullets::initialize() {
-  printf("Initializing bullets...\n");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;

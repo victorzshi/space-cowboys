@@ -6,8 +6,6 @@
 #include "ecs/engine.h"
 
 void Zappers::initialize() {
-  printf("Initializing zappers...\n");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;

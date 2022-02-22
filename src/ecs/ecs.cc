@@ -48,8 +48,6 @@ ECS::ECS()
 
 void ECS::initialize(SDL_Renderer* renderer, const Uint8* keyboard,
                      SDL_Rect& viewport) {
-  printf("Initializing ECS...\n");
-
   renderer_ = renderer;
   keyboard_ = keyboard;
   viewport_ = viewport;
@@ -194,6 +192,7 @@ Sprite ECS::createSpriteFromText(std::string text, int fontSize) {
   sprite.target.h = surface->h;
 
   SDL_FreeSurface(surface);
+  TTF_CloseFont(font);
 
   return sprite;
 }

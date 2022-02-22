@@ -4,8 +4,6 @@
 #include "ecs/engine.h"
 
 void Explosions::initialize() {
-  printf("Initializing explosions...\n");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   int index = 0;

@@ -1,9 +1,6 @@
 #include "game.h"
 
 #include <SDL_image.h>
-#include <SDL_ttf.h>
-
-#include <sstream>
 
 Game::Game() : isRunning_(true) {
   window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
@@ -14,8 +11,7 @@ Game::Game() : isRunning_(true) {
             SDL_GetError());
   }
 
-  renderer_ = SDL_CreateRenderer(
-      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
   if (renderer_ == nullptr) {
     fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
             SDL_GetError());
@@ -31,8 +27,6 @@ Game::Game() : isRunning_(true) {
 }
 
 bool Game::initialize() {
-  printf("Initializing game...\n");
-
   bool success = true;
 
   // Initialize SDL
@@ -65,11 +59,30 @@ bool Game::initialize() {
   // Initialize entities
   ecs_.initialize(renderer_, keyboard_, viewport_);
 
+  // Initialize FPS counter
+  fps_.font = TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 12);
+  if (fps_.font == nullptr) {
+    fprintf(stderr, "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+    success = false;
+  }
+  fps_.color = {0, 255, 0, 255};
+  fps_.texture = nullptr;
+  fps_.rect = {0, 0, 0, 0};
+  fps_.start = SDL_GetTicks64();
+  fps_.frames = 0;
+  fps_.text.str("");
+
   return success;
 }
 
 void Game::terminate() {
   ecs_.terminate();
+
+  TTF_CloseFont(fps_.font);
+  fps_.font = nullptr;
+  SDL_DestroyTexture(fps_.texture);
+  fps_.texture = nullptr;
+
   SDL_DestroyRenderer(renderer_);
   SDL_DestroyWindow(window_);
   TTF_Quit();
@@ -77,21 +90,6 @@ void Game::terminate() {
 }
 
 void Game::run(bool isSmokeTest) {
-  // FPS COUNTER START
-  Uint64 startTime = SDL_GetTicks64();
-  Uint64 totalFrames = 0;
-  TTF_Font* font =
-      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 12);
-  if (font == nullptr) {
-    fprintf(stderr, "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
-  }
-  SDL_Color color = {0, 255, 0, 255};
-  std::stringstream text;
-  SDL_Surface* surface = nullptr;
-  SDL_Texture* texture = nullptr;
-  SDL_Rect rect = {0, 0, 0, 0};
-  // FPS COUNTER END
-
   Uint64 previous = SDL_GetTicks64();
   Uint64 lag = 0;
 
@@ -125,21 +123,20 @@ void Game::run(bool isSmokeTest) {
       ecs_.update();
       lag -= TICKS_PER_UPDATE;
 
-       // FPS COUNTER START
-      Uint64 currentTime = SDL_GetTicks64();
-      float totalSeconds = static_cast<float>(currentTime - startTime) / 1000;
+      Uint64 ticks = SDL_GetTicks64() - fps_.start;
+      float seconds = static_cast<float>(ticks) / 1000;
 
-      float fps = static_cast<float>(totalFrames) / totalSeconds;
+      float fps = static_cast<float>(fps_.frames) / seconds;
 
-      text.str("");
-      text << fps;
+      fps_.text.str("");
+      fps_.text << fps;
 
-      SDL_DestroyTexture(texture);
-      surface = TTF_RenderText_Solid(font, text.str().c_str(), color);
-      texture = SDL_CreateTextureFromSurface(renderer_, surface);
-      rect = {0, 0, surface->w, surface->h};
+      SDL_DestroyTexture(fps_.texture);
+      SDL_Surface* surface =
+          TTF_RenderText_Solid(fps_.font, fps_.text.str().c_str(), fps_.color);
+      fps_.texture = SDL_CreateTextureFromSurface(renderer_, surface);
+      fps_.rect = {0, 0, surface->w, surface->h};
       SDL_FreeSurface(surface);
-      // FPS COUNTER END
     }
 
     // Render graphics
@@ -149,12 +146,10 @@ void Game::run(bool isSmokeTest) {
     float delay = static_cast<float>(lag) / TICKS_PER_UPDATE;
     ecs_.render(delay);
 
-    // FPS COUNTER START
-    SDL_RenderCopy(renderer_, texture, nullptr, &rect);
-    ++totalFrames;
-    // FPS COUNTER END
+    SDL_RenderCopy(renderer_, fps_.texture, nullptr, &fps_.rect);
 
     SDL_RenderPresent(renderer_);
+    fps_.frames++;
 
     // Handle testing
     if (isSmokeTest && current > SMOKE_TEST_DURATION) {

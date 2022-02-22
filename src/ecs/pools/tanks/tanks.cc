@@ -10,8 +10,6 @@
 #include "ecs/engine.h"
 
 void Tanks::initialize() {
-  printf("Initializing tanks...\n");
-
   Sprite sprite = e_->createSpriteFromFile(TEXTURE_FILE);
 
   Uint64 previous = SDL_GetTicks64();

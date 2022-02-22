@@ -1,11 +1,10 @@
 #include "game/game.h"
 
 int main(int argc, char *argv[]) {
-  printf("Program start...\n");
+  printf("Pro tip: You can touch the aliens without dying.\n\n");
 
   bool isSmokeTest = false;
   if (argc == 2 && std::string(argv[1]) == "--smoke-test") {
-    printf("Smoke testing...\n");
     isSmokeTest = true;
   }
 
@@ -17,5 +16,20 @@ int main(int argc, char *argv[]) {
 
   game.terminate();
 
+  const char *text =
+      "  ()     __   __    _    , __  _    __                        \n"
+      "  /\\    /  ` /  `  ' )  / / ')' )  /                         \n"
+      " /  )  /--  /--     /  / /  /  /  /                           \n"
+      "/__/__(___,(___,   (__/_(__/  (__/                            \n"
+      "                    //                                        \n"
+      "                   (/                                         \n"
+      "  ()   _ __  __   __  __      __  __  _     ___    __  _    , \n"
+      "  /\\  ' )  )/  ) /  )/  `    /  )/ ')' )   //  )  / ')' )  / \n"
+      " /  )  /--'/--/ /   /--     /   /  /  / / //--<  /  /  /  /   \n"
+      "/__/__/   /  (_(__/(___,   (__/(__/  (_(_//___/_(__/  (__/_ooo\n"
+      "                                                       //     \n"
+      "                                                      (/      \n";
+
+  printf("%s", text);
   return 0;
 }

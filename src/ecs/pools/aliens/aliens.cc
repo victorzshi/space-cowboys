@@ -25,8 +25,6 @@ struct Grid {
 };
 
 void Aliens::initialize() {
-  printf("Initializing aliens...\n");
-
   Grid grid;
   grid.cell.width = WIDTH;
   grid.cell.height = WIDTH;
