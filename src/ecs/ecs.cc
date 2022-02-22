@@ -222,6 +222,9 @@ void ECS::input() {
         win_ = createSpriteFromText(text, 36);
         win_.target.y += title_.target.h * 2;
       }
+      if (keyboard_[SDL_SCANCODE_F]) {
+        restart();
+      }
       break;
     case Screen::LOSE:
       if (lose_.texture == nullptr) {
@@ -235,10 +238,9 @@ void ECS::input() {
         lose_ = createSpriteFromText(text, 36);
         lose_.target.y += title_.target.h * 2;
       }
-      // TODO(Victor): Press F to restart the game.
-      // Reset id
-      // Reinitialize object pools
-      // Reset screen
+      if (keyboard_[SDL_SCANCODE_F]) {
+        restart();
+      }
       break;
     case Screen::NONE:
       break;
@@ -287,4 +289,18 @@ void ECS::initializeScreenText() {
   lose_.texture = nullptr;
 
   start_.target.y += title_.target.h * 2;
+}
+
+void ECS::restart() {
+  Locator::logger().print("F");
+  id_ = 0;
+
+  aliens_.initialize();
+  bullets_.initialize();
+  explosions_.initialize();
+  particles_.initialize();
+  tanks_.initialize();
+  zappers_.initialize();
+
+  screen_ = Screen::NONE;
 }

@@ -90,4 +90,5 @@ class ECS : public Engine {
   Sprite lose_;
 
   void initializeScreenText();
+  void restart();
 };
