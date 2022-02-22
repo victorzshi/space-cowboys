@@ -57,7 +57,7 @@ void ECS::initialize(SDL_Renderer* renderer, SDL_Rect& viewport,
   tanks_.initialize();
   zappers_.initialize();
 
-  initializeScreens();
+  initializeScreenText();
 }
 
 void ECS::terminate() {
@@ -160,9 +160,9 @@ Sprite ECS::createSpriteFromFile(std::string file) {
   return sprite;
 }
 
-Sprite ECS::createSpriteFromText(std::string text) {
+Sprite ECS::createSpriteFromText(std::string text, int fontSize) {
   TTF_Font* font =
-      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", 72);
+      TTF_OpenFont("../../data/fonts/PressStart2P-Regular.ttf", fontSize);
   SDL_Color color = {255, 255, 255, 255};
 
   SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
@@ -204,16 +204,44 @@ float ECS::random(float min, float max) {
 }
 
 void ECS::input() {
-  if (screen_ == Screen::START) {
-    if (keyboard_[SDL_SCANCODE_SPACE]) {
-      screen_ = Screen::NONE;
-    }
-    return;
-  } else if (screen_ == Screen::WIN || screen_ == Screen::LOSE) {
-    // TODO(Victor): Press space to restart the game.
-    // Reset id
-    // Reinitialize object pools
-    // Reset screen
+  switch (screen_) {
+    case Screen::START:
+      if (keyboard_[SDL_SCANCODE_SPACE]) {
+        screen_ = Screen::NONE;
+      }
+      return;
+    case Screen::WIN:
+      if (win_.texture == nullptr) {
+        int score = tanks_.size() - tanks_.begin();
+        std::string text = "You win!!! ";
+        if (score == 1) {
+          text += std::to_string(score) + " cowboy left.";
+        } else {
+          text += std::to_string(score) + " cowboys left.";
+        }
+        win_ = createSpriteFromText(text, 36);
+        win_.target.y += title_.target.h * 2;
+      }
+      break;
+    case Screen::LOSE:
+      if (lose_.texture == nullptr) {
+        int score = aliens_.size() - aliens_.begin();
+        std::string text = "You lose... ";
+        if (score == 1) {
+          text += std::to_string(score) + " alien left.";
+        } else {
+          text += std::to_string(score) + " aliens left.";
+        }
+        lose_ = createSpriteFromText(text, 36);
+        lose_.target.y += title_.target.h * 2;
+      }
+      // TODO(Victor): Press F to restart the game.
+      // Reset id
+      // Reinitialize object pools
+      // Reset screen
+      break;
+    case Screen::NONE:
+      break;
   }
   InputPlayer::input(*this);
   InputAI::input(*this);
@@ -252,13 +280,11 @@ void ECS::render(float delay) {
 #endif
 }
 
-void ECS::initializeScreens() {
-  title_ = createSpriteFromText("Space Invaders");
-  start_ = createSpriteFromText("Press SPACE");
-  win_ = createSpriteFromText("You win!");
-  lose_ = createSpriteFromText("You lose...");
+void ECS::initializeScreenText() {
+  title_ = createSpriteFromText("Space Cowboys", 72);
+  start_ = createSpriteFromText("Press SPACE", 36);
+  win_.texture = nullptr;
+  lose_.texture = nullptr;
 
   start_.target.y += title_.target.h * 2;
-  win_.target.y += title_.target.h * 2;
-  lose_.target.y += title_.target.h * 2;
 }

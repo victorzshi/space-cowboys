@@ -72,7 +72,7 @@ class Engine {
 
   // Utilities
   virtual Sprite createSpriteFromFile(std::string file) = 0;
-  virtual Sprite createSpriteFromText(std::string text) = 0;
+  virtual Sprite createSpriteFromText(std::string text, int fontSize) = 0;
   virtual bool isOutOfBounds(SDL_Rect rect) = 0;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) = 0;
   virtual bool isOutOfBoundsTop(SDL_Rect rect, int offset) = 0;

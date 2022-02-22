@@ -47,7 +47,7 @@ class ECS : public Engine {
   virtual void updateActive() override;
 
   virtual Sprite createSpriteFromFile(std::string file) override;
-  virtual Sprite createSpriteFromText(std::string text) override;
+  virtual Sprite createSpriteFromText(std::string text, int fontSize) override;
   virtual bool isOutOfBounds(SDL_Rect rect) override;
   virtual bool isOutOfBoundsWidth(SDL_Rect rect) override;
   virtual bool isOutOfBoundsTop(SDL_Rect rect, int offset) override;
@@ -89,5 +89,5 @@ class ECS : public Engine {
   Sprite win_;
   Sprite lose_;
 
-  void initializeScreens();
+  void initializeScreenText();
 };
