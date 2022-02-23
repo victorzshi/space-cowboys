@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-Game::Game() : isRunning_(true), isFullscreen_(false), isVSync_(false) {}
+Game::Game() : isRunning_(true), isVSync_(true), isFullscreen_(false) {}
 
 bool Game::initialize() {
   bool success = true;
@@ -47,7 +47,8 @@ bool Game::initialize() {
   }
 
   // Create global renderer
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+  renderer_ = SDL_CreateRenderer(
+      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer_ == nullptr) {
     fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
             SDL_GetError());
@@ -181,20 +182,34 @@ void Game::handleEvent(SDL_Event event) {
         }
         break;
 
-      case SDLK_f:
-        toggleFullscreen();
-        break;
-
       case SDLK_v:
         // Multiple vsync toggles will crash the game.
-        if (ecs_.screen() == Screen::START && !isVSync_) {
-          enableVSync();
+        if (ecs_.screen() == Screen::START && isVSync_) {
+          disableVSync();
           // Must reset all textures
           ecs_.initialize(renderer_, keyboard_, viewport_);
         }
         break;
+
+      case SDLK_f:
+        toggleFullscreen();
+        break;
     }
   }
+}
+
+void Game::disableVSync() {
+  SDL_DestroyRenderer(renderer_);
+
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+
+  if (renderer_ == nullptr) {
+    fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
+            SDL_GetError());
+    isRunning_ = false;
+  }
+
+  isVSync_ = true;
 }
 
 void Game::toggleFullscreen() {
@@ -219,19 +234,4 @@ void Game::toggleFullscreen() {
       isFullscreen_ = true;
     }
   }
-}
-
-void Game::enableVSync() {
-  SDL_DestroyRenderer(renderer_);
-
-  renderer_ = SDL_CreateRenderer(
-      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-  if (renderer_ == nullptr) {
-    fprintf(stderr, "VSync renderer could not be created! SDL Error: %s\n",
-            SDL_GetError());
-    isRunning_ = false;
-  }
-
-  isVSync_ = true;
 }
