@@ -214,6 +214,11 @@ void Game::disableVSync() {
     isRunning_ = false;
   }
 
+  if (SDL_RenderSetLogicalSize(renderer_, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
+    fprintf(stderr, "Warning: Renderer logical size not set! SDL Error: %s\n",
+            SDL_GetError());
+  }
+
   isVSync_ = true;
 }
 
