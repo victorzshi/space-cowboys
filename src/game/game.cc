@@ -17,7 +17,7 @@ bool Game::initialize() {
   }
 
   // Enable texture filtering
-  if (SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best") != SDL_TRUE) {
+  if (SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear") != SDL_TRUE) {
     fprintf(stderr, "Warning: Texture filtering not enabled!\n");
   }
 
@@ -176,12 +176,13 @@ void Game::handleEvent(SDL_Event event) {
   if (event.type == SDL_KEYDOWN) {
     switch (event.key.keysym.sym) {
       case SDLK_ESCAPE:
-        ecs_.setScreen(Screen::PAUSED);
+        if (ecs_.screen() == Screen::NONE) {
+          ecs_.setScreen(Screen::PAUSED);
+        }
         break;
 
       case SDLK_f:
         toggleFullscreen();
-        ecs_.setScreen(Screen::PAUSED);
         break;
     }
   }
