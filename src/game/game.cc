@@ -160,8 +160,8 @@ void Game::run(bool isSmokeTest) {
     SDL_RenderPresent(renderer_);
     fps_.frames++;
 
-    // Reset FPS counter every second
-    if (current - fps_.ticks > 1000) {
+    // Reset FPS counter every minute
+    if (current - fps_.ticks > 60000) {
       fps_.ticks = current;
       fps_.frames = 0;
     }
