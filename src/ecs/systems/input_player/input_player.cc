@@ -21,11 +21,11 @@ void InputPlayer::input(Engine& e) {
   int begin = e.tanks().begin();
   int size = e.tanks().size();
 
-  if (keyboard[SDL_SCANCODE_UP]) {
+  if (keyboard[SDL_SCANCODE_UP] || keyboard[SDL_SCANCODE_W]) {
     for (int i = begin; i < size; i++) {
       physics[i].velocity.y = -deltaVelocity;
     }
-  } else if (!keyboard[SDL_SCANCODE_UP]) {
+  } else if (!keyboard[SDL_SCANCODE_UP] && !keyboard[SDL_SCANCODE_W]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.y < 0) {
         physics[i].velocity.y = 0.0f;
@@ -33,11 +33,11 @@ void InputPlayer::input(Engine& e) {
     }
   }
 
-  if (keyboard[SDL_SCANCODE_DOWN]) {
+  if (keyboard[SDL_SCANCODE_DOWN] || keyboard[SDL_SCANCODE_S]) {
     for (int i = begin; i < size; i++) {
       physics[i].velocity.y = deltaVelocity;
     }
-  } else if (!keyboard[SDL_SCANCODE_DOWN]) {
+  } else if (!keyboard[SDL_SCANCODE_DOWN] && !keyboard[SDL_SCANCODE_S]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.y > 0) {
         physics[i].velocity.y = 0.0f;
@@ -45,11 +45,11 @@ void InputPlayer::input(Engine& e) {
     }
   }
 
-  if (keyboard[SDL_SCANCODE_LEFT]) {
+  if (keyboard[SDL_SCANCODE_LEFT] || keyboard[SDL_SCANCODE_A]) {
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = -deltaVelocity;
     }
-  } else if (!keyboard[SDL_SCANCODE_LEFT]) {
+  } else if (!keyboard[SDL_SCANCODE_LEFT] && !keyboard[SDL_SCANCODE_A]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.x < 0) {
         physics[i].velocity.x = 0.0f;
@@ -57,11 +57,11 @@ void InputPlayer::input(Engine& e) {
     }
   }
 
-  if (keyboard[SDL_SCANCODE_RIGHT]) {
+  if (keyboard[SDL_SCANCODE_RIGHT] || keyboard[SDL_SCANCODE_D]) {
     for (int i = begin; i < size; i++) {
       physics[i].velocity.x = deltaVelocity;
     }
-  } else if (!keyboard[SDL_SCANCODE_RIGHT]) {
+  } else if (!keyboard[SDL_SCANCODE_RIGHT] && !keyboard[SDL_SCANCODE_D]) {
     for (int i = begin; i < size; i++) {
       if (physics[i].velocity.x > 0) {
         physics[i].velocity.x = 0.0f;

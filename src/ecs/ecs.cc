@@ -270,8 +270,8 @@ void ECS::initializePools() {
 
 void ECS::initializeText() {
   title_ = createSpriteFromText("Space Cowboys", 72);
-  subtitle_ = createSpriteFromText("Press SPACE", 36);
-  text_ = createSpriteFromText("Use arrow keys to move", 36);
+  subtitle_ = createSpriteFromText("Press SPACE to start", 36);
+  text_ = createSpriteFromText("Use WASD or ARROW KEYS to move", 36);
 
   subtitle_.target.y += title_.target.h * 2;
   text_.target.y += title_.target.h * 3;
