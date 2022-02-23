@@ -1,17 +1,17 @@
-# Space Invaders (WIP)
+# Space Cowboys
 
-![GitHub Actions](https://github.com/victorzshi/space-invaders/actions/workflows/github-actions.yml/badge.svg)
+![GitHub Actions](https://github.com/victorzshi/space-cowboys/actions/workflows/github-actions.yml/badge.svg)
 
-C++ clone of Taito's arcade game Space Invaders (1978).
+Original C++ game inspired by Taito's Space Invaders (1978).
 
-![Gameplay](space-invaders.gif)
+![Gameplay](space-cowboys.gif)
 
 ## Installation
 
 Clone repo:
 
 ```
-git clone https://github.com/victorzshi/space-invaders.git
+git clone https://github.com/victorzshi/space-cowboys.git
 ```
 
 Initialize submodules:

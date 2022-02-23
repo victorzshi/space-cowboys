@@ -245,10 +245,10 @@ void ECS::input() {
         subtitle_ = createSpriteFromText(text, 36);
         subtitle_.target.y += title_.target.h * 2;
 
-        text_ = createSpriteFromText("Press F to restart", 36);
+        text_ = createSpriteFromText("Press R to restart", 36);
         text_.target.y += title_.target.h * 3;
       }
-      if (keyboard_[SDL_SCANCODE_F]) {
+      if (keyboard_[SDL_SCANCODE_R]) {
         restart();
       }
       break;
@@ -265,10 +265,10 @@ void ECS::input() {
         subtitle_ = createSpriteFromText(text, 36);
         subtitle_.target.y += title_.target.h * 2;
 
-        text_ = createSpriteFromText("Press F to restart", 36);
+        text_ = createSpriteFromText("Press R to restart", 36);
         text_.target.y += title_.target.h * 3;
       }
-      if (keyboard_[SDL_SCANCODE_F]) {
+      if (keyboard_[SDL_SCANCODE_R]) {
         restart();
       }
       break;
@@ -280,7 +280,7 @@ void ECS::input() {
         text_ = createSpriteFromText("Press SPACE to continue", 36);
         text_.target.y += title_.target.h * 3;
       }
-      if (keyboard_[SDL_SCANCODE_F]) {
+      if (keyboard_[SDL_SCANCODE_R]) {
         restart();
       } else if (keyboard_[SDL_SCANCODE_SPACE]) {
         SDL_DestroyTexture(subtitle_.texture);
@@ -291,7 +291,7 @@ void ECS::input() {
       }
       return;
     case Screen::NONE:
-      if (keyboard_[SDL_SCANCODE_F]) {
+      if (keyboard_[SDL_SCANCODE_R]) {
         restart();
       }
       break;
@@ -314,13 +314,6 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  if (screen_ == Screen::START || screen_ == Screen::WIN ||
-      screen_ == Screen::LOSE || screen_ == Screen::PAUSED) {
-    SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
-    SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
-    SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
-  }
-
   if (screen_ == Screen::PAUSED) {
     RenderSprite::render(*this, 0.0f);
   } else {
@@ -328,6 +321,13 @@ void ECS::render(float delay) {
 #ifdef DEBUG
     RenderCollider::render(*this);
 #endif
+  }
+
+  if (screen_ == Screen::START || screen_ == Screen::WIN ||
+      screen_ == Screen::LOSE || screen_ == Screen::PAUSED) {
+    SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
+    SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
+    SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
   }
 }
 
