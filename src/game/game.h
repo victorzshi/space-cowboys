@@ -31,6 +31,7 @@ class Game {
   static const int SMOKE_TEST_DURATION = 1000;
 
   bool isRunning_;
+  bool isVSync_;
   bool isFullscreen_;
 
   SDL_Window* window_;
@@ -44,5 +45,6 @@ class Game {
 
   // Non-gameplay events
   void handleEvent(SDL_Event event);
+  void disableVSync();
   void toggleFullscreen();
 };
