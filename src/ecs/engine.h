@@ -22,7 +22,7 @@ class Particles;
 class Tanks;
 class Zappers;
 
-enum class Screen { START, WIN, LOSE, NONE };
+enum class Screen { START, WIN, LOSE, PAUSED, NONE };
 
 struct Active {
   int* ids;

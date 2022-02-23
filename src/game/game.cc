@@ -101,25 +101,25 @@ void Game::run(bool isSmokeTest) {
     previous = current;
     lag += elapsed;
 
-    // Process input
-    while (SDL_PollEvent(&event) != 0) {
-      switch (event.type) {
-        case SDL_QUIT:
-          isRunning_ = false;
-          break;
-        case SDL_KEYDOWN:
-          switch (event.key.keysym.sym) {
-            case SDLK_ESCAPE:
-              isRunning_ = false;
-              break;
-          }
-          break;
-      }
-    }
-    ecs_.input();
-
-    // Update state
     while (lag >= TICKS_PER_UPDATE) {
+      // Process input
+      while (SDL_PollEvent(&event) != 0) {
+        switch (event.type) {
+          case SDL_QUIT:
+            isRunning_ = false;
+            break;
+          case SDL_KEYDOWN:
+            switch (event.key.keysym.sym) {
+              case SDLK_ESCAPE:
+                ecs_.setScreen(Screen::PAUSED);
+                break;
+            }
+            break;
+        }
+      }
+      ecs_.input();
+
+      // Update state
       ecs_.update();
       lag -= TICKS_PER_UPDATE;
 

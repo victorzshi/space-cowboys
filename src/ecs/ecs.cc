@@ -227,11 +227,13 @@ void ECS::input() {
       if (keyboard_[SDL_SCANCODE_SPACE]) {
         SDL_DestroyTexture(subtitle_.texture);
         subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       return;
     case Screen::WIN:
-      if (subtitle_.texture == nullptr) {
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
         int score = tanks_.size() - tanks_.begin();
         std::string text;
         if (score == 1) {
@@ -251,7 +253,7 @@ void ECS::input() {
       }
       break;
     case Screen::LOSE:
-      if (subtitle_.texture == nullptr) {
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
         int score = aliens_.size() - aliens_.begin();
         std::string text;
         if (score == 1) {
@@ -270,18 +272,39 @@ void ECS::input() {
         restart();
       }
       break;
+    case Screen::PAUSED:
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
+        subtitle_ = createSpriteFromText("Game Paused", 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press SPACE to continue", 36);
+        text_.target.y += title_.target.h * 3;
+      }
+      if (keyboard_[SDL_SCANCODE_F]) {
+        restart();
+      } else if (keyboard_[SDL_SCANCODE_SPACE]) {
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
+        screen_ = Screen::NONE;
+      }
+      return;
     case Screen::NONE:
       if (keyboard_[SDL_SCANCODE_F]) {
         restart();
       }
       break;
   }
+
   InputPlayer::input(*this);
   InputAI::input(*this);
   updateActive();
 }
 
 void ECS::update() {
+  if (screen_ == Screen::PAUSED) return;
+
   UpdatePosition::update(*this);
   UpdateTanks::update(*this);
   UpdateAliens::update(*this);
@@ -291,15 +314,21 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  if (screen_ != Screen::NONE) {
+  if (screen_ == Screen::START || screen_ == Screen::WIN ||
+      screen_ == Screen::LOSE || screen_ == Screen::PAUSED) {
     SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
     SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
     SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
   }
-  RenderSprite::render(*this, delay);
+
+  if (screen_ == Screen::PAUSED) {
+    RenderSprite::render(*this, 0.0f);
+  } else {
+    RenderSprite::render(*this, delay);
 #ifdef DEBUG
-  RenderCollider::render(*this);
+    RenderCollider::render(*this);
 #endif
+  }
 }
 
 void ECS::initializePools() {
@@ -316,7 +345,7 @@ void ECS::initializePools() {
 void ECS::initializeText() {
   title_ = createSpriteFromText("Space Cowboys", 72);
   subtitle_ = createSpriteFromText("Press SPACE", 36);
-  text_ = createSpriteFromText("Move with arrow keys", 36);
+  text_ = createSpriteFromText("Use arrow keys to move", 36);
 
   subtitle_.target.y += title_.target.h * 2;
   text_.target.y += title_.target.h * 3;
