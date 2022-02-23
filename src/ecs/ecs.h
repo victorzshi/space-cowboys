@@ -87,5 +87,6 @@ class ECS : public Engine {
 
   void initializePools();
   void initializeText();
+  void handleScreenInput();
   void restart();
 };
