@@ -147,6 +147,11 @@ void Game::run(bool isSmokeTest) {
     SDL_SetRenderDrawColor(renderer_, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer_);
 
+    if (isFullscreen_) {
+      SDL_SetRenderDrawColor(renderer_, 105, 105, 105, SDL_ALPHA_OPAQUE);
+      SDL_RenderDrawRect(renderer_, &viewport_);
+    }
+
     float delay = static_cast<float>(lag) / TICKS_PER_UPDATE;
     ecs_.render(delay);
 
