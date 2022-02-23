@@ -227,11 +227,13 @@ void ECS::input() {
       if (keyboard_[SDL_SCANCODE_SPACE]) {
         SDL_DestroyTexture(subtitle_.texture);
         subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       return;
     case Screen::WIN:
-      if (subtitle_.texture == nullptr) {
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
         int score = tanks_.size() - tanks_.begin();
         std::string text;
         if (score == 1) {
@@ -251,7 +253,7 @@ void ECS::input() {
       }
       break;
     case Screen::LOSE:
-      if (subtitle_.texture == nullptr) {
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
         int score = aliens_.size() - aliens_.begin();
         std::string text;
         if (score == 1) {
@@ -271,11 +273,20 @@ void ECS::input() {
       }
       break;
     case Screen::PAUSED:
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
+        subtitle_ = createSpriteFromText("Game Paused", 36);
+        subtitle_.target.y += title_.target.h * 2;
 
+        text_ = createSpriteFromText("Press SPACE to continue", 36);
+        text_.target.y += title_.target.h * 3;
+      }
       if (keyboard_[SDL_SCANCODE_F]) {
         restart();
-        screen_ = Screen::NONE;
       } else if (keyboard_[SDL_SCANCODE_SPACE]) {
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
         screen_ = Screen::NONE;
       }
       return;
@@ -334,7 +345,7 @@ void ECS::initializePools() {
 void ECS::initializeText() {
   title_ = createSpriteFromText("Space Cowboys", 72);
   subtitle_ = createSpriteFromText("Press SPACE", 36);
-  text_ = createSpriteFromText("Move with arrow keys", 36);
+  text_ = createSpriteFromText("Use arrow keys to move", 36);
 
   subtitle_.target.y += title_.target.h * 2;
   text_.target.y += title_.target.h * 3;
