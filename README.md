@@ -15,7 +15,7 @@ Inside the folder **bin/src/**, run `main.exe`.
 - Use WASD or the arrow keys to move and SPACE to fire.
 - Press R to restart the game.
 - Press F to toggle fullscreen.
-- Press V to enable vertical sync (only on start screen).
+- Press V to disable vertical sync (only on start screen).
 - Press ESC to pause the game.
 
 If the windowed mode is too large:
