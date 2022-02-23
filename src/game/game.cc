@@ -2,7 +2,7 @@
 
 #include <SDL_image.h>
 
-Game::Game() : isRunning_(true) {
+Game::Game() : isRunning_(true), isFullscreen_(false) {
   window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
                              SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
                              SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
@@ -14,6 +14,11 @@ Game::Game() : isRunning_(true) {
   renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
   if (renderer_ == nullptr) {
     fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
+            SDL_GetError());
+  }
+
+  if (SDL_RenderSetLogicalSize(renderer_, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
+    fprintf(stderr, "Warning: Renderer logical size not set! SDL Error: %s\n",
             SDL_GetError());
   }
 
@@ -104,18 +109,7 @@ void Game::run(bool isSmokeTest) {
     while (lag >= TICKS_PER_UPDATE) {
       // Process input
       while (SDL_PollEvent(&event) != 0) {
-        switch (event.type) {
-          case SDL_QUIT:
-            isRunning_ = false;
-            break;
-          case SDL_KEYDOWN:
-            switch (event.key.keysym.sym) {
-              case SDLK_ESCAPE:
-                ecs_.setScreen(Screen::PAUSED);
-                break;
-            }
-            break;
-        }
+        handleEvent(event);
       }
       ecs_.input();
 
@@ -159,6 +153,48 @@ void Game::run(bool isSmokeTest) {
     // Handle testing
     if (isSmokeTest && current > SMOKE_TEST_DURATION) {
       isRunning_ = false;
+    }
+  }
+}
+
+void Game::handleEvent(SDL_Event event) {
+  if (event.type == SDL_QUIT) {
+    isRunning_ = false;
+    return;
+  }
+
+  if (event.type == SDL_KEYDOWN) {
+    switch (event.key.keysym.sym) {
+      case SDLK_ESCAPE:
+        ecs_.setScreen(Screen::PAUSED);
+        break;
+      case SDLK_f:
+        toggleFullscreen();
+        ecs_.setScreen(Screen::PAUSED);
+        break;
+    }
+  }
+}
+
+void Game::toggleFullscreen() {
+  if (isFullscreen_) {
+    int result = SDL_SetWindowFullscreen(window_, 0);
+
+    if (result != 0) {
+      fprintf(stderr, "Window not set to windowed mode! SDL Error: %s\n",
+              SDL_GetError());
+    } else {
+      isFullscreen_ = false;
+    }
+  } else {
+    int result =
+        SDL_SetWindowFullscreen(window_, SDL_WINDOW_FULLSCREEN_DESKTOP);
+
+    if (result != 0) {
+      fprintf(stderr, "Window not set to fullscreen! SDL Error: %s\n",
+              SDL_GetError());
+    } else {
+      isFullscreen_ = true;
     }
   }
 }
