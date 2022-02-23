@@ -1,11 +1,9 @@
 #pragma once
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
 #include <sstream>
 
 #include "ecs/ecs.h"
+#include "types/types.h"
 
 struct FPS {
   TTF_Font* font;
