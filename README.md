@@ -12,7 +12,7 @@ Download and extract [space-cowboys-0.1.1-win64.zip](https://github.com/victorzs
 
 Inside the folder **bin/src/**, run `main.exe`.
 
-- Use the arrow keys to move and SPACE to fire.
+- Use WASD or the arrow keys to move and SPACE to fire.
 - Press F to toggle fullscreen.
 - Press R to restart the game.
 - Press ESC to pause the game.
