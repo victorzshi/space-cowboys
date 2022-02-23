@@ -1,6 +1,6 @@
 # CMakeLists.txt
 cmake_minimum_required(VERSION 3.21)
-project(main VERSION 0.1.1)
+project(main VERSION 0.1.2)
 
 # Specify the C++ standard
 set(CMAKE_CXX_STANDARD 11)
