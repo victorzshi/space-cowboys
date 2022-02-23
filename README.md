@@ -12,11 +12,16 @@ Download and extract [space-cowboys-0.1.1-win64.zip](https://github.com/victorzs
 
 Inside the folder **bin/src/**, run `main.exe`.
 
-- Use the arrow keys to move and space to fire.
+- Use the arrow keys to move and SPACE to fire.
 - Press F to toggle fullscreen.
 - Press R to restart the game.
+- Press ESC to pause the game.
 
-If the windowed mode is too large, disable DPI scaling on `main.exe`: Right click > Properties > Compatibility > Change high DPI settings > Check "Override high DPI scaling behaviour" > Select "Application" from the drop down.
+If the windowed mode is too large:
+
+1. Disable DPI scaling.
+   > On Windows 11: Right click on `main.exe` > Properties > Compatibility > Change high DPI settings > Check "Override high DPI scaling behaviour" > Select "Application" from the drop down.
+2. Use fullscreen mode.
 
 ## Installation
 
