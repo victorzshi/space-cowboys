@@ -270,18 +270,30 @@ void ECS::input() {
         restart();
       }
       break;
+    case Screen::PAUSED:
+
+      if (keyboard_[SDL_SCANCODE_F]) {
+        restart();
+        screen_ = Screen::NONE;
+      } else if (keyboard_[SDL_SCANCODE_SPACE]) {
+        screen_ = Screen::NONE;
+      }
+      return;
     case Screen::NONE:
       if (keyboard_[SDL_SCANCODE_F]) {
         restart();
       }
       break;
   }
+
   InputPlayer::input(*this);
   InputAI::input(*this);
   updateActive();
 }
 
 void ECS::update() {
+  if (screen_ == Screen::PAUSED) return;
+
   UpdatePosition::update(*this);
   UpdateTanks::update(*this);
   UpdateAliens::update(*this);
@@ -291,15 +303,21 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  if (screen_ != Screen::NONE) {
+  if (screen_ == Screen::START || screen_ == Screen::WIN ||
+      screen_ == Screen::LOSE || screen_ == Screen::PAUSED) {
     SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
     SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
     SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
   }
-  RenderSprite::render(*this, delay);
+
+  if (screen_ == Screen::PAUSED) {
+    RenderSprite::render(*this, 0.0f);
+  } else {
+    RenderSprite::render(*this, delay);
 #ifdef DEBUG
-  RenderCollider::render(*this);
+    RenderCollider::render(*this);
 #endif
+  }
 }
 
 void ECS::initializePools() {

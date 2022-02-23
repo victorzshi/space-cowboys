@@ -111,7 +111,7 @@ void Game::run(bool isSmokeTest) {
           case SDL_KEYDOWN:
             switch (event.key.keysym.sym) {
               case SDLK_ESCAPE:
-                isRunning_ = false;
+                ecs_.setScreen(Screen::PAUSED);
                 break;
             }
             break;
