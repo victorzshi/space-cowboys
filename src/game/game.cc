@@ -2,48 +2,21 @@
 
 #include <SDL_image.h>
 
-Game::Game() : isRunning_(true), isFullscreen_(false) {
-  window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
-                             SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
-                             SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-  if (window_ == nullptr) {
-    fprintf(stderr, "Window could not be created! SDL Error: %s\n",
-            SDL_GetError());
-  }
-
-  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
-  if (renderer_ == nullptr) {
-    fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
-            SDL_GetError());
-  }
-
-  if (SDL_RenderSetLogicalSize(renderer_, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
-    fprintf(stderr, "Warning: Renderer logical size not set! SDL Error: %s\n",
-            SDL_GetError());
-  }
-
-  keyboard_ = SDL_GetKeyboardState(nullptr);
-  if (keyboard_ == nullptr) {
-    fprintf(stderr, "Keyboard could not be found! SDL Error: %s\n",
-            SDL_GetError());
-  }
-
-  viewport_ = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
-}
+Game::Game() : isRunning_(true), isFullscreen_(false) {}
 
 bool Game::initialize() {
   bool success = true;
 
   // Initialize SDL
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     fprintf(stderr, "SDL could not initialize! SDL Error: %s\n",
             SDL_GetError());
     success = false;
   }
 
-  // Set texture filtering to linear
-  if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear")) {
-    fprintf(stderr, "Warning: Linear texture filtering not enabled!\n");
+  // Enable texture filtering
+  if (SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "best") != SDL_TRUE) {
+    fprintf(stderr, "Warning: Texture filtering not enabled!\n");
   }
 
   // Initialize PNG loading
@@ -60,6 +33,41 @@ bool Game::initialize() {
             TTF_GetError());
     success = false;
   }
+
+  // Create global window
+  window_ = SDL_CreateWindow("Space Cowboys", SDL_WINDOWPOS_UNDEFINED,
+                             SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH,
+                             SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+  if (window_ == nullptr) {
+    fprintf(stderr, "Window could not be created! SDL Error: %s\n",
+            SDL_GetError());
+    success = false;
+  }
+
+  // Create global renderer
+  renderer_ = SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED);
+  if (renderer_ == nullptr) {
+    fprintf(stderr, "Renderer could not be created! SDL Error: %s\n",
+            SDL_GetError());
+    success = false;
+  }
+
+  // Set device independent resolution
+  if (SDL_RenderSetLogicalSize(renderer_, SCREEN_WIDTH, SCREEN_HEIGHT) != 0) {
+    fprintf(stderr, "Warning: Renderer logical size not set! SDL Error: %s\n",
+            SDL_GetError());
+  }
+
+  // Set global keyboard
+  keyboard_ = SDL_GetKeyboardState(nullptr);
+  if (keyboard_ == nullptr) {
+    fprintf(stderr, "Keyboard could not be found! SDL Error: %s\n",
+            SDL_GetError());
+    success = false;
+  }
+
+  // Set global viewport
+  viewport_ = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
   // Initialize entities
   ecs_.initialize(renderer_, keyboard_, viewport_);
@@ -168,6 +176,7 @@ void Game::handleEvent(SDL_Event event) {
       case SDLK_ESCAPE:
         ecs_.setScreen(Screen::PAUSED);
         break;
+
       case SDLK_f:
         toggleFullscreen();
         ecs_.setScreen(Screen::PAUSED);
@@ -181,7 +190,8 @@ void Game::toggleFullscreen() {
     int result = SDL_SetWindowFullscreen(window_, 0);
 
     if (result != 0) {
-      fprintf(stderr, "Window not set to windowed mode! SDL Error: %s\n",
+      fprintf(stderr,
+              "Warning: Window not set to windowed mode! SDL Error: %s\n",
               SDL_GetError());
     } else {
       isFullscreen_ = false;
@@ -191,7 +201,7 @@ void Game::toggleFullscreen() {
         SDL_SetWindowFullscreen(window_, SDL_WINDOW_FULLSCREEN_DESKTOP);
 
     if (result != 0) {
-      fprintf(stderr, "Window not set to fullscreen! SDL Error: %s\n",
+      fprintf(stderr, "Warning: Window not set to fullscreen! SDL Error: %s\n",
               SDL_GetError());
     } else {
       isFullscreen_ = true;

@@ -222,80 +222,9 @@ float ECS::random(float min, float max) {
 }
 
 void ECS::input() {
-  switch (screen_) {
-    case Screen::START:
-      if (keyboard_[SDL_SCANCODE_SPACE]) {
-        SDL_DestroyTexture(subtitle_.texture);
-        subtitle_.texture = nullptr;
-        SDL_DestroyTexture(text_.texture);
-        text_.texture = nullptr;
-        screen_ = Screen::NONE;
-      }
-      return;
-    case Screen::WIN:
-      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
-        int score = tanks_.size() - tanks_.begin();
-        std::string text;
-        if (score == 1) {
-          text = "You win!!! " + std::to_string(score) + " cowboy left.";
-        } else {
-          text = "You win!!! " + std::to_string(score) + " cowboys left.";
-        }
+  handleScreenInput();
 
-        subtitle_ = createSpriteFromText(text, 36);
-        subtitle_.target.y += title_.target.h * 2;
-
-        text_ = createSpriteFromText("Press R to restart", 36);
-        text_.target.y += title_.target.h * 3;
-      }
-      if (keyboard_[SDL_SCANCODE_R]) {
-        restart();
-      }
-      break;
-    case Screen::LOSE:
-      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
-        int score = aliens_.size() - aliens_.begin();
-        std::string text;
-        if (score == 1) {
-          text = "You lose... " + std::to_string(score) + " alien left.";
-        } else {
-          text = "You lose... " + std::to_string(score) + " aliens left.";
-        }
-
-        subtitle_ = createSpriteFromText(text, 36);
-        subtitle_.target.y += title_.target.h * 2;
-
-        text_ = createSpriteFromText("Press R to restart", 36);
-        text_.target.y += title_.target.h * 3;
-      }
-      if (keyboard_[SDL_SCANCODE_R]) {
-        restart();
-      }
-      break;
-    case Screen::PAUSED:
-      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
-        subtitle_ = createSpriteFromText("Game Paused", 36);
-        subtitle_.target.y += title_.target.h * 2;
-
-        text_ = createSpriteFromText("Press SPACE to continue", 36);
-        text_.target.y += title_.target.h * 3;
-      }
-      if (keyboard_[SDL_SCANCODE_R]) {
-        restart();
-      } else if (keyboard_[SDL_SCANCODE_SPACE]) {
-        SDL_DestroyTexture(subtitle_.texture);
-        subtitle_.texture = nullptr;
-        SDL_DestroyTexture(text_.texture);
-        text_.texture = nullptr;
-        screen_ = Screen::NONE;
-      }
-      return;
-    case Screen::NONE:
-      if (keyboard_[SDL_SCANCODE_R]) {
-        restart();
-      }
-      break;
-  }
+  if (screen_ == Screen::START || screen_ == Screen::PAUSED) return;
 
   InputPlayer::input(*this);
   InputAI::input(*this);
@@ -314,17 +243,14 @@ void ECS::update() {
 }
 
 void ECS::render(float delay) {
-  if (screen_ == Screen::PAUSED) {
-    RenderSprite::render(*this, 0.0f);
-  } else {
+  if (screen_ == Screen::NONE) {
     RenderSprite::render(*this, delay);
 #ifdef DEBUG
     RenderCollider::render(*this);
 #endif
-  }
+  } else {
+    RenderSprite::render(*this, 0.0f);
 
-  if (screen_ == Screen::START || screen_ == Screen::WIN ||
-      screen_ == Screen::LOSE || screen_ == Screen::PAUSED) {
     SDL_RenderCopy(renderer_, title_.texture, nullptr, &title_.target);
     SDL_RenderCopy(renderer_, subtitle_.texture, nullptr, &subtitle_.target);
     SDL_RenderCopy(renderer_, text_.texture, nullptr, &text_.target);
@@ -349,6 +275,87 @@ void ECS::initializeText() {
 
   subtitle_.target.y += title_.target.h * 2;
   text_.target.y += title_.target.h * 3;
+}
+
+void ECS::handleScreenInput() {
+  switch (screen_) {
+    case Screen::START:
+      if (keyboard_[SDL_SCANCODE_SPACE]) {
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
+        screen_ = Screen::NONE;
+      }
+      break;
+
+    case Screen::WIN:
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
+        int score = tanks_.size() - tanks_.begin();
+        std::string text;
+        if (score == 1) {
+          text = "You win!!! " + std::to_string(score) + " cowboy left.";
+        } else {
+          text = "You win!!! " + std::to_string(score) + " cowboys left.";
+        }
+
+        subtitle_ = createSpriteFromText(text, 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press R to restart", 36);
+        text_.target.y += title_.target.h * 3;
+      }
+      if (keyboard_[SDL_SCANCODE_R]) {
+        restart();
+      }
+      break;
+
+    case Screen::LOSE:
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
+        int score = aliens_.size() - aliens_.begin();
+        std::string text;
+        if (score == 1) {
+          text = "You lose... " + std::to_string(score) + " alien left.";
+        } else {
+          text = "You lose... " + std::to_string(score) + " aliens left.";
+        }
+
+        subtitle_ = createSpriteFromText(text, 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press R to restart", 36);
+        text_.target.y += title_.target.h * 3;
+      }
+      if (keyboard_[SDL_SCANCODE_R]) {
+        restart();
+      }
+      break;
+
+    case Screen::PAUSED:
+      if (subtitle_.texture == nullptr && text_.texture == nullptr) {
+        subtitle_ = createSpriteFromText("Game Paused", 36);
+        subtitle_.target.y += title_.target.h * 2;
+
+        text_ = createSpriteFromText("Press SPACE to continue", 36);
+        text_.target.y += title_.target.h * 3;
+      }
+      if (keyboard_[SDL_SCANCODE_R]) {
+        restart();
+      } else if (keyboard_[SDL_SCANCODE_SPACE]) {
+        SDL_DestroyTexture(subtitle_.texture);
+        subtitle_.texture = nullptr;
+        SDL_DestroyTexture(text_.texture);
+        text_.texture = nullptr;
+        screen_ = Screen::NONE;
+      }
+      break;
+
+    case Screen::NONE:
+      if (keyboard_[SDL_SCANCODE_R]) {
+        restart();
+      }
+      break;
+  }
 }
 
 void ECS::restart() {
