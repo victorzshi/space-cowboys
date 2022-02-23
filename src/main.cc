@@ -28,6 +28,8 @@ int main(int argc, char *argv[]) {
 
   if (game.initialize()) {
     game.run(isSmokeTest);
+  } else {
+    fprintf(stderr, "Game could not initialize.\n");
   }
 
   game.terminate();
