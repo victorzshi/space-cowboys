@@ -41,7 +41,7 @@ git submodule update
 Build with CMake:
 
 ```
-cmake -B build
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 cmake --build build
 ```
 
