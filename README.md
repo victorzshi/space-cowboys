@@ -6,13 +6,17 @@ Original C++ game inspired by Taito's Space Invaders (1978).
 
 ![Gameplay](space-cowboys.gif)
 
-## Controls
+## How to Play
 
-Use the arrow keys to move and space to fire.
+Download and extract [space-cowboys-0.1.1-win64.zip](https://github.com/victorzshi/space-cowboys/releases/download/v0.1.1/space-cowboys-0.1.1-win64.zip).
 
-Press F to toggle fullscreen.
+Inside the folder **bin/src/**, run `main.exe`.
 
-Press R to restart the game.
+- Use the arrow keys to move and space to fire.
+- Press F to toggle fullscreen.
+- Press R to restart the game.
+
+If the windowed mode is too large, disable DPI scaling on `main.exe`: Right click > Properties > Compatibility > Change high DPI settings > Check "Override high DPI scaling behaviour" > Select "Application" from the drop down.
 
 ## Installation
 
