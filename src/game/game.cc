@@ -4,7 +4,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-Game::Game() : isRunning_(true), isFullscreen_(false) {}
+Game::Game() : isRunning_(true), isFullscreen_(false), isVSync_(false) {}
 
 bool Game::initialize() {
   bool success = true;
@@ -184,6 +184,15 @@ void Game::handleEvent(SDL_Event event) {
       case SDLK_f:
         toggleFullscreen();
         break;
+
+      case SDLK_v:
+        // Multiple vsync toggles will crash the game.
+        if (ecs_.screen() == Screen::START && !isVSync_) {
+          enableVSync();
+          // Must reset all textures
+          ecs_.initialize(renderer_, keyboard_, viewport_);
+        }
+        break;
     }
   }
 }
@@ -210,4 +219,19 @@ void Game::toggleFullscreen() {
       isFullscreen_ = true;
     }
   }
+}
+
+void Game::enableVSync() {
+  SDL_DestroyRenderer(renderer_);
+
+  renderer_ = SDL_CreateRenderer(
+      window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+  if (renderer_ == nullptr) {
+    fprintf(stderr, "VSync renderer could not be created! SDL Error: %s\n",
+            SDL_GetError());
+    isRunning_ = false;
+  }
+
+  isVSync_ = true;
 }

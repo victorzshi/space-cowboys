@@ -32,6 +32,7 @@ class Game {
 
   bool isRunning_;
   bool isFullscreen_;
+  bool isVSync_;
 
   SDL_Window* window_;
   SDL_Renderer* renderer_;
@@ -45,4 +46,5 @@ class Game {
   // Non-gameplay events
   void handleEvent(SDL_Event event);
   void toggleFullscreen();
+  void enableVSync();
 };
