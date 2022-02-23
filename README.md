@@ -6,6 +6,14 @@ Original C++ game inspired by Taito's Space Invaders (1978).
 
 ![Gameplay](space-cowboys.gif)
 
+## Controls
+
+Use the arrow keys to move and space to fire.
+
+Press F to toggle fullscreen.
+
+Press R to restart the game.
+
 ## Installation
 
 Clone repo:
