@@ -149,7 +149,10 @@ void Game::run(bool isSmokeTest) {
 
     if (isFullscreen_) {
       SDL_SetRenderDrawColor(renderer_, 105, 105, 105, SDL_ALPHA_OPAQUE);
-      SDL_RenderDrawRect(renderer_, &viewport_);
+      // viewport_.h gets cut off by one pixel in DPI scaled mode
+      SDL_Rect border = {viewport_.x, viewport_.y, viewport_.w,
+                         viewport_.h - 1};
+      SDL_RenderDrawRect(renderer_, &border);
     }
 
     float delay = static_cast<float>(lag) / TICKS_PER_UPDATE;
