@@ -1,6 +1,7 @@
 #pragma once
 
-struct Vector2 {
+class Vector2 {
+ public:
   float x, y;
 
   Vector2();

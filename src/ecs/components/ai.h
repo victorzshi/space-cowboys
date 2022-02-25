@@ -2,7 +2,8 @@
 
 enum class Direction { LEFT, RIGHT, DOWN };
 
-struct AI {
+class AI {
+ public:
   Direction nextDirection;
   Direction prevDirection;
   float goalHeight;

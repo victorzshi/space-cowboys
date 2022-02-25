@@ -2,6 +2,7 @@
 
 #include <vector2/vector2.h>
 
-struct Transform {
+class Transform {
+ public:
   Vector2 position;
 };

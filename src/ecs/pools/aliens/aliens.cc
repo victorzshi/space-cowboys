@@ -12,18 +12,6 @@
 #include "ecs/engine.h"
 #include "vector2/vector2.h"
 
-struct Grid {
-  struct Size {
-    int width;
-    int height;
-  };
-  Size cell;
-  Size gutter;
-  int rows;
-  int columns;
-  SDL_Point center;
-};
-
 void Aliens::initialize() {
   Grid grid;
   grid.cell.width = WIDTH;

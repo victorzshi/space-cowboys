@@ -2,7 +2,8 @@
 
 #include "types/types.h"
 
-struct Timer {
+class Timer {
+ public:
   Uint64 previous;
 
   Uint64 elapsed(Uint64 current) { return current - previous; }

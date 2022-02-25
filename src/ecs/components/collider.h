@@ -4,7 +4,8 @@
 
 #include "vector2/vector2.h"
 
-struct Collider {
+class Collider {
+ public:
   SDL_Rect box;
 
   void update(Vector2 position) { box = createBox(position, box); }

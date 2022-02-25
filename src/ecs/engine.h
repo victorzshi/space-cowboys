@@ -8,12 +8,12 @@ struct SDL_Rect;
 struct SDL_Renderer;
 struct SDL_Texture;
 
-struct AI;
-struct Collider;
-struct Physics;
-struct Sprite;
-struct Timer;
-struct Transform;
+class AI;
+class Collider;
+class Physics;
+class Sprite;
+class Timer;
+class Transform;
 
 class Aliens;
 class Bullets;
@@ -24,7 +24,8 @@ class Zappers;
 
 enum class Screen { START, WIN, LOSE, PAUSED, NONE };
 
-struct Active {
+class Active {
+ public:
   int* ids;
   int size;
 };

@@ -5,7 +5,8 @@
 #include "ecs/ecs.h"
 #include "types/types.h"
 
-struct FPS {
+class FPS {
+ public:
   TTF_Font* font;
   SDL_Color color;
   SDL_Texture* texture;

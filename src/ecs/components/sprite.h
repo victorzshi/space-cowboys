@@ -4,7 +4,8 @@
 
 struct SDL_Texture;
 
-struct Sprite {
+class Sprite {
+ public:
   SDL_Texture* texture;
   SDL_Rect target;
 };

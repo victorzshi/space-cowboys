@@ -6,8 +6,20 @@
 #include "types/types.h"
 
 class Engine;
-struct Vector2;
-struct Grid;
+class Vector2;
+
+class Grid {
+ public:
+  struct Size {
+    int width;
+    int height;
+  };
+  Size cell;
+  Size gutter;
+  int rows;
+  int columns;
+  SDL_Point center;
+};
 
 class Aliens : public Pool {
  public:

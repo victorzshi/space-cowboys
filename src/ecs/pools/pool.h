@@ -1,12 +1,13 @@
 #pragma once
 
 class Engine;
-struct AI;
-struct Collider;
-struct Physics;
-struct Sprite;
-struct Timer;
-struct Transform;
+
+class AI;
+class Collider;
+class Physics;
+class Sprite;
+class Timer;
+class Transform;
 
 class Pool {
  public:
