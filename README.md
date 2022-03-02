@@ -4,7 +4,7 @@
 
 ![Gameplay](space-cowboys.gif)
 
-> Gameplay was recorded with disabled vertical sync and using [OBS](https://obsproject.com/). 
+> Gameplay was recorded with disabled vertical sync and using [OBS](https://obsproject.com/).
 > The .mkv video file was then converted to .gif using [CloudConvert](https://cloudconvert.com/mkv-to-gif).
 
 Original game inspired by Taito's Space Invaders (1978).
