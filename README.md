@@ -2,13 +2,14 @@
 
 ![GitHub Actions](https://github.com/victorzshi/space-cowboys/actions/workflows/github-actions.yml/badge.svg)
 
-Original game inspired by Taito's Space Invaders (1978).
-Developed in C++ using Visual Studio and SDL2.
-
 ![Gameplay](space-cowboys.gif)
 
 > Gameplay was recorded with disabled vertical sync and using [OBS](https://obsproject.com/). 
 > The .mkv video file was then converted to .gif using [CloudConvert](https://cloudconvert.com/mkv-to-gif).
+
+Original game inspired by Taito's Space Invaders (1978).
+
+Developed in C++ using Visual Studio and SDL2.
 
 ## How to Play
 
@@ -50,7 +51,7 @@ cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="external/vcpkg/scripts/buildsystems/
 cmake --build build
 ```
 
-## About
+## Attribution
 
 Graphics provided by [Twemoji](https://twemoji.twitter.com/).
 
